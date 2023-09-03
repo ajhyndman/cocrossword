@@ -8,9 +8,10 @@
   },
   "private": true,
   "browserslist": "last 2 Chrome versions",
+  "source": "src/index.html",
   "scripts": {
-    "build": "parcel build src/index.html",
-    "dev": "parcel src/index.html"
+    "build": "parcel build",
+    "dev": "parcel"
   },
   "devDependencies": {
     "@types/react": "18.2.21",
