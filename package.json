@@ -1,0 +1,10 @@
+{
+  "name": "crossword-app",
+  "version": "1.0.0",
+  "author": "Andrew Hyndman <ajhyndman@hotmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ajhyndman/crossword-app.git"
+  },
+  "private": true
+}
