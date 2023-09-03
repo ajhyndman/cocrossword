@@ -1,3 +1,10 @@
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --black-pearl: #030D1A;
+  --casper: #B0BECF;
+  --fountain-blue: #5EB5B9;
+  --mystic: #DFE5EC;
+  --san-juan: #2B476A;
+  --white: #FFFFFF;
 }
