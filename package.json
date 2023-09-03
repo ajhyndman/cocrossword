@@ -10,5 +10,8 @@
   "browserslist": "last 2 Chrome versions",
   "devDependencies": {
     "parcel": "2.9.3"
+  },
+  "dependencies": {
+    "reset-css": "5.0.2"
   }
 }
