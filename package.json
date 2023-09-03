@@ -9,6 +9,7 @@
   "private": true,
   "browserslist": "last 2 Chrome versions",
   "scripts": {
+    "build": "parcel build src/index.html",
     "dev": "parcel src/index.html"
   },
   "devDependencies": {
