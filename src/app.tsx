@@ -1,6 +1,9 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
-const App = () => <h1>Hello World!</h1>;
+import UploadView from './UploadView';
 
-render(<App />, document.getElementById('app'));
+const App = () => <UploadView />;
+
+const root = createRoot(document.getElementById('app')!);
+root.render(<App />);

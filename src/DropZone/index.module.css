@@ -1,0 +1,21 @@
+.input {
+  display: none;
+}
+
+.label {
+  border: dashed 2px var(--san-juan);
+  border-radius: 16px;
+  color: var(--san-juan);
+  cursor: pointer;
+  background: none;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 200ms;
+}
+
+.label:hover {
+  background-color: var(--mystic);
+}
