@@ -8,6 +8,9 @@
   },
   "private": true,
   "browserslist": "last 2 Chrome versions",
+  "scripts": {
+    "dev": "parcel src/index.html"
+  },
   "devDependencies": {
     "parcel": "2.9.3"
   },
