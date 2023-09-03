@@ -6,5 +6,8 @@
     "type": "git",
     "url": "git@github.com:ajhyndman/crossword-app.git"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "parcel": "2.9.3"
+  }
 }
