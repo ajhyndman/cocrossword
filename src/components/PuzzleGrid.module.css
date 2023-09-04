@@ -1,0 +1,9 @@
+.grid {
+  width: fit-content;;
+  background: var(--black-pearl);
+  border: 1px solid var(--black-pearl);
+  display: grid;
+  grid-auto-rows: 32px;
+  grid-gap: 1px;
+  margin: 0 auto;
+}

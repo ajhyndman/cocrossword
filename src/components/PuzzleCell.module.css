@@ -1,0 +1,48 @@
+.cell {
+  background: var(--white);
+  position: relative;
+}
+
+.content {
+  bottom: 0px;
+  display: block;
+  width: 100%;
+  /* font-family: "Kiwi Maru"; */
+  /* font-family: "Bradley Hand"; */
+  /* font-family: "Indie Flower"; */
+  font-family: "Architects Daughter";
+  font-size: 22px;
+  position: absolute;
+  text-align: center;
+}
+
+.number {
+  font-size: 12px;
+  position: absolute;
+  top: 1px;
+  left: 2.5px;
+}
+
+.focus {
+  background: var(--fountain-blue);
+  color: var(--white);
+}
+
+.active {
+  background: var(--casper);
+}
+
+.black {
+  background: none;
+}
+
+/* input should be visually hidden but interactable */
+.input {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
