@@ -1,17 +1,22 @@
+.index {
+  box-sizing: border-box;;
+  font-weight: bold;
+  left: 0;
+  padding: 0 6px;
+  position: absolute;
+  text-align: right;
+  top: auto;
+  width: 36px;
+}
+
 .listItem {
   font-size: 16px;
   line-height: 1.25em;
+  list-style-type: none;
   padding: 6px 6px 6px 36px;
 }
 
 .listItem.active {
   background: var(--san-juan);
   color: var(--white);
-}
-
-.index {
-  font-weight: 600;
-  left: 0;
-  padding: 0 6px;
-  position: absolute;
 }
