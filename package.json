@@ -21,6 +21,7 @@
     "process": "^0.11.10"
   },
   "dependencies": {
+    "buffer": "6.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "reset-css": "5.0.2"
