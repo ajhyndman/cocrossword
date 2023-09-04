@@ -1,18 +1,18 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { parseBinaryFile, unscramble } from '@ajhyndman/puz';
+import { Provider } from 'react-redux';
 
 import Test from './views/Test';
 import Solver from './views/Solver';
+import { createStore } from './store/store';
 
-const file = readFileSync(join(__dirname, '../test/nyt_locked.puz'));
-let puzzle = parseBinaryFile(file);
-puzzle = unscramble(puzzle, '7844');
-console.log(puzzle);
+const store = createStore();
 
-const App = () => <Solver puzzle={puzzle} />;
+const App = () => (
+  <Provider store={store}>
+    <Solver />;
+  </Provider>
+);
 
 const root = createRoot(document.getElementById('app')!);
 root.render(<App />);

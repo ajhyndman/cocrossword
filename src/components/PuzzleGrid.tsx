@@ -1,24 +1,41 @@
 import React from 'react';
-import { Puzzle, gridNumbering } from '@ajhyndman/puz';
+import { useDispatch, useSelector } from 'react-redux';
+import { gridNumbering } from '@ajhyndman/puz';
 
 import styles from './PuzzleGrid.module.css';
 import PuzzleCell from './PuzzleCell';
+import { selectPuzzle } from '../store/selectors';
 
-type Props = {
-  puzzle: Puzzle;
-};
-
-export default ({ puzzle }: Props) => {
+export default () => {
+  const puzzle = useSelector(selectPuzzle);
+  const dispatch = useDispatch();
+  if (!puzzle) return null;
   const numbering = gridNumbering(puzzle);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowLeft':
+      case 'ArrowRight':
+      case 'ArrowUp':
+        event.preventDefault();
+        dispatch({ type: 'KEYBOARD_NAVIGATE', payload: { key: event.key } });
+        break;
+      default:
+      // pass
+    }
+  };
+
   return (
     <div
       className={styles.grid}
       style={{
         gridTemplateColumns: `repeat(${puzzle.width}, 32px)`,
       }}
+      onKeyDown={handleKeyDown}
     >
-      {[...puzzle.solution].map((char, i) => (
-        <PuzzleCell number={numbering[i]} content={char} />
+      {[...puzzle.state!].map((char, i) => (
+        <PuzzleCell index={i} number={numbering[i]} content={char} />
       ))}
     </div>
   );
