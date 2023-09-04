@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@ajhyndman/puz@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@ajhyndman/puz/-/puz-0.1.1.tgz#9126fe9004025ed9694c7cfefcc3eaacabadf923"
-  integrity sha512-loN/tWBBUqV6hzYVa59qXdE7m+Cydv9oYoHrzSVJTHEqX83Eqa0Jzwjy6DWI1K6leYBF9aVdx45C6ENAVpojmg==
+"@ajhyndman/puz@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@ajhyndman/puz/-/puz-0.2.0.tgz#4e9bdf27a0e412ac7202d3be59575db016882689"
+  integrity sha512-lEfIuMMZpUqKNRwI3N+K41RpZRHLuQq2hERh4H2hz6Komc7TY5AN4AfL608ASMF9y0dvbXIR+QFQbi5Cg9OPaw==
   dependencies:
     ts-invariant "0.8.2"
 
