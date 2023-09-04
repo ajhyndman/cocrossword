@@ -14,6 +14,7 @@
     "dev": "parcel"
   },
   "devDependencies": {
+    "@types/css-modules": "1.0.2",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "parcel": "2.9.3",
