@@ -1,0 +1,30 @@
+.container {
+  /* height: 100vh; */
+  /* display: flex;
+  flex-direction: column; */
+}
+
+.fixed {
+  position: fixed;
+}
+
+.sticky {
+  position: sticky;
+  bottom: 0;
+}
+
+.puzzle {
+  flex-shrink: 1;
+  flex-grow: 1;
+  min-height: 0;
+  overflow: scroll;
+  overscroll-behavior: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px;
+}
+
+@media screen and (min-width: 1024px) {
+  .container {
+    height: auto;
+  }
+}
