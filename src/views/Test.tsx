@@ -1,22 +1,37 @@
 import React from 'react';
+import type { Puzzle } from '@ajhyndman/puz';
 
 import styles from './Test.module.css';
 import Clue from '../components/Clue';
+import BottomAppBar from '../components/BottomAppBar';
+import IconButton from '../components/IconButton';
+import FloatingActionButton from '../components/FloatingActionButton';
+import PuzzleGrid from '../components/PuzzleGrid';
 
-export default () => (
-  <ol className={styles.clues}>
-    <Clue
-      index={1}
-      content="“The sentinels silent and sure,” per a “Les Miserables” song"
+type Props = {
+  puzzle: Puzzle;
+};
+
+export default ({ puzzle }: Props) => (
+  <>
+    <div className={styles.container}>
+      <PuzzleGrid puzzle={puzzle} />
+    </div>
+    {/* <ol>
+      {puzzle.clues.map((clue, i) => (
+        <Clue isActive={i + 1 === 86} index={i + 1} content={clue} />
+      ))}
+    </ol> */}
+    <BottomAppBar
+      left={
+        <>
+          <IconButton name="chat" />
+          <IconButton name="info" />
+          <IconButton name="check_box" />
+          <IconButton name="edit" />
+        </>
+      }
+      right={<FloatingActionButton name="text_rotation_none" />}
     />
-    <Clue
-      isActive
-      index={2}
-      content="“The sentinels silent and sure,” per a “Les Miserables” song"
-    />
-    <Clue
-      index={3}
-      content="“The sentinels silent and sure,” per a “Les Miserables” song"
-    />
-  </ol>
+  </>
 );
