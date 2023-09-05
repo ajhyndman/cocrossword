@@ -1,19 +1,18 @@
 .cell {
   background: var(--white);
   position: relative;
+  cursor: pointer;
 }
 
 .content {
   bottom: 0px;
   display: block;
   width: 100%;
-  /* font-family: "Kiwi Maru"; */
-  /* font-family: "Bradley Hand"; */
-  /* font-family: "Indie Flower"; */
   font-family: "Architects Daughter";
   font-size: 22px;
   position: absolute;
   text-align: center;
+  pointer-events: none;
 }
 
 .number {

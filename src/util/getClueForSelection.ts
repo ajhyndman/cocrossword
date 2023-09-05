@@ -5,21 +5,17 @@ export const getClueForSelection = (
   selection: { index: number; direction: 'row' | 'column' },
 ): number => {
   const numbering = gridNumbering(puzzle);
-  const clue = numbering[selection.index];
-  if (clue != null) return clue;
+  let clue;
   let index = selection.index;
-  if (selection.direction === 'row') {
-    while (index >= 0) {
-      // step left in the puzzle until we find a clue
-      index = index - 1;
-      const clue = numbering[index];
-      if (clue != null) return clue;
-    }
-  }
-  while (index >= 0) {
-    // step up in the puzzle until we find a clue
-    index = index - puzzle.width;
-    const clue = numbering[index];
-    if (clue != null) return clue;
-  }
+
+  // find the clue associated with this selection
+  do {
+    clue = numbering[index];
+    index = index - (selection.direction === 'row' ? 1 : puzzle.width);
+  } while (
+    index >= 0 &&
+    puzzle.solution[index] !== '.' &&
+    (selection.direction !== 'row' || index % puzzle.width !== puzzle.width - 1)
+  );
+  return clue!;
 };

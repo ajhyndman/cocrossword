@@ -19,7 +19,7 @@ type Props = {
   onChange?: (event: React.ChangeEvent) => void;
 };
 
-export default React.memo(({ index, number, content }: Props) => {
+export default ({ index, number, content }: Props) => {
   const puzzle = useSelector(selectPuzzle);
   const selection = useSelector(selectSelection);
   const dispatch = useDispatch<Dispatch<Action>>();
@@ -42,27 +42,25 @@ export default React.memo(({ index, number, content }: Props) => {
   const cellContent = !isBlackCell && content !== '-' && content;
 
   const handleFocus = (event: React.FocusEvent) => {
-    if (selection.index === index) return;
-    inputRef.current?.select();
     dispatch({ type: 'SELECT', payload: { index } });
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('handleChange');
     event.preventDefault();
-    const value = (event.target.value || '-').slice(-1).toUpperCase();
+    inputRef.current?.select();
+    const value = event.target.value.slice(-1).toUpperCase();
     dispatch({ type: 'INPUT', payload: { value } });
   };
   const handleClick = (event: React.MouseEvent) => {
     // if element is already selected, "focus" event won't be triggered
     if (selection.index === index && event.target === labelRef.current) {
-      dispatch({ type: 'TOGGLE_SELECTION_DIRECTION' });
+      dispatch({ type: 'ROTATE_SELECTION' });
     }
   };
 
   useEffect(() => {
-    if (
-      selection.index === index &&
-      inputRef.current !== document.activeElement
-    ) {
+    if (selection.index === index) {
+      inputRef.current?.select();
       inputRef.current?.focus();
     }
   }, [selection.index]);
@@ -89,9 +87,10 @@ export default React.memo(({ index, number, content }: Props) => {
           className={styles.input}
           onChange={handleChange}
           onFocus={handleFocus}
-          value={cellContent || undefined}
+          // onKeyDown={handleKeyDown}
+          value={cellContent || '-'}
         ></input>
       )}
     </label>
   );
-});
+};

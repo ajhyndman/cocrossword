@@ -24,12 +24,12 @@ export const reducer = (
   { type, payload }: Action,
 ): State => {
   switch (type) {
-    case 'INPUT':
+    case 'INPUT': {
       if (state.selection.index == null) return state;
       if (!REGEX_INPUT.test(payload.value)) return state;
-      const nextState = [...(state.puzzle?.state ?? '')];
 
-      nextState[state.selection.index] = payload.value;
+      const nextState = [...(state.puzzle?.state ?? '')];
+      nextState[state.selection.index] = payload.value || '-';
       return {
         ...state,
         puzzle: state.puzzle && {
@@ -37,9 +37,62 @@ export const reducer = (
           state: nextState.join(''),
         },
       };
-    case 'KEYBOARD_NAVIGATE':
-      if (state.selection.index == null) return state;
-      if (!state.puzzle) return state;
+    }
+    case 'RETREAT_CURSOR': {
+      if (
+        state.selection.index == null ||
+        !state.puzzle ||
+        !state.puzzle.state
+      ) {
+        return state;
+      }
+      let nextIndex = state.selection.index;
+      if (state.selection.direction === 'row') {
+        nextIndex -= 1;
+      } else {
+        nextIndex -= state.puzzle.width;
+      }
+      if (nextIndex < 0 || state.puzzle.state?.[nextIndex] === '.') {
+        return state;
+      }
+      return {
+        ...state,
+        selection: {
+          ...state.selection,
+          index: nextIndex,
+        },
+      };
+    }
+    case 'ADVANCE_CURSOR': {
+      if (
+        state.selection.index == null ||
+        !state.puzzle ||
+        !state.puzzle.state
+      ) {
+        return state;
+      }
+      let nextIndex = state.selection.index;
+      if (state.selection.direction === 'row') {
+        nextIndex += 1;
+      } else {
+        nextIndex += state.puzzle.width;
+      }
+      if (
+        nextIndex > state.puzzle.state.length ||
+        state.puzzle.state?.[nextIndex] === '.'
+      ) {
+        return state;
+      }
+      return {
+        ...state,
+        selection: {
+          ...state.selection,
+          index: nextIndex,
+        },
+      };
+    }
+    case 'KEYBOARD_NAVIGATE': {
+      if (state.selection.index == null || !state.puzzle) return state;
       let nextIndex = state.selection.index;
       do {
         switch (payload.key) {
@@ -66,7 +119,8 @@ export const reducer = (
           index: nextIndex,
         },
       };
-    case 'SELECT':
+    }
+    case 'SELECT': {
       return {
         ...state,
         selection: {
@@ -74,7 +128,8 @@ export const reducer = (
           index: payload.index,
         },
       };
-    case 'TOGGLE_SELECTION_DIRECTION':
+    }
+    case 'ROTATE_SELECTION': {
       return {
         ...state,
         selection: {
@@ -82,6 +137,7 @@ export const reducer = (
           direction: state.selection.direction === 'row' ? 'column' : 'row',
         },
       };
+    }
     default:
       return state;
   }

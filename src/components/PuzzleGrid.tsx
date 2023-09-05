@@ -21,6 +21,9 @@ export default () => {
         event.preventDefault();
         dispatch({ type: 'KEYBOARD_NAVIGATE', payload: { key: event.key } });
         break;
+      case ' ':
+        event.preventDefault();
+        dispatch({ type: 'ROTATE_SELECTION' });
       default:
       // pass
     }

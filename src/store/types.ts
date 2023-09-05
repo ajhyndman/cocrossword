@@ -12,6 +12,14 @@ export type State = {
 // actions
 export type Action =
   | {
+      type: 'ADVANCE_CURSOR';
+      payload?: undefined;
+    }
+  | {
+      type: 'RETREAT_CURSOR';
+      payload?: undefined;
+    }
+  | {
       type: 'INPUT';
       payload: {
         value: string;
@@ -30,6 +38,6 @@ export type Action =
       };
     }
   | {
-      type: 'TOGGLE_SELECTION_DIRECTION';
+      type: 'ROTATE_SELECTION';
       payload?: undefined;
     };

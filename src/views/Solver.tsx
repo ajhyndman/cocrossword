@@ -23,7 +23,7 @@ export default () => {
 
   const handleRotateSelectionClick = () => {
     // if element is already selected, "focus" event won't be triggered
-    dispatch({ type: 'TOGGLE_SELECTION_DIRECTION' });
+    dispatch({ type: 'ROTATE_SELECTION' });
   };
 
   const [primaryClue] = useSelector(selectActiveClues);
@@ -50,7 +50,11 @@ export default () => {
           }
           right={
             <FloatingActionButton
-              name="text_rotation_none"
+              name={
+                selection.direction === 'row'
+                  ? 'text_rotation_none'
+                  : 'text_rotate_vertical'
+              }
               onClick={handleRotateSelectionClick}
             />
           }
