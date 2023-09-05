@@ -32,9 +32,7 @@ export default () => {
   return (
     <div
       className={styles.grid}
-      style={{
-        gridTemplateColumns: `repeat(${puzzle.width}, 33px)`,
-      }}
+      style={{ gridTemplateColumns: `repeat(${puzzle.width}, 33px)` }}
       onKeyDown={handleKeyDown}
     >
       {[...puzzle.state!].map((char, i) => (

@@ -20,6 +20,7 @@
 
 .number {
   font-size: 12px;
+  pointer-events: none;
   position: absolute;
   top: 1px;
   left: 2.5px;
