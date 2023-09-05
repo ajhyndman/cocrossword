@@ -6,7 +6,7 @@ import styles from './Solver.module.css';
 import BottomAppBar from '../components/BottomAppBar';
 import IconButton from '../components/IconButton';
 import FloatingActionButton from '../components/FloatingActionButton';
-import Clue from '../components/Clue';
+import ClueCarousel from '../components/ClueCarousel';
 import PuzzleGrid from '../components/PuzzleGrid';
 import {
   selectPuzzle,
@@ -38,7 +38,7 @@ export default () => {
         <PuzzleGrid />
       </div>
       <div className={styles.sticky}>
-        {clue && <Clue isActive index={clue.number} content={clue.clue} />}
+        {clue && <ClueCarousel index={clue.number} content={clue.clue} />}
         <BottomAppBar
           left={
             <>
@@ -52,8 +52,8 @@ export default () => {
             <FloatingActionButton
               name={
                 selection.direction === 'row'
-                  ? 'text_rotation_none'
-                  : 'text_rotate_vertical'
+                  ? 'text_rotate_vertical'
+                  : 'text_rotation_none'
               }
               onClick={handleRotateSelectionClick}
             />
