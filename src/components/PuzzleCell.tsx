@@ -83,11 +83,13 @@ export default ({ index, number, content }: Props) => {
       )}
       {!isBlackCell && (
         <input
+          autoCapitalize="characters"
+          autoCorrect="off"
+          autoComplete="off"
           ref={inputRef}
           className={styles.input}
           onChange={handleChange}
           onFocus={handleFocus}
-          // onKeyDown={handleKeyDown}
           value={cellContent || '-'}
         ></input>
       )}
