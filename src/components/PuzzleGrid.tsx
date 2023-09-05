@@ -33,7 +33,7 @@ export default () => {
     <div
       className={styles.grid}
       style={{
-        gridTemplateColumns: `repeat(${puzzle.width}, 32px)`,
+        gridTemplateColumns: `repeat(${puzzle.width}, 33px)`,
       }}
       onKeyDown={handleKeyDown}
     >

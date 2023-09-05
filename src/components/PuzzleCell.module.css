@@ -1,7 +1,10 @@
 .cell {
+  border-top: 1px solid var(--black-pearl);
+  border-left: 1px solid var(--black-pearl);
   background: var(--white);
   position: relative;
   cursor: pointer;
+  display: block;
 }
 
 .content {
@@ -32,7 +35,7 @@
 }
 
 .black {
-  background: none;
+  background: var(--black-pearl);
 }
 
 /* input should be visually hidden but interactable */
