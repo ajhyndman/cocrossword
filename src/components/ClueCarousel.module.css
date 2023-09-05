@@ -1,0 +1,27 @@
+.appBar {
+  align-items: stretch;
+  background-color: var(--san-juan);
+  box-sizing: border-box;
+  color: var(--white);
+  display: flex;
+  min-height: 64px;
+  padding: 6px 0;
+}
+
+.button {
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  display: flex;
+  font-size: 48px;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.center {
+  margin: 0 -12px;
+  flex-grow: 1;
+}

@@ -14,6 +14,7 @@
   line-height: 1.25em;
   list-style-type: none;
   padding: 6px 6px 6px 36px;
+  position: relative;
 }
 
 .listItem.active {
