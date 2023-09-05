@@ -11,33 +11,16 @@ export type State = {
 
 // actions
 export type Action =
-  | {
-      type: 'ADVANCE_CURSOR';
-      payload?: undefined;
-    }
-  | {
-      type: 'RETREAT_CURSOR';
-      payload?: undefined;
-    }
-  | {
-      type: 'INPUT';
-      payload: {
-        value: string;
-      };
-    }
+  | { type: 'ADVANCE_CURSOR'; payload?: undefined }
+  | { type: 'RETREAT_CURSOR'; payload?: undefined }
+  | { type: 'INPUT'; payload: { value: string } }
   | {
       type: 'KEYBOARD_NAVIGATE';
       payload: {
         key: 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp';
       };
     }
-  | {
-      type: 'SELECT';
-      payload: {
-        index: number;
-      };
-    }
-  | {
-      type: 'ROTATE_SELECTION';
-      payload?: undefined;
-    };
+  | { type: 'PREVIOUS_CLUE'; payload?: undefined }
+  | { type: 'NEXT_CLUE'; payload?: undefined }
+  | { type: 'ROTATE_SELECTION'; payload?: undefined }
+  | { type: 'SELECT'; payload: { index: number } };

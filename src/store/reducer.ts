@@ -2,10 +2,16 @@
 import { readFileSync } from 'fs';
 // @ts-ignore
 import { join } from 'path';
-import { parseBinaryFile, unscramble } from '@ajhyndman/puz';
+import {
+  enumerateClues,
+  gridNumbering,
+  parseBinaryFile,
+  unscramble,
+} from '@ajhyndman/puz';
 
 import { Action, State } from './types';
 import { REGEX_INPUT } from '../util/constants';
+import { getClueForSelection } from '../util/getClueForSelection';
 
 // REVERT ME
 // @ts-ignore
@@ -55,13 +61,7 @@ export const reducer = (
       if (nextIndex < 0 || state.puzzle.state?.[nextIndex] === '.') {
         return state;
       }
-      return {
-        ...state,
-        selection: {
-          ...state.selection,
-          index: nextIndex,
-        },
-      };
+      return { ...state, selection: { ...state.selection, index: nextIndex } };
     }
     case 'ADVANCE_CURSOR': {
       if (
@@ -83,13 +83,7 @@ export const reducer = (
       ) {
         return state;
       }
-      return {
-        ...state,
-        selection: {
-          ...state.selection,
-          index: nextIndex,
-        },
-      };
+      return { ...state, selection: { ...state.selection, index: nextIndex } };
     }
     case 'KEYBOARD_NAVIGATE': {
       if (state.selection.index == null || !state.puzzle) return state;
@@ -112,22 +106,42 @@ export const reducer = (
         nextIndex =
           (nextIndex + puzzle.solution.length) % puzzle.solution.length;
       } while (puzzle.solution[nextIndex] === '.');
-      return {
-        ...state,
-        selection: {
-          ...state.selection,
-          index: nextIndex,
-        },
-      };
+      return { ...state, selection: { ...state.selection, index: nextIndex } };
     }
-    case 'SELECT': {
-      return {
-        ...state,
-        selection: {
-          ...state.selection,
-          index: payload.index,
-        },
-      };
+    case 'NEXT_CLUE': {
+      if (state.selection.index == null || !state.puzzle) return state;
+      // @ts-ignore
+      const selectedClue = getClueForSelection(state.puzzle, state.selection);
+      const numbering = gridNumbering(state.puzzle);
+      const clues = enumerateClues(state.puzzle);
+      const clueCategory =
+        state.selection.direction === 'row' ? 'across' : 'down';
+      const numClues = clues[clueCategory].length;
+
+      const clueIndex = clues[clueCategory].findIndex(
+        ({ number }) => number === selectedClue,
+      );
+      const nextClue = clues[clueCategory][(clueIndex + 1) % numClues].number;
+      const nextIndex = numbering.findIndex((number) => number === nextClue);
+      return { ...state, selection: { ...state.selection, index: nextIndex } };
+    }
+    case 'PREVIOUS_CLUE': {
+      if (state.selection.index == null || !state.puzzle) return state;
+      // @ts-ignore
+      const selectedClue = getClueForSelection(state.puzzle, state.selection);
+      const numbering = gridNumbering(state.puzzle);
+      const clues = enumerateClues(state.puzzle);
+      const clueCategory =
+        state.selection.direction === 'row' ? 'across' : 'down';
+      const numClues = clues[clueCategory].length;
+
+      const clueIndex = clues[clueCategory].findIndex(
+        ({ number }) => number === selectedClue,
+      );
+      const nextClue =
+        clues[clueCategory][(clueIndex + numClues - 1) % numClues].number;
+      const nextIndex = numbering.findIndex((number) => number === nextClue);
+      return { ...state, selection: { ...state.selection, index: nextIndex } };
     }
     case 'ROTATE_SELECTION': {
       return {
@@ -136,6 +150,12 @@ export const reducer = (
           ...state.selection,
           direction: state.selection.direction === 'row' ? 'column' : 'row',
         },
+      };
+    }
+    case 'SELECT': {
+      return {
+        ...state,
+        selection: { ...state.selection, index: payload.index },
       };
     }
     default:
