@@ -31,7 +31,7 @@ export default ({ index, number, content }: Props) => {
     index,
     direction: selection.direction,
   });
-  // const clue = getClueForSelection(puzzle, selection);
+
   const state =
     selection.index === index
       ? 'focus'
