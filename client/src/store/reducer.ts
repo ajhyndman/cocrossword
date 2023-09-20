@@ -30,7 +30,7 @@ export const reducer = (
   { type, payload }: Action,
 ): State => {
   switch (type) {
-    case 'INPUT': {
+    case 'INPUT_SERVER': {
       if (state.selection.index == null) return state;
       if (!REGEX_INPUT.test(payload.value)) return state;
 
@@ -152,7 +152,7 @@ export const reducer = (
         },
       };
     }
-    case 'SELECT': {
+    case 'SELECT_SERVER': {
       return {
         ...state,
         selection: { ...state.selection, index: payload.index },

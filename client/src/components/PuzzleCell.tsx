@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
+import { usePrevious } from 'react-use';
 import cx from 'classnames';
 
 import styles from './PuzzleCell.module.css';
@@ -58,12 +59,14 @@ export default ({ index, number, content }: Props) => {
     }
   };
 
+  const prevSelectionIndex = usePrevious(selection.index);
+
   useEffect(() => {
-    if (selection.index === index) {
+    if (prevSelectionIndex !== selection.index && selection.index === index) {
       inputRef.current?.select();
       inputRef.current?.focus();
     }
-  }, [selection.index]);
+  }, [prevSelectionIndex, selection.index]);
 
   return (
     <label
