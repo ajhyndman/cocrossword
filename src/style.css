@@ -9,3 +9,8 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: var(--black-pearl);
 }
+
+input {
+  /* prevent ios from automatically zooming when an input is focused */
+  font-size: inherit;
+}
