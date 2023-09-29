@@ -2,6 +2,7 @@
   align-items: center;
   background: none;
   border: none;
+  color: inherit;
   cursor: pointer;
   display: flex;
   height: 48px;
