@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { enumerateClues } from '@ajhyndman/puz';
 
@@ -18,6 +18,25 @@ export default () => {
   const puzzle = useSelector(selectPuzzle);
   const selection = useSelector(selectSelection);
   const dispatch = useDispatch();
+  const [height, setHeight] = useState<number>();
+
+  // **WORKAROUND**
+  // iOS does not yet support the meta viewport interactive-widget configuration options.
+  // https://github.com/bramus/viewport-resize-behavior/blob/main/explainer.md#the-visual-viewport
+  useEffect(() => {
+    const iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    if (iOS) {
+      const handleViewportResize = () => {
+        setHeight(window.visualViewport?.height);
+      };
+      window.visualViewport?.addEventListener('resize', handleViewportResize);
+      return () =>
+        window.visualViewport?.removeEventListener(
+          'resize',
+          handleViewportResize,
+        );
+    }
+  }, []);
 
   if (!puzzle) return null;
 
@@ -33,7 +52,7 @@ export default () => {
   );
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{ height }}>
       <div className={styles.puzzle}>
         <PuzzleGrid />
       </div>
