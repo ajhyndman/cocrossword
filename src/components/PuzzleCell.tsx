@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
@@ -19,7 +19,7 @@ type Props = {
   onChange?: (event: React.ChangeEvent) => void;
 };
 
-export default ({ index, number, content }: Props) => {
+export default memo(({ index, number, content }: Props) => {
   const puzzle = useSelector(selectPuzzle);
   const selection = useSelector(selectSelection);
   const dispatch = useDispatch<Dispatch<Action>>();
@@ -41,15 +41,20 @@ export default ({ index, number, content }: Props) => {
   const isBlackCell = content === '.';
   const cellContent = !isBlackCell && content !== '-' && content;
 
+  const handleBackspace = (event: React.KeyboardEvent) => {
+    if (event.key === 'Backspace') {
+      dispatch({ type: 'BACKSPACE' });
+      dispatch({ type: 'RETREAT_CURSOR' });
+    }
+  };
   const handleFocus = (event: React.FocusEvent) => {
     dispatch({ type: 'SELECT', payload: { index } });
   };
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('handleChange');
-    event.preventDefault();
-    inputRef.current?.select();
-    const value = event.target.value.slice(-1).toUpperCase();
+    const value = event.nativeEvent.data;
     dispatch({ type: 'INPUT', payload: { value } });
+    dispatch({ type: 'ADVANCE_CURSOR' });
   };
   const handleClick = (event: React.MouseEvent) => {
     // if element is already selected, "focus" event won't be triggered
@@ -60,7 +65,6 @@ export default ({ index, number, content }: Props) => {
 
   useEffect(() => {
     if (selection.index === index) {
-      inputRef.current?.select();
       inputRef.current?.focus();
     }
   }, [selection.index]);
@@ -88,11 +92,12 @@ export default ({ index, number, content }: Props) => {
           autoComplete="off"
           ref={inputRef}
           className={styles.input}
-          onChange={handleChange}
+          onKeyDown={handleBackspace}
+          onInput={handleInput}
           onFocus={handleFocus}
-          value={cellContent || '-'}
+          value=""
         ></input>
       )}
     </label>
   );
-};
+});

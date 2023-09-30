@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Clue from './Clue';
 import styles from './ClueCarousel.module.css';
-import IconButton from './IconButton';
 
 type Props = {
   content: string;
   index: number;
 };
 
-export default ({ content, index }: Props) => {
+export default memo(({ content, index }: Props) => {
   const dispatch = useDispatch();
 
   return (
@@ -32,4 +31,4 @@ export default ({ content, index }: Props) => {
       </button>
     </div>
   );
-};
+});
