@@ -43,15 +43,14 @@ export default memo(({ index, number, content }: Props) => {
 
   const handleBackspace = (event: React.KeyboardEvent) => {
     if (event.key === 'Backspace') {
+      if (cellContent === false) dispatch({ type: 'RETREAT_CURSOR' });
       dispatch({ type: 'BACKSPACE' });
-      dispatch({ type: 'RETREAT_CURSOR' });
     }
   };
   const handleFocus = (event: React.FocusEvent) => {
     dispatch({ type: 'SELECT', payload: { index } });
   };
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('handleChange');
     const value = event.nativeEvent.data;
     dispatch({ type: 'INPUT', payload: { value } });
     dispatch({ type: 'ADVANCE_CURSOR' });

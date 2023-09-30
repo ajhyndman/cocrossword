@@ -32,18 +32,38 @@ export const reducer = (
   switch (type) {
     case 'INPUT': {
       if (state.selection.index == null) return state;
+      if (!state.puzzle || !state.puzzle.state) return state;
       if (!REGEX_INPUT.test(payload.value)) return state;
 
-      const nextState = [...(state.puzzle?.state ?? '')];
-      nextState[state.selection.index] = payload.value || '-';
+      const nextState = [...state.puzzle.state];
+      nextState[state.selection.index] = payload.value
+        .slice(0, 1)
+        .toUpperCase();
       return {
         ...state,
-        puzzle: state.puzzle && {
+        puzzle: {
           ...state.puzzle,
           state: nextState.join(''),
         },
       };
     }
+    case 'BACKSPACE':
+      if (
+        state.selection.index == null ||
+        !state.puzzle ||
+        !state.puzzle.state
+      ) {
+        return state;
+      }
+      const nextState = [...state.puzzle.state];
+      nextState[state.selection.index] = '-';
+      return {
+        ...state,
+        puzzle: {
+          ...state.puzzle,
+          state: nextState.join(''),
+        },
+      };
     case 'RETREAT_CURSOR': {
       if (
         state.selection.index == null ||

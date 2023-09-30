@@ -14,6 +14,7 @@ export type Action =
   | { type: 'ADVANCE_CURSOR'; payload?: undefined }
   | { type: 'RETREAT_CURSOR'; payload?: undefined }
   | { type: 'INPUT'; payload: { value: string } }
+  | { type: 'BACKSPACE' }
   | {
       type: 'KEYBOARD_NAVIGATE';
       payload: {
