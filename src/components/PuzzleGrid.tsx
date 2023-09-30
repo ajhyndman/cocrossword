@@ -21,9 +21,15 @@ export default () => {
         event.preventDefault();
         dispatch({ type: 'KEYBOARD_NAVIGATE', payload: { key: event.key } });
         break;
+      case 'Tab':
+        event.preventDefault();
+        if (event.shiftKey) dispatch({ type: 'PREVIOUS_CLUE' });
+        else dispatch({ type: 'NEXT_CLUE' });
+        break;
       case ' ':
         event.preventDefault();
         dispatch({ type: 'ROTATE_SELECTION' });
+        break;
       default:
       // pass
     }
