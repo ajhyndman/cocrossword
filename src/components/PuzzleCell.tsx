@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useLayoutEffect, useRef } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
@@ -62,7 +62,7 @@ export default memo(({ index, number, content }: Props) => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (selection.index === index) {
       inputRef.current?.focus();
     }
