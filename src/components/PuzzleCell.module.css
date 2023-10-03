@@ -5,6 +5,7 @@
   position: relative;
   cursor: pointer;
   display: block;
+  user-select: none;
 }
 
 .content {
