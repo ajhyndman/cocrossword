@@ -8,7 +8,7 @@
   },
   "private": true,
   "browserslist": "last 2 Chrome versions",
-  "source": "src/index.html",
+  "source": "client/src/index.html",
   "scripts": {
     "build": "parcel build",
     "dev": "parcel"
