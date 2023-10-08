@@ -15,7 +15,7 @@ import { getClueForSelection } from '../util/getClueForSelection';
 
 // REVERT ME
 // @ts-ignore
-const file = readFileSync(join(__dirname, '../../test/nyt_locked.puz'));
+const file = readFileSync(join(__dirname, '../../../test/nyt_locked.puz'));
 let puzzle = parseBinaryFile(file);
 puzzle = unscramble(puzzle, '7844');
 console.log(puzzle);
