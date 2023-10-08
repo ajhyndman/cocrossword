@@ -10,7 +10,7 @@ export type State = {
 };
 
 // actions
-export type Action =
+export type ClientAction =
   | { type: 'ADVANCE_CURSOR'; payload?: undefined }
   | { type: 'RETREAT_CURSOR'; payload?: undefined }
   | { type: 'INPUT'; payload: { value: string } }
@@ -25,3 +25,7 @@ export type Action =
   | { type: 'NEXT_CLUE'; payload?: undefined }
   | { type: 'ROTATE_SELECTION'; payload?: undefined }
   | { type: 'SELECT'; payload: { index: number } };
+
+export type ServerAction =
+  | { type: 'SERVER:CELL_CHANGED'; payload: { index: number; value: string } }
+  | { type: 'SERVER:SELECTED'; payload: { index: number } };
