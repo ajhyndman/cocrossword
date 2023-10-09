@@ -30,15 +30,13 @@ export const reducer = (
   { type, payload }: Action,
 ): State => {
   switch (type) {
-    case 'INPUT': {
-      if (state.selection.index == null) return state;
+    case 'SERVER:CELL_CHANGED': {
+      if (payload.index == null) return state;
       if (!state.puzzle || !state.puzzle.state) return state;
       if (!REGEX_INPUT.test(payload.value)) return state;
 
       const nextState = [...state.puzzle.state];
-      nextState[state.selection.index] = payload.value
-        .slice(0, 1)
-        .toUpperCase();
+      nextState[payload.index] = payload.value.slice(0, 1).toUpperCase();
       return {
         ...state,
         puzzle: {
@@ -47,23 +45,10 @@ export const reducer = (
         },
       };
     }
-    case 'BACKSPACE':
-      if (
-        state.selection.index == null ||
-        !state.puzzle ||
-        !state.puzzle.state
-      ) {
-        return state;
-      }
-      const nextState = [...state.puzzle.state];
-      nextState[state.selection.index] = '-';
-      return {
-        ...state,
-        puzzle: {
-          ...state.puzzle,
-          state: nextState.join(''),
-        },
-      };
+    case 'INPUT':
+    case 'BACKSPACE': {
+      return state;
+    }
     case 'RETREAT_CURSOR': {
       if (
         state.selection.index == null ||

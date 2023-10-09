@@ -2,7 +2,7 @@ import { legacy_createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import { reducer } from './reducer';
-import { clientSaga } from './saga';
+import { serverSyncSaga } from './saga';
 
 export const createStore = () => {
   const sagaMiddleware = createSagaMiddleware();
@@ -13,6 +13,7 @@ export const createStore = () => {
     reducer,
     composeEnhancers(applyMiddleware(sagaMiddleware)),
   );
-  sagaMiddleware.run(clientSaga);
+  // sagaMiddleware.run(clientSaga);
+  sagaMiddleware.run(serverSyncSaga);
   return store;
 };
