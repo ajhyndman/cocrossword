@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { enumerateClues } from '@ajhyndman/puz';
+import { enumerateClues, printBinaryFile, printTextFile } from '@ajhyndman/puz';
 
 import styles from './Solver.module.css';
 import BottomAppBar from '../components/BottomAppBar';
@@ -45,6 +45,17 @@ export default () => {
     dispatch({ type: 'ROTATE_SELECTION' });
   };
 
+  // export the current puzzle state as a .puz binary file
+  const handleDownload = () => {
+    const buffer = printBinaryFile(puzzle);
+    const file = new File([buffer], 'download.puz');
+    const url = URL.createObjectURL(file);
+    a.download = file.name;
+    a.href = url;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const [primaryClue] = useSelector(selectActiveClues);
   const clues = enumerateClues(puzzle);
   const clue = clues[selection.direction === 'row' ? 'across' : 'down'].find(
@@ -63,8 +74,9 @@ export default () => {
             <>
               <IconButton name="chat" />
               <IconButton name="info" />
-              <IconButton name="check_box" />
-              <IconButton name="edit" />
+              {/* <IconButton name="check_box" /> */}
+              {/* <IconButton name="edit" /> */}
+              <IconButton name="download" onClick={handleDownload} />
             </>
           }
           right={
