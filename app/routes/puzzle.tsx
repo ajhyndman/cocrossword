@@ -12,7 +12,7 @@ import {
   selectPuzzle,
   selectActiveClues,
   selectSelection,
-} from '../store/selectors';
+} from '~/store/selectors';
 
 export default () => {
   const puzzle = useSelector(selectPuzzle);
