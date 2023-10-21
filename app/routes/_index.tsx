@@ -1,6 +1,6 @@
 import React from 'react';
-import DropZone from '../../../app/components/DropZone';
-import styles from './UploadView.module.css';
+import DropZone from '~/components/DropZone';
+import styles from './_index.module.css';
 
 export default () => (
   <div className={styles.container}>

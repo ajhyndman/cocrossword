@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 
 import Solver from './views/Solver';
-import { createStore } from './store/store';
+import { createStore } from '../../app/store/store';
 
 // disable pinch zoom on iOS devices
 document.addEventListener(

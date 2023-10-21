@@ -2,11 +2,11 @@ import React from 'react';
 import type { Puzzle } from '@ajhyndman/puz';
 
 import styles from './Test.module.css';
-import Clue from '../components/Clue';
-import BottomAppBar from '../components/BottomAppBar';
-import IconButton from '../components/IconButton';
-import FloatingActionButton from '../components/FloatingActionButton';
-import PuzzleGrid from '../components/PuzzleGrid';
+import Clue from '../../../app/components/Clue';
+import BottomAppBar from '../../../app/components/BottomAppBar';
+import IconButton from '../../../app/components/IconButton';
+import FloatingActionButton from '../../../app/components/FloatingActionButton';
+import PuzzleGrid from '../../../app/components/PuzzleGrid';
 
 type Props = {
   puzzle: Puzzle;

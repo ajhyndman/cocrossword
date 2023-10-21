@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { enumerateClues } from '@ajhyndman/puz';
 
-import styles from './Solver.module.css';
-import BottomAppBar from '../../../app/components/BottomAppBar';
-import IconButton from '../../../app/components/IconButton';
-import FloatingActionButton from '../../../app/components/FloatingActionButton';
-import ClueCarousel from '../../../app/components/ClueCarousel';
-import PuzzleGrid from '../../../app/components/PuzzleGrid';
+import styles from './puzzle.module.css';
+import BottomAppBar from '~/components/BottomAppBar';
+import IconButton from '~/components/IconButton';
+import FloatingActionButton from '~/components/FloatingActionButton';
+import ClueCarousel from '~/components/ClueCarousel';
+import PuzzleGrid from '~/components/PuzzleGrid';
 import {
   selectPuzzle,
   selectActiveClues,
   selectSelection,
-} from '../../../app/store/selectors';
+} from '../store/selectors';
 
 export default () => {
   const puzzle = useSelector(selectPuzzle);

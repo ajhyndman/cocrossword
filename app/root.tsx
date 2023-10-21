@@ -1,5 +1,20 @@
 import { cssBundleHref } from '@remix-run/css-bundle';
 import { Links, LiveReload, Meta, Outlet, Scripts } from '@remix-run/react';
+import { Provider } from 'react-redux';
+import { createStore } from './store/store';
+
+// disable pinch zoom on iOS devices
+document.addEventListener(
+  'touchmove',
+  (event) => {
+    if ('scale' in event && event.scale !== 1) {
+      event.preventDefault();
+    }
+  },
+  { passive: false },
+);
+
+const store = createStore();
 
 export const links = () => [{ rel: 'stylesheet', href: cssBundleHref! }];
 
@@ -12,7 +27,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Provider store={store}>
+          <Outlet />
+        </Provider>
 
         <Scripts />
         <LiveReload />
