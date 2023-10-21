@@ -2,7 +2,7 @@
 export default {
   // appDirectory: "app",
   assetsBuildDirectory: "public/dist",
-  // ignoredRouteFiles: ["**/.*"],
+  ignoredRouteFiles: ["**/.*", "**/*.css"],
   publicPath: "/dist/",
   // routes(defineRoutes) {
   //   return defineRoutes((route) => {
