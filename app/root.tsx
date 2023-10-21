@@ -1,12 +1,26 @@
 import { cssBundleHref } from '@remix-run/css-bundle';
 import { Links, LiveReload, Meta, Outlet, Scripts } from '@remix-run/react';
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from './store/store';
-import { useEffect } from 'react';
+import styles from './style.css';
 
 const store = createStore();
 
-export const links = () => [{ rel: 'stylesheet', href: cssBundleHref! }];
+export const links = () => [
+  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+  { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+  {
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap',
+  },
+  {
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+  },
+  { rel: 'stylesheet', href: cssBundleHref! },
+  { rel: 'stylesheet', href: styles },
+];
 
 export default function App() {
   useEffect(() => {
@@ -26,6 +40,12 @@ export default function App() {
     <html>
       <head>
         <link rel="icon" href="data:image/x-icon;base64,AA" />
+        <meta charSet="utf-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content"
+        />
+        <title>Crossword App</title>
         <Meta />
         <Links />
       </head>
