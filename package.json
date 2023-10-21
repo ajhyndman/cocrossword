@@ -17,6 +17,7 @@
     "dev": "remix dev"
   },
   "dependencies": {
+    "@remix-run/css-bundle": "^2.1.0",
     "@remix-run/node": "^2.1.0",
     "@remix-run/react": "^2.1.0",
     "@remix-run/serve": "^2.1.0",

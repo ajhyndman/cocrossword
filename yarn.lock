@@ -647,6 +647,11 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@remix-run/css-bundle@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/css-bundle/-/css-bundle-2.1.0.tgz#d32ab754c360fe123e081c28dc23cadaa8b572d1"
+  integrity sha512-HkLQzfJFbg0yLUPvczSsdOHuK1dfTYl+egOSsJ0WYY0PNSKxjlFAI4v1ZKyPrgllVdVeqUWVtmPCjwdcYdlxjw==
+
 "@remix-run/dev@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@remix-run/dev/-/dev-2.1.0.tgz#8d303666495b7f16b69607dd8a6ba0ecc1438935"
