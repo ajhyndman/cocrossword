@@ -24,6 +24,8 @@ export default () => {
   // iOS does not yet support the meta viewport interactive-widget configuration options.
   // https://github.com/bramus/viewport-resize-behavior/blob/main/explainer.md#the-visual-viewport
   useEffect(() => {
+    if (typeof document === 'undefined') return;
+
     const iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
     if (iOS) {
       const handleViewportResize = () => {

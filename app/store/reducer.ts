@@ -1,27 +1,20 @@
-// @ts-ignore
-import { readFileSync } from 'fs';
-// @ts-ignore
-import { join } from 'path';
 import {
   enumerateClues,
   gridNumbering,
   parseBinaryFile,
   unscramble,
+  Puzzle,
 } from '@ajhyndman/puz';
 
 import { Action, State } from './types';
 import { REGEX_INPUT } from '../util/constants';
 import { getClueForSelection } from '../util/getClueForSelection';
 
-// REVERT ME
-// @ts-ignore
-const file = readFileSync(join(__dirname, '../../test/nyt_locked.puz'));
-let puzzle = parseBinaryFile(file);
-puzzle = unscramble(puzzle, '7844');
-console.log(puzzle);
+// let puzzle = parseBinaryFile(file);
+// puzzle = unscramble(puzzle, '7844');
+// console.log(puzzle);
 
 const initialState: State = {
-  puzzle,
   selection: { index: undefined, direction: 'row' },
 };
 
@@ -124,8 +117,9 @@ export const reducer = (
             break;
         }
         nextIndex =
-          (nextIndex + puzzle.solution.length) % puzzle.solution.length;
-      } while (puzzle.solution[nextIndex] === '.');
+          (nextIndex + state.puzzle.solution.length) %
+          state.puzzle.solution.length;
+      } while (state.puzzle.solution[nextIndex] === '.');
       return { ...state, selection: { ...state.selection, index: nextIndex } };
     }
     case 'NEXT_CLUE': {
