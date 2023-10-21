@@ -1,4 +1,3 @@
-import React from 'react';
 import DropZone from '~/components/DropZone';
 import styles from './_index.module.css';
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styles from './FloatingActionButton.module.css';
 
 type Props = {
