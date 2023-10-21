@@ -1,5 +1,6 @@
 import {
   Links,
+  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -21,6 +22,7 @@ export default function App() {
         <Outlet />
 
         <Scripts />
+        <LiveReload />
       </body>
     </html>
   );
