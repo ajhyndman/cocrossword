@@ -2,6 +2,7 @@ import { cssBundleHref } from '@remix-run/css-bundle';
 import { Links, LiveReload, Meta, Outlet, Scripts } from '@remix-run/react';
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
+import resetCss from 'reset-css/reset.css';
 import { createStore } from './store/store';
 import styles from './style.css';
 
@@ -10,6 +11,7 @@ const store = createStore();
 export const links = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+  { rel: 'stylesheet', href: resetCss },
   {
     rel: 'stylesheet',
     href: 'https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap',
