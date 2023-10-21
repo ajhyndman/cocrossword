@@ -7,8 +7,14 @@
     "url": "git@github.com:ajhyndman/crossword-app.git"
   },
   "private": true,
+  "type": "module",
   "engines": {
     "node": ">=18"
+  },
+  "scripts": {
+    "build": "remix build",
+    "serve": "remix-serve build/index.js",
+    "dev": "remix dev"
   },
   "dependencies": {
     "@remix-run/node": "^2.1.0",
