@@ -2,12 +2,14 @@
 # yarn lockfile v1
 
 
-"@ajhyndman/puz@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@ajhyndman/puz/-/puz-0.2.0.tgz#4e9bdf27a0e412ac7202d3be59575db016882689"
-  integrity sha512-lEfIuMMZpUqKNRwI3N+K41RpZRHLuQq2hERh4H2hz6Komc7TY5AN4AfL608ASMF9y0dvbXIR+QFQbi5Cg9OPaw==
+"@ajhyndman/puz@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@ajhyndman/puz/-/puz-0.3.0.tgz#29546504f80606288602c90f290b2aeee4a792be"
+  integrity sha512-X38TMOYskKTbZUq9rPFXY7kGsq09RSva3pxLozB1lJLp1wiPHt2xpeTvwIR9LccwkXFCyRoZi9aOSQbERZp1AA==
   dependencies:
     ts-invariant "0.8.2"
+  optionalDependencies:
+    buffer ">=5"
 
 "@ampproject/remapping@^2.2.0":
   version "2.2.1"
@@ -1180,6 +1182,14 @@ buffer-from@^1.0.0:
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
 
+buffer@>=5:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
+  integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
+  dependencies:
+    base64-js "^1.3.1"
+    ieee754 "^1.2.1"
+
 buffer@^5.5.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.7.1.tgz#ba62e7c13133053582197160851a8f648e99eed0"
@@ -2086,7 +2096,7 @@ icss-utils@^5.0.0, icss-utils@^5.1.0:
   resolved "https://registry.yarnpkg.com/icss-utils/-/icss-utils-5.1.0.tgz#c6be6858abd013d768e98366ae47e25d5887b1ae"
   integrity sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==
 
-ieee754@^1.1.13:
+ieee754@^1.1.13, ieee754@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
