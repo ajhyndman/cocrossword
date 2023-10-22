@@ -36,25 +36,19 @@ class Store<State, Action> {
   };
 }
 
-export function createStore<State, Action>(init: State) {
+export function createStore<State, Action>(reducer: Reducer<State, Action>, init: State) {
   const StoreContext = createContext<{
     dispatch: Dispatch<Action>;
     state: State;
   }>({ dispatch: () => {}, state: init });
 
-  const Provider = ({
-    reducer,
-    children,
-  }: {
-    reducer: Reducer<State, Action>;
-    children: ReactNode;
-  }) => {
+  const Provider = (props: { reducer?: Reducer<State, Action>; children: ReactNode }) => {
     const [state, setState] = useState<State>(init);
-    const store = useRef(new Store(reducer, setState, init));
+    const store = useRef(new Store(props.reducer ?? reducer, setState, init));
 
     return (
       <StoreContext.Provider value={{ dispatch: store.current.dispatch, state }}>
-        {children}
+        {props.children}
       </StoreContext.Provider>
     );
   };
