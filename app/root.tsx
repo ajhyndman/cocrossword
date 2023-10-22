@@ -3,6 +3,7 @@ import { Links, LiveReload, Meta, Outlet, Scripts } from '@remix-run/react';
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import resetCss from 'reset-css/reset.css';
+
 import { createStore } from './store/store';
 import styles from './style.css';
 
@@ -27,7 +28,7 @@ export const links = () => [
 export default function App() {
   useEffect(() => {
     // disable pinch zoom on iOS devices
-    document.addEventListener(
+    document?.addEventListener(
       'touchmove',
       (event) => {
         if ('scale' in event && event.scale !== 1) {
