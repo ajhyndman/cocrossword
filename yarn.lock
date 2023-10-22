@@ -865,6 +865,18 @@
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
 
+"@types/lodash.debounce@^4.0.8":
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/@types/lodash.debounce/-/lodash.debounce-4.0.8.tgz#d5fe36a35aa57773e05d960b3e3c703fd9ffb8b3"
+  integrity sha512-REumepIJjQFSOaBUoj81U5ZzF9YIhovzE2Lm6ejUbycmwx597k2ivG1cVfPtAj4eVuSbGoZDkJR0sRIahsE6/Q==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.200"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.200.tgz#435b6035c7eba9cdf1e039af8212c9e9281e7149"
+  integrity sha512-YI/M/4HRImtNf3pJgbF+W6FrXovqj+T+/HpENLTooK9PnkacBsDpeP3IpHab40CClUfhNmdM2WTNP2sa2dni5Q==
+
 "@types/mdast@^3.0.0":
   version "3.0.14"
   resolved "https://registry.yarnpkg.com/@types/mdast/-/mdast-3.0.14.tgz#0735473a5b35be032b9f2685b7413cbab1b8a639"
