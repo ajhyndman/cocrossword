@@ -1,10 +1,4 @@
-import {
-  enumerateClues,
-  gridNumbering,
-  parseBinaryFile,
-  unscramble,
-  Puzzle,
-} from '@ajhyndman/puz';
+import { enumerateClues, gridNumbering, parseBinaryFile, unscramble, Puzzle } from '@ajhyndman/puz';
 
 import { Action, State } from './types';
 import { REGEX_INPUT } from '../util/constants';
@@ -18,20 +12,18 @@ const initialState: State = {
   selection: { index: undefined, direction: 'row' },
 };
 
-export const reducer = (
-  state: State = initialState,
-  { type, payload }: Action,
-): State => {
+export const reducer = (state: State = initialState, { type, payload }: Action): State => {
   switch (type) {
+    case 'NEW_PUZZLE': {
+      return { ...initialState, puzzle: payload };
+    }
     case 'INPUT': {
       if (state.selection.index == null) return state;
       if (!state.puzzle || !state.puzzle.state) return state;
       if (!REGEX_INPUT.test(payload.value)) return state;
 
       const nextState = [...state.puzzle.state];
-      nextState[state.selection.index] = payload.value
-        .slice(0, 1)
-        .toUpperCase();
+      nextState[state.selection.index] = payload.value.slice(0, 1).toUpperCase();
       return {
         ...state,
         puzzle: {
@@ -41,11 +33,7 @@ export const reducer = (
       };
     }
     case 'BACKSPACE':
-      if (
-        state.selection.index == null ||
-        !state.puzzle ||
-        !state.puzzle.state
-      ) {
+      if (state.selection.index == null || !state.puzzle || !state.puzzle.state) {
         return state;
       }
       const nextState = [...state.puzzle.state];
@@ -58,11 +46,7 @@ export const reducer = (
         },
       };
     case 'RETREAT_CURSOR': {
-      if (
-        state.selection.index == null ||
-        !state.puzzle ||
-        !state.puzzle.state
-      ) {
+      if (state.selection.index == null || !state.puzzle || !state.puzzle.state) {
         return state;
       }
       let nextIndex = state.selection.index;
@@ -77,11 +61,7 @@ export const reducer = (
       return { ...state, selection: { ...state.selection, index: nextIndex } };
     }
     case 'ADVANCE_CURSOR': {
-      if (
-        state.selection.index == null ||
-        !state.puzzle ||
-        !state.puzzle.state
-      ) {
+      if (state.selection.index == null || !state.puzzle || !state.puzzle.state) {
         return state;
       }
       let nextIndex = state.selection.index;
@@ -90,10 +70,7 @@ export const reducer = (
       } else {
         nextIndex += state.puzzle.width;
       }
-      if (
-        nextIndex > state.puzzle.state.length ||
-        state.puzzle.state?.[nextIndex] === '.'
-      ) {
+      if (nextIndex > state.puzzle.state.length || state.puzzle.state?.[nextIndex] === '.') {
         return state;
       }
       return { ...state, selection: { ...state.selection, index: nextIndex } };
@@ -116,9 +93,7 @@ export const reducer = (
             nextIndex -= state.puzzle.width;
             break;
         }
-        nextIndex =
-          (nextIndex + state.puzzle.solution.length) %
-          state.puzzle.solution.length;
+        nextIndex = (nextIndex + state.puzzle.solution.length) % state.puzzle.solution.length;
       } while (state.puzzle.solution[nextIndex] === '.');
       return { ...state, selection: { ...state.selection, index: nextIndex } };
     }
@@ -128,13 +103,10 @@ export const reducer = (
       const selectedClue = getClueForSelection(state.puzzle, state.selection);
       const numbering = gridNumbering(state.puzzle);
       const clues = enumerateClues(state.puzzle);
-      const clueCategory =
-        state.selection.direction === 'row' ? 'across' : 'down';
+      const clueCategory = state.selection.direction === 'row' ? 'across' : 'down';
       const numClues = clues[clueCategory].length;
 
-      const clueIndex = clues[clueCategory].findIndex(
-        ({ number }) => number === selectedClue,
-      );
+      const clueIndex = clues[clueCategory].findIndex(({ number }) => number === selectedClue);
       const nextClue = clues[clueCategory][(clueIndex + 1) % numClues].number;
       const nextIndex = numbering.findIndex((number) => number === nextClue);
       return { ...state, selection: { ...state.selection, index: nextIndex } };
@@ -145,15 +117,11 @@ export const reducer = (
       const selectedClue = getClueForSelection(state.puzzle, state.selection);
       const numbering = gridNumbering(state.puzzle);
       const clues = enumerateClues(state.puzzle);
-      const clueCategory =
-        state.selection.direction === 'row' ? 'across' : 'down';
+      const clueCategory = state.selection.direction === 'row' ? 'across' : 'down';
       const numClues = clues[clueCategory].length;
 
-      const clueIndex = clues[clueCategory].findIndex(
-        ({ number }) => number === selectedClue,
-      );
-      const nextClue =
-        clues[clueCategory][(clueIndex + numClues - 1) % numClues].number;
+      const clueIndex = clues[clueCategory].findIndex(({ number }) => number === selectedClue);
+      const nextClue = clues[clueCategory][(clueIndex + numClues - 1) % numClues].number;
       const nextIndex = numbering.findIndex((number) => number === nextClue);
       return { ...state, selection: { ...state.selection, index: nextIndex } };
     }
