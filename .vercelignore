@@ -1,4 +1,5 @@
 .cache
 .env
 dist
+test
 node_modules

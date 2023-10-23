@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs } from '@remix-run/node';
-import { messageLog } from '~/kafkajs/index';
-
 import { eventStream } from 'remix-utils/sse/server';
+
+import { messageLog } from '~/kafkajs/index';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   return eventStream(request.signal, (send) => {

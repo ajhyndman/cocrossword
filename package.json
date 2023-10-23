@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "remix build",
-    "serve": "remix-serve build/index.js",
+    "serve": "remix-serve dist/index.js",
     "dev": "remix dev"
   },
   "dependencies": {
