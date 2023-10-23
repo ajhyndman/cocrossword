@@ -118,7 +118,7 @@ const reducer =
         const numClues = clues[clueCategory].length;
 
         const clueIndex = clues[clueCategory].findIndex(({ number }) => number === selectedClue);
-        const nextClue = clues[clueCategory][(clueIndex + 1) % numClues].number;
+        const nextClue = clues[clueCategory][(clueIndex + numClues - 1) % numClues].number;
         const nextIndex = numbering.findIndex((number) => number === nextClue);
         return { ...state, index: nextIndex };
       }

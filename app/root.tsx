@@ -1,13 +1,10 @@
 import { cssBundleHref } from '@remix-run/css-bundle';
 import { Links, LiveReload, Meta, Outlet, Scripts } from '@remix-run/react';
 import { useEffect } from 'react';
-import { Provider } from 'react-redux';
 import resetCss from 'reset-css/reset.css';
 
-import { createStore } from './store/store';
-import styles from './style.css';
-
-const store = createStore();
+import { PuzzleProvider } from '~/store/puzzle';
+import styles from '~/style.css';
 
 export const links = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -53,9 +50,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Provider store={store}>
+        <PuzzleProvider>
           <Outlet />
-        </Provider>
+        </PuzzleProvider>
 
         <Scripts />
         <LiveReload />

@@ -1,31 +1,36 @@
-import type { ActionFunctionArgs } from '@remix-run/node';
-import { useEventSource } from 'remix-utils/sse/react';
-import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { parseBinaryFile } from '@ajhyndman/puz';
+import { Form } from '@remix-run/react';
 
 import DropZone from '~/components/DropZone';
 import styles from './_index.module.css';
-
-export async function action({ params }: ActionFunctionArgs) {
-  return {};
-}
-
-export async function loader() {
-  return json({ data: 1234 });
-}
+import { useRef } from 'react';
 
 export default () => {
-  const data = useLoaderData();
-  const message = useEventSource('/sse/kafka', { event: 'message' });
+  const valueRef = useRef<HTMLInputElement>();
 
-  console.log(data);
-  console.log(message);
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file != null && valueRef.current) {
+      try {
+        const buffer = await file.arrayBuffer();
+        const puzzle = parseBinaryFile(buffer as Uint8Array);
+        console.log(puzzle);
+        valueRef.current.value = JSON.stringify(puzzle);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
 
   return (
-    <div className={styles.container}>
-      <DropZone onChange={(event) => console.log(event.target.files)} />
-      <p className={styles.caption}>Upload a .puz file to start a new game</p>
-      <p>{message}</p>
-    </div>
+    <Form action="/kafka/action" method="POST">
+      <div className={styles.container}>
+        <DropZone onChange={handleUpload} />
+        <input name="type" type="hidden" value="NEW_PUZZLE" />
+        <input name="payload" type="hidden" ref={valueRef} />
+        <p className={styles.caption}>Upload a .puz file to start a new game</p>
+        <button type="submit">GO</button>
+      </div>
+    </Form>
   );
 };

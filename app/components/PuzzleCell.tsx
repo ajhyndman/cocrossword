@@ -1,16 +1,12 @@
 import { memo, useLayoutEffect, useRef } from 'react';
-import type { Dispatch } from 'redux';
-import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 
+import { useSelectionContext } from '~/store/selection';
+import { usePuzzleContext } from '~/store/puzzle';
+import { getActiveClues } from '~/util/getActiveClues';
+import { getClueForSelection } from '~/util/getClueForSelection';
+import { useKafkaAction } from '~/util/useKafkaAction';
 import styles from './PuzzleCell.module.css';
-import {
-  selectPuzzle,
-  selectSelection,
-  selectActiveClues,
-} from '../store/selectors';
-import { Action } from '../store/types';
-import { getClueForSelection } from '../util/getClueForSelection';
 
 type Props = {
   number?: number;
@@ -20,31 +16,35 @@ type Props = {
 };
 
 export default memo(({ index, number, content }: Props) => {
-  const puzzle = useSelector(selectPuzzle);
-  const selection = useSelector(selectSelection);
-  const dispatch = useDispatch<Dispatch<Action>>();
+  // const puzzle = useSelector(selectPuzzle);
+  // const selection = useSelector(selectSelection);
+  // const dispatch = useDispatch<Dispatch<Action>>();
+
+  const { dispatch, selection } = useSelectionContext();
+  const dispatchKafka = useKafkaAction();
+  const { puzzle } = usePuzzleContext();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
 
-  const clues = useSelector(selectActiveClues);
+  if (!puzzle) return null;
+
+  // const clues = useSelector(selectActiveClues);
+  const clues = getActiveClues(puzzle, selection);
   const clueForCell = getClueForSelection(puzzle!, {
     index,
     direction: selection.direction,
   });
 
   const state =
-    selection.index === index
-      ? 'focus'
-      : clues?.[0] === clueForCell
-      ? 'secondary'
-      : undefined;
+    selection.index === index ? 'focus' : clues?.[0] === clueForCell ? 'secondary' : undefined;
   const isBlackCell = content === '.';
   const cellContent = !isBlackCell && content !== '-' && content;
 
   const handleBackspace = (event: React.KeyboardEvent) => {
     if (event.key === 'Backspace') {
       if (cellContent === false) dispatch({ type: 'RETREAT_CURSOR' });
-      dispatch({ type: 'BACKSPACE' });
+      dispatchKafka({ type: 'CELL_CHANGED', payload: { index, value: '-' } });
     }
   };
   const handleFocus = (event: React.FocusEvent) => {
@@ -52,7 +52,7 @@ export default memo(({ index, number, content }: Props) => {
   };
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.nativeEvent.data;
-    dispatch({ type: 'INPUT', payload: { value } });
+    dispatchKafka({ type: 'CELL_CHANGED', payload: { index, value } });
     dispatch({ type: 'ADVANCE_CURSOR' });
   };
   const handleClick = (event: React.MouseEvent) => {

@@ -1,9 +1,10 @@
 import { gridNumbering, Puzzle } from '@ajhyndman/puz';
 
-export const getClueForSelection = (
-  puzzle: Puzzle,
-  selection: { index: number; direction: 'row' | 'column' },
-): number => {
+import { Selection } from '~/store/selection';
+
+export const getClueForSelection = (puzzle: Puzzle, selection: Selection): number => {
+  if (selection.index == null) return -1;
+
   const numbering = gridNumbering(puzzle);
   let clue;
   let index = selection.index;

@@ -28,6 +28,7 @@ export function getKafkaClient() {
       const producer = kafka.producer();
       const consumer = kafka.consumer({ groupId: 'node-group' });
 
+      await producer.connect();
       await consumer.connect();
       await consumer.subscribe({ topic: 'my-topic', fromBeginning: true });
 

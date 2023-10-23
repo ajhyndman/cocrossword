@@ -3,7 +3,8 @@ import debounce from 'lodash.debounce';
 
 export function useEventSourceReducer<S, E>(
   route: string,
-  reducer: (state: S | undefined, message: E) => S
+  eventName: string,
+  reducer: (state: S | undefined, message: E) => S,
 ) {
   const eventSource = useRef<EventSource>();
   const state = useRef<S>();
@@ -28,8 +29,8 @@ export function useEventSourceReducer<S, E>(
       setSnapshotDebounced(nextState);
     };
 
-    source.addEventListener('message', handleEvent);
-    return () => source.removeEventListener('message', handleEvent);
+    source.addEventListener(eventName, handleEvent);
+    return () => source.removeEventListener(eventName, handleEvent);
   }, []);
 
   return snapshot;

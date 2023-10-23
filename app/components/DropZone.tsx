@@ -10,6 +10,7 @@ export default ({ onChange }: Props) => (
       upload
     </span>
     <input
+      name="file"
       type="file"
       accept=".puz"
       className={styles.input}

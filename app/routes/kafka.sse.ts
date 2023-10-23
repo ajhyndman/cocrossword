@@ -6,7 +6,7 @@ import { eventStream } from 'remix-utils/sse/server';
 export async function loader({ request }: LoaderFunctionArgs) {
   return eventStream(request.signal, (send) => {
     const unsubscribe = messageLog.subscribe((message) => {
-      send({ event: 'message', data: message.value });
+      send({ event: message.key?.toString(), data: message.value?.toString() });
     });
 
     return unsubscribe;

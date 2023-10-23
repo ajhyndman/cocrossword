@@ -1,13 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { gridNumbering } from '@ajhyndman/puz';
 
+import { usePuzzleContext } from '~/store/puzzle';
+import { useSelectionContext } from '~/store/selection';
 import styles from './PuzzleGrid.module.css';
 import PuzzleCell from './PuzzleCell';
-import { selectPuzzle } from '../store/selectors';
 
 export default () => {
-  const puzzle = useSelector(selectPuzzle);
-  const dispatch = useDispatch();
+  const { puzzle } = usePuzzleContext();
+  const { dispatch } = useSelectionContext();
+
   if (!puzzle) return null;
   const numbering = gridNumbering(puzzle);
 
@@ -41,7 +42,7 @@ export default () => {
       onKeyDown={handleKeyDown}
     >
       {[...puzzle.state!].map((char, i) => (
-        <PuzzleCell index={i} number={numbering[i]} content={char} />
+        <PuzzleCell key={i} index={i} number={numbering[i]} content={char} />
       ))}
     </div>
   );

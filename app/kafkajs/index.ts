@@ -15,7 +15,7 @@ async function initMessageLog() {
     },
   });
 
-  await consumer.seek({ topic: 'my-topic', partition: 0, offset: '0' });
+  await consumer.seek({ topic: 'my-topic', partition: 0, offset: '2' });
 }
 
 // populate log

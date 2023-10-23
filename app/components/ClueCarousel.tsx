@@ -1,32 +1,36 @@
-import React, { memo } from 'react';
-import { useDispatch } from 'react-redux';
+import { memo } from 'react';
+import { enumerateClues } from '@ajhyndman/puz';
 
+import { useSelectionContext } from '~/store/selection';
+import { usePuzzleContext } from '~/store/puzzle';
 import Clue from './Clue';
 import styles from './ClueCarousel.module.css';
+import { getActiveClues } from '~/util/getActiveClues';
 
-type Props = {
-  content: string;
-  index: number;
-};
+export default memo(() => {
+  const { dispatch, selection } = useSelectionContext();
+  const { puzzle } = usePuzzleContext();
 
-export default memo(({ content, index }: Props) => {
-  const dispatch = useDispatch();
+  if (!puzzle) return null;
+
+  const [primaryClue] = getActiveClues(puzzle, selection);
+
+  const clues = enumerateClues(puzzle);
+  const clue = clues[selection.direction === 'row' ? 'across' : 'down'].find(
+    (clue) => clue.number === primaryClue,
+  );
+
+  if (!clue) return null;
 
   return (
     <div className={styles.appBar}>
-      <button
-        className={styles.button}
-        onClick={() => dispatch({ type: 'PREVIOUS_CLUE' })}
-      >
+      <button className={styles.button} onClick={() => dispatch({ type: 'PREVIOUS_CLUE' })}>
         <span className="material-icons">arrow_left</span>
       </button>
       <div className={styles.center}>
-        <Clue isActive content={content} index={index} />
+        <Clue isActive content={clue.clue} index={clue.number} />
       </div>
-      <button
-        className={styles.button}
-        onClick={() => dispatch({ type: 'NEXT_CLUE' })}
-      >
+      <button className={styles.button} onClick={() => dispatch({ type: 'NEXT_CLUE' })}>
         <span className="material-icons">arrow_right</span>
       </button>
     </div>
