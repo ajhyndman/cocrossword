@@ -27,6 +27,7 @@ export default () => {
       <div className={styles.container}>
         <DropZone onChange={handleUpload} />
         <input name="type" type="hidden" value="NEW_PUZZLE" />
+        {/* @ts-ignore typedef mismatch between react ref prop and useRef */}
         <input name="payload" type="hidden" ref={valueRef} />
         <p className={styles.caption}>Upload a .puz file to start a new game</p>
         <button type="submit">GO</button>

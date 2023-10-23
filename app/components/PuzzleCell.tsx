@@ -51,6 +51,7 @@ export default memo(({ index, number, content }: Props) => {
     dispatch({ type: 'SELECT', payload: { index } });
   };
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // @ts-ignore TS doesn't guarantee that nativeEvent.data is present
     const value = event.nativeEvent.data;
     dispatchKafka({ type: 'CELL_CHANGED', payload: { index, value } });
     dispatch({ type: 'ADVANCE_CURSOR' });
