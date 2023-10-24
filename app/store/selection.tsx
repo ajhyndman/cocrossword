@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import { createStore } from '~/util/redux-lite';
 import { getClueForSelection } from '~/util/getClueForSelection';
+import { getNextIndex, getPrevIndex } from '~/util/cursor';
 
 export type Selection = {
   readonly index?: number;
@@ -39,35 +40,11 @@ const reducer =
       }
 
       case 'ADVANCE_CURSOR': {
-        if (state.index == null) return state;
-        let nextIndex = state.index;
-        if (state.direction === 'row') {
-          nextIndex += 1;
-        } else {
-          nextIndex += puzzle.width;
-        }
-        if (
-          nextIndex > puzzle.solution.length ||
-          puzzle.solution[nextIndex] === '.' ||
-          state.index % puzzle.width === 1
-        ) {
-          return state;
-        }
-        return { ...state, index: nextIndex };
+        return { ...state, index: getNextIndex(puzzle, state) };
       }
 
       case 'RETREAT_CURSOR': {
-        if (state.index == null) return state;
-        let nextIndex = state.index;
-        if (state.direction === 'row') {
-          nextIndex -= 1;
-        } else {
-          nextIndex -= puzzle.width;
-        }
-        if (nextIndex < 0 || puzzle.solution[nextIndex] === '.') {
-          return state;
-        }
-        return { ...state, index: nextIndex };
+        return { ...state, index: getPrevIndex(puzzle, state) };
       }
 
       case 'KEYBOARD_NAVIGATE': {
