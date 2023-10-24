@@ -4,34 +4,38 @@ import debounce from 'lodash.debounce';
 export function useEventSourceReducer<S, E>(
   route: string,
   eventName: string,
-  reducer: (state: S | undefined, message: E) => S,
+  reducer: (state: S, message: E) => S,
+  init: S,
 ) {
-  const eventSource = useRef<EventSource>();
-  const state = useRef<S>();
-
-  const [snapshot, setSnapshot] = useState<S>();
+  const state = useRef<S>(init);
+  const [snapshot, setSnapshot] = useState<S>(init);
 
   // Don't trigger a react re-render on _every_ update
   const setSnapshotDebounced = debounce((nextState: S) => setSnapshot(nextState), 100);
 
   useEffect(() => {
-    eventSource.current = new EventSource(route);
-  }, []);
+    const eventSource = new EventSource(route);
 
-  useEffect(() => {
-    const source = eventSource.current;
-    if (!source) return;
+    const handleEvent = (event: MessageEvent<string>) => {
+      // parse action
+      const action = JSON.parse(event.data);
+      action.payload = JSON.parse(action.payload);
+      console.log(action);
 
-    const handleEvent = (event: MessageEvent<E>) => {
-      const nextState = reducer(state.current, event.data);
+      const nextState = reducer(state.current, action);
       state.current = nextState;
 
       setSnapshotDebounced(nextState);
     };
 
-    source.addEventListener(eventName, handleEvent);
-    return () => source.removeEventListener(eventName, handleEvent);
+    eventSource.addEventListener(eventName, handleEvent);
+    return () => {
+      eventSource.removeEventListener(eventName, handleEvent);
+      eventSource.close();
+    };
   }, []);
+
+  console.log(snapshot);
 
   return snapshot;
 }

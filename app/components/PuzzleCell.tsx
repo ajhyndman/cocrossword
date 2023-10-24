@@ -5,7 +5,6 @@ import { useSelectionContext } from '~/store/selection';
 import { usePuzzleContext } from '~/store/puzzle';
 import { getActiveClues } from '~/util/getActiveClues';
 import { getClueForSelection } from '~/util/getClueForSelection';
-import { useKafkaAction } from '~/util/useKafkaAction';
 import styles from './PuzzleCell.module.css';
 
 type Props = {
@@ -21,8 +20,7 @@ export default memo(({ index, number, content }: Props) => {
   // const dispatch = useDispatch<Dispatch<Action>>();
 
   const { dispatch, selection } = useSelectionContext();
-  const dispatchKafka = useKafkaAction();
-  const { puzzle } = usePuzzleContext();
+  const { dispatch: dispatchKafka, puzzle } = usePuzzleContext();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);

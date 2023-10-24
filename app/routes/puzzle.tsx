@@ -5,23 +5,11 @@ import PuzzleGrid from '~/components/PuzzleGrid';
 import SolverAppBar from '~/components/SolverAppBar';
 import { usePuzzleContext } from '~/store/puzzle';
 import { SelectionProvider } from '~/store/selection';
-import { useEventSourceReducer } from '~/util/useEventSourceReducer';
 import styles from './puzzle.module.css';
 
 export default () => {
-  const { dispatch, puzzle } = usePuzzleContext();
+  const { puzzle } = usePuzzleContext();
   const [height, setHeight] = useState<number>();
-
-  useEventSourceReducer('/kafka/sse', 'ACTION', (state, event: string) => {
-    try {
-      console.log(event);
-      const action = JSON.parse(event);
-      action.payload = JSON.parse(action.payload);
-      dispatch(action);
-    } catch (e) {
-      console.warn(e);
-    }
-  });
 
   // **WORKAROUND**
   // iOS does not yet support the meta viewport interactive-widget configuration options.
