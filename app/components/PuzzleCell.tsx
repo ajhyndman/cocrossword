@@ -6,6 +6,7 @@ import { usePuzzleContext } from '~/store/puzzle';
 import { getActiveClues } from '~/util/getActiveClues';
 import { getClueForSelection } from '~/util/getClueForSelection';
 import styles from './PuzzleCell.module.css';
+import { getPrevIndex } from '~/util/cursor';
 
 type Props = {
   number?: number;
@@ -41,8 +42,12 @@ export default memo(({ index, number, content }: Props) => {
 
   const handleBackspace = (event: React.KeyboardEvent) => {
     if (event.key === 'Backspace') {
-      if (cellContent === false) dispatch({ type: 'RETREAT_CURSOR' });
-      dispatchKafka({ type: 'CELL_CHANGED', payload: { index, value: '-' } });
+      let deletedIndex = index;
+      if (cellContent === false) {
+        deletedIndex = getPrevIndex(puzzle, selection)!;
+        dispatch({ type: 'RETREAT_CURSOR' });
+      }
+      dispatchKafka({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
     }
   };
   const handleFocus = (event: React.FocusEvent) => {
