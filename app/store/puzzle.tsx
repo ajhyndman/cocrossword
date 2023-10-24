@@ -32,7 +32,7 @@ const reducer = (state: State, { type, payload }: Action) => {
   }
 };
 
-const { Provider, useContext } = createStore(reducer, DEFAULT_STATE);
+const { Provider, useContext } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
 
 export const PuzzleProvider = Provider;
 
