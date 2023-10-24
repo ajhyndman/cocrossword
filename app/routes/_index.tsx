@@ -14,7 +14,6 @@ export default () => {
       try {
         const buffer = await file.arrayBuffer();
         const puzzle = parseBinaryFile(buffer as Uint8Array);
-        console.log(puzzle);
         valueRef.current.value = JSON.stringify(puzzle);
       } catch (e) {
         console.error(e);

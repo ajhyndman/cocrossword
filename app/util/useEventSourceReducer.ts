@@ -20,7 +20,6 @@ export function useEventSourceReducer<S, E>(
       // parse action
       const action = JSON.parse(event.data);
       action.payload = JSON.parse(action.payload);
-      console.log(action);
 
       const nextState = reducer(state.current, action);
       state.current = nextState;
@@ -34,8 +33,6 @@ export function useEventSourceReducer<S, E>(
       eventSource.close();
     };
   }, []);
-
-  console.log(snapshot);
 
   return snapshot;
 }

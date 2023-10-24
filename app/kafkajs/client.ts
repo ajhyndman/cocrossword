@@ -32,6 +32,8 @@ export function getKafkaClient() {
       await consumer.connect();
       await consumer.subscribe({ topic: 'my-topic', fromBeginning: true });
 
+      console.info('kafkajs :: connection established');
+
       resolve({ consumer, producer });
     });
   }
