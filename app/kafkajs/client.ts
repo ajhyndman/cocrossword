@@ -30,7 +30,7 @@ export function getKafkaClient() {
 
       await producer.connect();
       await consumer.connect();
-      await consumer.subscribe({ topic: 'my-topic', fromBeginning: true });
+      await consumer.subscribe({ topic: 'crossword-actions', fromBeginning: true });
 
       console.info('kafkajs :: connection established');
 

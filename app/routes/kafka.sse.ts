@@ -10,7 +10,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const payload = body.get('payload') as string;
   const { producer } = await getKafkaClient();
   await producer.send({
-    topic: 'my-topic',
+    topic: 'crossword-actions',
     messages: [{ key: 'ACTION', value: JSON.stringify({ type, payload }) }],
   });
 

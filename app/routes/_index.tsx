@@ -22,7 +22,7 @@ export default () => {
   };
 
   return (
-    <Form action="/kafka/action" method="POST">
+    <Form action="/kafka/sse" method="POST">
       <div className={styles.container}>
         <DropZone onChange={handleUpload} />
         <input name="type" type="hidden" value="NEW_PUZZLE" />
