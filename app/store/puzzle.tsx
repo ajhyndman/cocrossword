@@ -24,6 +24,7 @@ const reducer = (state: State, { type, payload }: Action) => {
       return { ...state, puzzle: payload };
     case 'CELL_CHANGED':
       if (!state.puzzle?.state) return state;
+      if (payload.value == null) return state;
       const nextState = [...state.puzzle.state];
       nextState[payload.index] = payload.value.slice(0, 1).toUpperCase();
       return { ...state, puzzle: { ...state.puzzle, state: nextState.join('') } };

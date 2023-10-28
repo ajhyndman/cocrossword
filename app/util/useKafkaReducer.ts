@@ -1,17 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import debounce from 'lodash.debounce';
 
-export function useEventSourceReducer<S, E>(
+export function useKafkaReducer<S, E>(
   route: string,
   eventName: string,
   reducer: (state: S, message: E) => S,
   init: S,
 ) {
-  const state = useRef<S>(init);
+  const actions = useRef([]);
+  const animationFrameCallback = useRef(-1);
   const [snapshot, setSnapshot] = useState<S>(init);
-
-  // Don't trigger a react re-render on _every_ update
-  const setSnapshotDebounced = debounce((nextState: S) => setSnapshot(nextState), 100);
 
   useEffect(() => {
     const eventSource = new EventSource(route);
@@ -20,11 +17,14 @@ export function useEventSourceReducer<S, E>(
       // parse action
       const action = JSON.parse(event.data);
       action.payload = JSON.parse(action.payload);
+      actions.current.push(action);
 
-      const nextState = reducer(state.current, action);
-      state.current = nextState;
-
-      setSnapshotDebounced(nextState);
+      // schedule state rebuild on next paint
+      window.cancelAnimationFrame(animationFrameCallback.current);
+      animationFrameCallback.current = window.requestAnimationFrame(() => {
+        const state = actions.current.reduce(reducer, init);
+        setSnapshot(state);
+      });
     };
 
     eventSource.addEventListener(eventName, handleEvent);

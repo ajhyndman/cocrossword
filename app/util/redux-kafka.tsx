@@ -17,7 +17,7 @@
  *  )
  */
 import { createContext, ReactNode, useContext } from 'react';
-import { useEventSourceReducer } from './useEventSourceReducer';
+import { useKafkaReducer } from './useKafkaReducer';
 import { useKafkaAction } from './useKafkaAction';
 
 export type Reducer<State, Action> = (state: State, action: Action) => State;
@@ -35,7 +35,7 @@ export function createStore<State, Action>(
 
   const Provider = (props: { reducer?: Reducer<State, Action>; children: ReactNode }) => {
     const dispatch = useKafkaAction(resource);
-    const state = useEventSourceReducer(resource, 'ACTION', reducer, init);
+    const state = useKafkaReducer(resource, 'ACTION', reducer, init);
 
     return (
       <StoreContext.Provider value={{ dispatch, state }}>{props.children}</StoreContext.Provider>
