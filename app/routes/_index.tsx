@@ -4,6 +4,7 @@ import { Form } from '@remix-run/react';
 import DropZone from '~/components/DropZone';
 import styles from './_index.module.css';
 import { useRef } from 'react';
+import { CLIENT_ID } from '~/util/constants';
 
 export default () => {
   const valueRef = useRef<HTMLInputElement>();
@@ -28,6 +29,8 @@ export default () => {
         <input name="type" type="hidden" value="NEW_PUZZLE" />
         {/* @ts-ignore typedef mismatch between react ref prop and useRef */}
         <input name="payload" type="hidden" ref={valueRef} />
+        <input name="client" type="hidden" value={CLIENT_ID} />
+        <input name="index" type="hidden" value={0} />
         <p className={styles.caption}>Upload a .puz file to start a new game</p>
         <button type="submit">GO</button>
       </div>

@@ -6,12 +6,14 @@ import { messageLog } from '~/kafkajs/index';
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
+  const index = body.get('index');
+  const client = body.get('client');
   const type = body.get('type') as string;
   const payload = body.get('payload') as string;
   const { producer } = await getKafkaClient();
   await producer.send({
     topic: 'crossword-actions',
-    messages: [{ key: 'ACTION', value: JSON.stringify({ type, payload }) }],
+    messages: [{ key: 'ACTION', value: JSON.stringify({ index, client, type, payload }) }],
   });
 
   return redirect('/puzzle');
