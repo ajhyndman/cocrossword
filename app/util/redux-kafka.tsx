@@ -98,15 +98,16 @@ export function createStore<State, Action>(
     useEffect(() => {
       const eventSource = new EventSource(resource);
       const handleEvent = (event: MessageEvent<string>) => {
-        // parse action
-        const action = JSON.parse(event.data);
-
-        if (action.index == null || action.client == null) {
-          return;
-        }
-
-        action.payload = JSON.parse(action.payload);
-        pushAction(action);
+        // parse batch
+        const actions = JSON.parse(event.data);
+        actions.forEach((a: string) => {
+          const action = JSON.parse(a);
+          if (action.index == null || action.client == null) {
+            return;
+          }
+          action.payload = JSON.parse(action.payload);
+          pushAction(action);
+        });
       };
 
       eventSource.addEventListener('ACTION', handleEvent);

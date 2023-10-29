@@ -21,8 +21,9 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   return eventStream(request.signal, (send) => {
-    const unsubscribe = messageLog.subscribe((message) => {
-      send({ event: message.key?.toString(), data: message.value?.toString() ?? '' });
+    const unsubscribe = messageLog.subscribe((messages) => {
+      const actions = messages.map((message) => message.value?.toString() ?? '');
+      send({ event: 'ACTION', data: JSON.stringify(actions) });
     });
 
     return unsubscribe;
