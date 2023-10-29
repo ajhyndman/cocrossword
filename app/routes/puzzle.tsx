@@ -31,7 +31,7 @@ export default () => {
 
   return (
     <SelectionProvider puzzle={puzzle}>
-      <div className={styles.container} style={{ height }}>
+      <div className={styles.container} style={{ ...(height && { height }) }}>
         <div className={styles.puzzle}>
           <PuzzleGrid />
         </div>
