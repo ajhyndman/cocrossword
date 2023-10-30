@@ -1,0 +1,11 @@
+.container {
+  padding: 0 6px 6px 1em;
+  text-indent: -1em;
+  line-height: 1.5em;
+}
+
+.author {
+  font-weight: bold;
+  margin-right: 6px;
+}
+

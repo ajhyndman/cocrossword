@@ -1,0 +1,19 @@
+.input {
+  display: block;
+  padding: 12px 10px;
+  border: none;
+  border-radius: 8px;
+  background: var(--mystic);
+  color: inherit;
+  resize: none;
+  appearance: none;
+  line-height: 1.5em;
+  font-family: inherit;
+  font-size: inherit;
+  box-sizing: border-box;
+  flex-grow: 1;
+}
+
+.input::placeholder {
+  color: var(--casper);
+}

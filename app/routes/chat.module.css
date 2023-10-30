@@ -1,0 +1,29 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 18px 16px;
+  /* min-height: 100dvh; */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  /* create new container context for @container rules */
+  /* container-type: size; */
+}
+
+.fixed {
+  position: fixed;
+}
+
+.sticky {
+  bottom: 0;
+  position: sticky;
+}
+
+.appBar {
+  background: var(--white);
+  box-sizing: border-box;
+  display: flex;
+  /* margin: 0 auto;
+  max-width: 600px; */
+  padding: 16px 0;
+}
