@@ -2,7 +2,7 @@ import ChatMessage from '~/components/ChatMessage';
 import ChatInput from '~/components/ChatInput';
 import IconButton from '~/components/IconButton';
 
-import styles from './chat.module.css';
+import styles from './$id.chat.module.css';
 
 const CHAT_COLORS = [
   // list of colors that may be assigned to a user
