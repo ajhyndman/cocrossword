@@ -6,6 +6,7 @@ import { messageLog } from '~/kafkajs/index';
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
+  const key = body.get('key') as string;
   const index = body.get('index');
   const client = body.get('client');
   const type = body.get('type') as string;
@@ -13,17 +14,20 @@ export async function action({ request }: ActionFunctionArgs) {
   const { producer } = await getKafkaClient();
   await producer.send({
     topic: 'crossword-actions',
-    messages: [{ key: 'ACTION', value: JSON.stringify({ index, client, type, payload }) }],
+    messages: [{ key, value: JSON.stringify({ index, client, type, payload }) }],
   });
 
   return redirect('/puzzle');
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const params = new URL(request.url).searchParams;
   return eventStream(request.signal, (send) => {
     const unsubscribe = messageLog.subscribe((messages) => {
-      const actions = messages.map((message) => message.value?.toString() ?? '');
-      send({ event: 'ACTION', data: JSON.stringify(actions) });
+      const actions = messages
+        .filter((message) => message.key?.toString() === (params.get('key') as string))
+        .map((message) => message.value?.toString() ?? '');
+      send({ event: params.get('key') as string, data: JSON.stringify(actions) });
     });
 
     return unsubscribe;

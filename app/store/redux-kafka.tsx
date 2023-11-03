@@ -56,12 +56,17 @@ export function createStore<State, Action extends BaseKafkaAction>(
     dispatch: Dispatch<Action>;
     state: State;
   }>({ dispatch: () => {}, state: init });
-  const Provider = (props: { reducer?: Reducer<State, Action>; children: ReactNode }) => {
+  const Provider = (props: {
+    reducer?: Reducer<State, Action>;
+    children: ReactNode;
+    KEY: string;
+  }) => {
     const actions = useRef<Record<string, Action>>({});
     const animationFrameCallback = useRef(-1);
     const fetcher = useFetcher();
     const [state, setState] = useState(init);
 
+    // get the most recent kafka index consumed by this client
     const getCursor = useCallback(() => {
       const keys = Object.keys(actions.current);
       keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
@@ -69,6 +74,7 @@ export function createStore<State, Action extends BaseKafkaAction>(
       return Number.parseInt(last.split(':')[0]);
     }, []);
 
+    // rebuild state and trigger a re-render
     const rebuildState = useCallback(() => {
       const keys = Object.keys(actions.current);
       keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
@@ -77,6 +83,7 @@ export function createStore<State, Action extends BaseKafkaAction>(
       setState(state);
     }, []);
 
+    // push an action into the actions ref
     const pushAction = useCallback(
       (action: Action) => {
         const key = getKey(action);
@@ -90,6 +97,7 @@ export function createStore<State, Action extends BaseKafkaAction>(
       [rebuildState],
     );
 
+    // public facing 'dispatch' function
     const dispatch = useCallback((action: Action) => {
       const cursor = getCursor();
       action.index = cursor + 1;
@@ -100,6 +108,7 @@ export function createStore<State, Action extends BaseKafkaAction>(
 
       fetcher.submit(
         {
+          key: props.KEY,
           ...action,
           payload: JSON.stringify(action.payload),
         },
@@ -107,8 +116,9 @@ export function createStore<State, Action extends BaseKafkaAction>(
       );
     }, []);
 
+    // subscribe to kafka events
     useEffect(() => {
-      const eventSource = new EventSource(resource);
+      const eventSource = new EventSource(`${resource}?key=${props.KEY}`);
       const handleEvent = (event: MessageEvent<string>) => {
         // parse batch
         const actions = JSON.parse(event.data);
@@ -122,9 +132,9 @@ export function createStore<State, Action extends BaseKafkaAction>(
         });
       };
 
-      eventSource.addEventListener('ACTION', handleEvent);
+      eventSource.addEventListener(props.KEY, handleEvent);
       return () => {
-        eventSource.removeEventListener('ACTION', handleEvent);
+        eventSource.removeEventListener(props.KEY, handleEvent);
         eventSource.close();
       };
     }, [pushAction]);
