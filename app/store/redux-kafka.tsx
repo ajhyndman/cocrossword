@@ -47,7 +47,7 @@ function getKey<Action extends BaseKafkaAction>(action: Action) {
   return `${action.index}:${action.client}`;
 }
 
-export function createStore<State, Action extends BaseKafkaAction>(
+export function createStore<State, Action extends BaseAction>(
   resource: string,
   reducer: Reducer<State, Action>,
   init: State,
@@ -61,7 +61,7 @@ export function createStore<State, Action extends BaseKafkaAction>(
     children: ReactNode;
     KEY: string;
   }) => {
-    const actions = useRef<Record<string, Action>>({});
+    const actions = useRef<Record<string, BaseKafkaAction>>({});
     const animationFrameCallback = useRef(-1);
     const fetcher = useFetcher();
     const [state, setState] = useState(init);
@@ -79,13 +79,14 @@ export function createStore<State, Action extends BaseKafkaAction>(
       const keys = Object.keys(actions.current);
       keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
       const sortedActions = keys.map((key) => actions.current[key]);
-      const state = sortedActions.reduce(reducer, init);
+      // @ts-ignore (use BaseAction as BaseKafkaAction)
+      const state = sortedActions.reduce(reducer, init) as State;
       setState(state);
     }, []);
 
     // push an action into the actions ref
     const pushAction = useCallback(
-      (action: Action) => {
+      (action: BaseKafkaAction) => {
         const key = getKey(action);
         if (!actions.current[key]) {
           actions.current[key] = action;
@@ -100,11 +101,13 @@ export function createStore<State, Action extends BaseKafkaAction>(
     // public facing 'dispatch' function
     const dispatch = useCallback((action: Action) => {
       const cursor = getCursor();
+      // @ts-ignore (use BaseAction as BaseKafkaAction)
       action.index = cursor + 1;
+      // @ts-ignore (use BaseAction as BaseKafkaAction)
       action.client = CLIENT_ID;
 
       // optimistically update UI
-      pushAction(action);
+      pushAction(action as unknown as BaseKafkaAction);
 
       fetcher.submit(
         {
