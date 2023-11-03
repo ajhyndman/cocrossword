@@ -92,7 +92,6 @@ export function createStore<State, Action extends BaseAction>(
           actions.current[key] = action;
           window.cancelAnimationFrame(animationFrameCallback.current);
           animationFrameCallback.current = window.requestAnimationFrame(rebuildState);
-          console.log(actions.current);
         }
       },
       [rebuildState],
