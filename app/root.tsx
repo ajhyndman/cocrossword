@@ -50,9 +50,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <PuzzleProvider>
-          <Outlet />
-        </PuzzleProvider>
+        <Outlet />
 
         <Scripts />
         <LiveReload />

@@ -17,7 +17,7 @@ export async function action({ request }: ActionFunctionArgs) {
     messages: [{ key, value: JSON.stringify({ index, client, type, payload }) }],
   });
 
-  return redirect('/puzzle');
+  return null;
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {

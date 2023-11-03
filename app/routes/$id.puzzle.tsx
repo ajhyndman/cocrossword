@@ -1,13 +1,14 @@
+import { useParams } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 
 import ClueCarousel from '~/components/ClueCarousel';
 import PuzzleGrid from '~/components/PuzzleGrid';
 import SolverAppBar from '~/components/SolverAppBar';
-import { usePuzzleContext } from '~/store/puzzle';
+import { PuzzleProvider, usePuzzleContext } from '~/store/puzzle';
 import { SelectionProvider } from '~/store/selection';
-import styles from './puzzle.module.css';
+import styles from './$id.puzzle.module.css';
 
-export default () => {
+const View = () => {
   const { puzzle } = usePuzzleContext();
   const [height, setHeight] = useState<number>();
 
@@ -45,5 +46,15 @@ export default () => {
         <div className={styles.fixed} />
       </div>
     </SelectionProvider>
+  );
+};
+
+export default () => {
+  const { id } = useParams();
+
+  return (
+    <PuzzleProvider KEY={id!}>
+      <View />
+    </PuzzleProvider>
   );
 };
