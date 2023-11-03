@@ -1,7 +1,7 @@
 import { enumerateClues, gridNumbering, type Puzzle } from '@ajhyndman/puz';
 import type { ReactNode } from 'react';
 
-import { createStore } from '~/util/redux-lite';
+import { createStore } from '~/store/redux-lite';
 import { getClueForSelection } from '~/util/getClueForSelection';
 import { getNextIndex, getPrevIndex } from '~/util/cursor';
 

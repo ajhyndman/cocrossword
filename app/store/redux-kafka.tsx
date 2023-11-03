@@ -26,7 +26,7 @@ import {
   useState,
 } from 'react';
 import { useFetcher } from '@remix-run/react';
-import { CLIENT_ID } from './constants';
+import { CLIENT_ID } from '../util/constants';
 
 export type Reducer<State, Action> = (state: State, action: Action) => State;
 export type Dispatch<Action> = (action: Action) => void;

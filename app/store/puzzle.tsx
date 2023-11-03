@@ -1,6 +1,6 @@
 import type { Puzzle } from '@ajhyndman/puz';
 
-import { createStore } from '~/util/redux-kafka';
+import { createStore } from '~/store/redux-kafka';
 
 export type State = {
   puzzle?: Puzzle;
