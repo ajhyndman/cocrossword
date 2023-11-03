@@ -28,14 +28,26 @@ import {
 import { useFetcher } from '@remix-run/react';
 import { CLIENT_ID } from '../util/constants';
 
-export type Reducer<State, Action> = (state: State, action: Action) => State;
-export type Dispatch<Action> = (action: Action) => void;
+type BaseAction = {
+  type: string;
+  payload?: any;
+};
 
-function getKey<Action>(action: Action) {
+type BaseKafkaAction = {
+  index: number;
+  client: string;
+  type: string;
+  payload?: any;
+};
+
+export type Reducer<State, Action extends BaseAction> = (state: State, action: Action) => State;
+export type Dispatch<Action extends BaseAction> = (action: Action) => void;
+
+function getKey<Action extends BaseKafkaAction>(action: Action) {
   return `${action.index}:${action.client}`;
 }
 
-export function createStore<State, Action>(
+export function createStore<State, Action extends BaseKafkaAction>(
   resource: string,
   reducer: Reducer<State, Action>,
   init: State,

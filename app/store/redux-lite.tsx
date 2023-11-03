@@ -16,10 +16,15 @@
  */
 import { createContext, ReactNode, useContext, useRef, useState } from 'react';
 
-export type Reducer<State, Action> = (state: State, action: Action) => State;
-export type Dispatch<Action> = (action: Action) => void;
+type BaseAction = {
+  type: string;
+  payload?: any;
+};
 
-class Store<State, Action> {
+export type Reducer<State, Action extends BaseAction> = (state: State, action: Action) => State;
+export type Dispatch<Action extends BaseAction> = (action: Action) => void;
+
+class Store<State, Action extends BaseAction> {
   private reducer: (state: State, action: Action) => State;
   private state: State;
   private onChange: (state: State) => void;
@@ -36,7 +41,10 @@ class Store<State, Action> {
   };
 }
 
-export function createStore<State, Action>(reducer: Reducer<State, Action>, init: State) {
+export function createStore<State, Action extends BaseAction>(
+  reducer: Reducer<State, Action>,
+  init: State,
+) {
   const StoreContext = createContext<{
     dispatch: Dispatch<Action>;
     state: State;
