@@ -38,11 +38,11 @@ const reducer = (state: State, { type, payload }: Action) => {
   }
 };
 
-const { Provider, useContext } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
+const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
 
 export const PuzzleProvider = Provider;
 
-export const usePuzzleContext = () => {
-  const { dispatch, state } = useContext();
+export const usePuzzleStore = () => {
+  const { dispatch, state } = useStore();
   return { dispatch, puzzle: state.puzzle };
 };

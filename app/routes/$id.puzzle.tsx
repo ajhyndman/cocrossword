@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import ClueCarousel from '~/components/ClueCarousel';
 import PuzzleGrid from '~/components/PuzzleGrid';
 import SolverAppBar from '~/components/SolverAppBar';
-import { PuzzleProvider, usePuzzleContext } from '~/store/puzzle';
+import { PuzzleProvider, usePuzzleStore } from '~/store/puzzle';
 import { SelectionProvider } from '~/store/selection';
 import styles from './$id.puzzle.module.css';
 
 const View = () => {
-  const { puzzle } = usePuzzleContext();
+  const { puzzle } = usePuzzleStore();
   const [height, setHeight] = useState<number>();
 
   // **WORKAROUND**

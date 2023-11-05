@@ -1,13 +1,13 @@
 import { gridNumbering } from '@ajhyndman/puz';
 
-import { usePuzzleContext } from '~/store/puzzle';
-import { useSelectionContext } from '~/store/selection';
+import { usePuzzleStore } from '~/store/puzzle';
+import { useSelectionStore } from '~/store/selection';
 import styles from './PuzzleGrid.module.css';
 import PuzzleCell from './PuzzleCell';
 
 export default () => {
-  const { puzzle } = usePuzzleContext();
-  const { dispatch } = useSelectionContext();
+  const { puzzle } = usePuzzleStore();
+  const { dispatch } = useSelectionStore();
 
   if (!puzzle) return null;
   const numbering = gridNumbering(puzzle);

@@ -1,10 +1,10 @@
-import { useSelectionContext } from '~/store/selection';
+import { useSelectionStore } from '~/store/selection';
 import BottomAppBar from './BottomAppBar';
 import FloatingActionButton from './FloatingActionButton';
 import IconButton from './IconButton';
 
 export default () => {
-  const { dispatch, selection } = useSelectionContext();
+  const { dispatch, selection } = useSelectionStore();
 
   const handleRotateSelectionClick = () => {
     // if element is already selected, "focus" event won't be triggered

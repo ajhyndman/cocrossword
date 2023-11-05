@@ -147,9 +147,9 @@ export function createStore<State, Action extends BaseAction>(
     );
   };
 
-  const useStoreContext = () => {
+  const useStore = () => {
     return useContext(StoreContext);
   };
 
-  return { Provider, useContext: useStoreContext };
+  return { Provider, useStore };
 }

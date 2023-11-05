@@ -1,8 +1,8 @@
 import { memo, useLayoutEffect, useRef } from 'react';
 import cx from 'classnames';
 
-import { useSelectionContext } from '~/store/selection';
-import { usePuzzleContext } from '~/store/puzzle';
+import { useSelectionStore } from '~/store/selection';
+import { usePuzzleStore } from '~/store/puzzle';
 import { getActiveClues } from '~/util/getActiveClues';
 import { getClueForSelection } from '~/util/getClueForSelection';
 import styles from './PuzzleCell.module.css';
@@ -16,12 +16,8 @@ type Props = {
 };
 
 export default memo(({ index, number, content }: Props) => {
-  // const puzzle = useSelector(selectPuzzle);
-  // const selection = useSelector(selectSelection);
-  // const dispatch = useDispatch<Dispatch<Action>>();
-
-  const { dispatch, selection } = useSelectionContext();
-  const { dispatch: dispatchKafka, puzzle } = usePuzzleContext();
+  const { dispatch, selection } = useSelectionStore();
+  const { dispatch: dispatchKafka, puzzle } = usePuzzleStore();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);

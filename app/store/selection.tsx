@@ -105,10 +105,7 @@ const reducer =
     }
   };
 
-const { Provider, useContext } = createStore<Selection, SelectionAction>(
-  (a) => a,
-  DEFAULT_SELECTION,
-);
+const { Provider, useStore } = createStore<Selection, SelectionAction>((a) => a, DEFAULT_SELECTION);
 
 export const SelectionProvider = ({
   puzzle,
@@ -118,7 +115,7 @@ export const SelectionProvider = ({
   children: ReactNode;
 }) => <Provider reducer={reducer(puzzle)}>{children}</Provider>;
 
-export const useSelectionContext = () => {
-  const { dispatch, state } = useContext();
+export const useSelectionStore = () => {
+  const { dispatch, state } = useStore();
   return { dispatch, selection: state };
 };
