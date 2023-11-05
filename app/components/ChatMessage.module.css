@@ -2,6 +2,8 @@
   padding: 0 6px 6px 1em;
   text-indent: -1em;
   line-height: 1.5em;
+  overflow-anchor: none;
+  white-space: pre-wrap;
 }
 
 .author {
