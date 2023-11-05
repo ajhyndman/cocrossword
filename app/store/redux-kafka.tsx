@@ -26,7 +26,8 @@ import {
   useState,
 } from 'react';
 import { useFetcher } from '@remix-run/react';
-import { CLIENT_ID } from '../util/constants';
+
+import { CLIENT_ID } from '~/util/constants';
 
 type BaseAction = {
   type: string;
@@ -56,6 +57,7 @@ export function createStore<State, Action extends BaseAction>(
     dispatch: Dispatch<Action>;
     state: State;
   }>({ dispatch: () => {}, state: init });
+
   const Provider = (props: {
     reducer?: Reducer<State, Action>;
     children: ReactNode;
@@ -130,7 +132,6 @@ export function createStore<State, Action extends BaseAction>(
           if (action.index == null || action.client == null) {
             return;
           }
-          action.payload = JSON.parse(action.payload);
           pushAction(action);
         });
       };

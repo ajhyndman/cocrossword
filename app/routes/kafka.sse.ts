@@ -14,7 +14,9 @@ export async function action({ request }: ActionFunctionArgs) {
   const { producer } = await getKafkaClient();
   await producer.send({
     topic: 'crossword-actions',
-    messages: [{ key, value: JSON.stringify({ index, client, type, payload }) }],
+    messages: [
+      { key, value: JSON.stringify({ index, client, type, payload: JSON.parse(payload) }) },
+    ],
   });
 
   return null;
