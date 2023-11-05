@@ -256,7 +256,7 @@ export const MIDDLE_EARTH_NAMES = [
   'Ereinion',
   'Erestor',
   'Fëanor',
-  'Fingon,',
+  'Fingon',
   'Finrod',
   'Galdor',
   'Galion',
