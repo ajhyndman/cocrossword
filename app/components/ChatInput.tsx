@@ -3,18 +3,20 @@ import { ChangeEvent } from 'react';
 import styles from './ChatInput.module.css';
 
 type Props = {
-  onChange: (event: ChangeEvent) => void;
-  value: string;
+  onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder: string;
+  value?: string;
 };
 
-export default ({ onChange, value }: Props) => {
+export default ({ onChange, placeholder, value }: Props) => {
   return (
     <textarea
+      autoFocus
       rows={1}
       className={styles.input}
       onChange={onChange}
       value={value}
-      placeholder={`Message as Chic Trout`}
+      placeholder={placeholder}
     />
   );
 };
