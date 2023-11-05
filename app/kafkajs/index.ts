@@ -10,14 +10,13 @@ async function initMessageLog() {
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      console.debug({ value: message });
       messageLog.push(message);
     },
   });
 
   await consumer.seek({ topic: 'crossword-actions', partition: 0, offset: '0' });
 
-  console.log('kafkajs :: local log populated');
+  console.info('kafkajs :: local log populated');
 }
 
 // populate log
