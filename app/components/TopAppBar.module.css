@@ -1,0 +1,21 @@
+.container {
+  align-items: center;
+  background: var(--san-juan);
+  box-sizing: border-box;
+  color: var(--white);
+  display: flex;
+  padding: 8px 16px;
+  position: sticky;
+  top: 0;
+}
+
+.left {
+  align-items: center;
+  display: flex;
+  flex-grow: 1;
+}
+
+.right {
+  align-items: center;
+  display: flex;
+}
