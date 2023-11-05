@@ -1,5 +1,5 @@
 import { cssBundleHref } from '@remix-run/css-bundle';
-import { Links, LiveReload, Meta, Outlet, Scripts } from '@remix-run/react';
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 import { useEffect } from 'react';
 import resetCss from 'reset-css/reset.css';
 
@@ -53,6 +53,7 @@ export default function App() {
         <Outlet />
 
         <Scripts />
+        <ScrollRestoration />
         <LiveReload />
       </body>
     </html>
