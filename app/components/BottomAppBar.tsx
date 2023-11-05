@@ -10,6 +10,6 @@ type Props = {
 export default memo(({ left, right }: Props) => (
   <div className={styles.container}>
     <span className={styles.left}>{left}</span>
-    <span>{right}</span>
+    <span className={styles.right}>{right}</span>
   </div>
 ));

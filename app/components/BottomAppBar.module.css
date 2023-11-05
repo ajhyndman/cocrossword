@@ -7,8 +7,14 @@
 }
 
 .left {
+  align-items: center;;
   display: flex;
   flex-grow: 1;
+}
+
+.right {
+  align-items: center;
+  display: flex;
 }
 
 @container (max-height: 479px) {
