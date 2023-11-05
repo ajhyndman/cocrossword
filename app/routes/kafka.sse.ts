@@ -1,8 +1,8 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { eventStream } from 'remix-utils/sse/server';
-import { getKafkaClient } from '~/kafkajs/client';
 
-import { messageLog } from '~/kafkajs/index';
+import { getKafkaClient } from '~/kafkajs/client';
+import { getMessageLog } from '~/kafkajs/index';
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
@@ -22,6 +22,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const params = new URL(request.url).searchParams;
+  const messageLog = await getMessageLog();
+
   return eventStream(request.signal, (send) => {
     const unsubscribe = messageLog.subscribe((messages) => {
       const actions = messages

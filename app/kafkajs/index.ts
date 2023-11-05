@@ -2,22 +2,26 @@ import { getKafkaClient } from './client';
 import { Log } from './log';
 import type { KafkaMessage } from 'kafkajs';
 
-// TODO: When should this buffer be initialized and how long should it live?
-export const messageLog = new Log<KafkaMessage>();
+let init: Promise<Log<KafkaMessage>>;
 
-async function initMessageLog() {
-  const { consumer } = await getKafkaClient();
+export async function getMessageLog() {
+  if (init) return init;
 
-  await consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
-      messageLog.push(message);
-    },
+  init = new Promise(async (resolve) => {
+    const messageLog = new Log<KafkaMessage>();
+    const { consumer } = await getKafkaClient();
+
+    await consumer.run({
+      eachMessage: async ({ topic, partition, message }) => {
+        messageLog.push(message);
+      },
+    });
+    await consumer.seek({ topic: 'crossword-actions', partition: 0, offset: '0' });
+
+    resolve(messageLog);
+
+    console.info('kafkajs :: local log populated');
   });
 
-  await consumer.seek({ topic: 'crossword-actions', partition: 0, offset: '0' });
-
-  console.info('kafkajs :: local log populated');
+  return init;
 }
-
-// populate log
-initMessageLog();
