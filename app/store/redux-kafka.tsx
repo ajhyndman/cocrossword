@@ -71,6 +71,7 @@ export function createStore<State, Action extends BaseAction>(
       const keys = Object.keys(actions.current);
       keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
       const last = keys[keys.length - 1];
+      if (!last) return 0;
       return Number.parseInt(last.split(':')[0]);
     }, []);
 
