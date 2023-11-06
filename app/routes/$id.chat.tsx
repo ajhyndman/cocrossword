@@ -1,58 +1,126 @@
-import ChatMessage from '~/components/ChatMessage';
+import { useLoaderData, useParams } from '@remix-run/react';
+import { json, LoaderFunctionArgs } from '@remix-run/node';
+import { useCallback, useMemo, useState } from 'react';
+import { v4 } from 'uuid';
+
 import ChatInput from '~/components/ChatInput';
+import ChatMessage from '~/components/ChatMessage';
 import IconButton from '~/components/IconButton';
+import TopAppBar from '~/components/TopAppBar';
+import { getSession, commitSession } from '~/sessions.server';
+import { ChatProvider, useChatStore } from '~/store/chat';
+import { UsersProvider, loadUsersStore, useUsersStore } from '~/store/users';
+import { CHAT_COLORS, MIDDLE_EARTH_NAMES } from '~/util/constants';
+import { randomItem } from '~/util/randomItem';
+import { login } from '~/util/login.server';
 
 import styles from './$id.chat.module.css';
 
-const CHAT_COLORS = [
-  // list of colors that may be assigned to a user
-  '#405695',
-  '#409395',
-  '#509540',
-  '#714095',
-  '#954058',
-  '#95408E',
-  '#957840',
-  '#BB51B3',
-];
+export async function loader({ request, params: { id } }: LoaderFunctionArgs) {
+  const cookie = request.headers.get('Cookie');
+  return login(cookie, id!);
+}
 
-export default () => {
+const View = () => {
+  const { userId } = useLoaderData<typeof loader>();
+  const {
+    dispatch: userDispatch,
+    state: { users },
+  } = useUsersStore();
+  const {
+    dispatch: chatDispatch,
+    state: { messages },
+  } = useChatStore();
+  const [value, setValue] = useState<string>('');
+  const [isEditing, setIsEditing] = useState(false);
+
+  const user = useMemo(() => users[userId], [users, userId]);
+
+  const submitMessage = useCallback(() => {
+    if (!value) return;
+
+    // dispatch message
+    chatDispatch({ type: 'NEW_MESSAGE', payload: { author: userId, body: value } });
+
+    // clear input state
+    setValue('');
+  }, [userId, value]);
+
+  const handleEnter = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+
+        submitMessage();
+      }
+    },
+    [submitMessage],
+  );
+
+  const handleBlur = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
+    userDispatch({ type: 'USER_RENAMED', payload: { id: userId, name: event.target.value } });
+    setIsEditing(false);
+  }, []);
+
+  if (!user) return null;
+
   return (
-    <div className={styles.container}>
-      <ChatMessage
-        color={CHAT_COLORS[0]}
-        author="Notable Mole"
-        message="Could 36A be “Elephant”?"
+    <>
+      <TopAppBar
+        left={
+          <>
+            {isEditing ? (
+              <input
+                autoFocus
+                className={styles.titleInput}
+                defaultValue={user.name}
+                onBlur={handleBlur}
+                maxLength={50}
+              />
+            ) : (
+              <span className={styles.title}>{user.name}</span>
+            )}
+            {!isEditing && <IconButton name="edit" onClick={() => setIsEditing(true)} />}
+          </>
+        }
+        right={
+          <>
+            <IconButton name="group" />
+          </>
+        }
       />
-      <ChatMessage color={CHAT_COLORS[0]} author="Disdainful Heron" message="Hello!" />
-      <ChatMessage color={CHAT_COLORS[1]} author="Disdainful Heron" message="Hello!" />
-      <ChatMessage color={CHAT_COLORS[2]} author="Disdainful Heron" message="Hello!" />
-      <ChatMessage color={CHAT_COLORS[3]} author="Disdainful Heron" message="Hello!" />
-      <ChatMessage color={CHAT_COLORS[4]} author="Disdainful Heron" message="Hello!" />
-      <ChatMessage color={CHAT_COLORS[5]} author="Disdainful Heron" message="Hello!" />
-      <ChatMessage color={CHAT_COLORS[6]} author="Disdainful Heron" message="Hello!" />
-      <ChatMessage color={CHAT_COLORS[7]} author="Disdainful Heron" message="Hello!" />
-      <ChatMessage
-        color={CHAT_COLORS[2]}
-        author="Chic Trout"
-        message="It looks like the clue for 17A might help with 42D"
-      />
-      <ChatMessage
-        author="Disdainful Heron"
-        color={CHAT_COLORS[1]}
-        message="The name of this puzzle is “Dynamic Duos”. Could that be a clue to the connection between some of these clues?"
-      />
+      <div className={styles.container}>
+        {messages.map((message, i) => {
+          const user = users[message.author];
+          return (
+            <ChatMessage key={i} color={user.color} author={user.name} message={message.body} />
+          );
+        })}
+        <div className={styles.anchor} />
 
-      <div className={styles.sticky}>
-        <div className={styles.appBar}>
-          <ChatInput />
-          <IconButton name="send" />
+        <div className={styles.fixed}>
+          <div className={styles.appBar} onKeyDown={handleEnter}>
+            <ChatInput
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder={`Message as ${user.name}`}
+            />
+            <IconButton name="send" onClick={submitMessage} />
+          </div>
         </div>
       </div>
-      {/* simply having a position: fixed element on the page fixes a bug with
-            position: sticky on some browsers.
-            @see: https://www.stevefenton.co.uk/blog/2022/12/mobile-position-sticky-issue/ */}
-      <div className={styles.fixed} />
-    </div>
+    </>
+  );
+};
+
+export default () => {
+  const { id } = useParams();
+
+  return (
+    <UsersProvider KEY={id!}>
+      <ChatProvider KEY={id!}>
+        <View />
+      </ChatProvider>
+    </UsersProvider>
   );
 };

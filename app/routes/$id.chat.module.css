@@ -1,29 +1,47 @@
 .container {
   max-width: 600px;
   margin: 0 auto;
-  padding: 18px 16px;
-  /* min-height: 100dvh; */
+  padding: 18px 16px 0;
+  min-height: calc(100dvh - 60px); /* subtract height of top bar */
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  /* create new container context for @container rules */
-  /* container-type: size; */
+}
+
+.anchor {
+  overflow-anchor: auto;
+  /* also serves as a spacer for the fixed chat input pane */
+  height: 80px;
 }
 
 .fixed {
   position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
 }
 
-.sticky {
-  bottom: 0;
-  position: sticky;
+.title {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.titleInput {
+  color: inherit;
+  appearance: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  min-width: 0;
+  width: 200px;
 }
 
 .appBar {
   background: var(--white);
   box-sizing: border-box;
   display: flex;
-  /* margin: 0 auto;
-  max-width: 600px; */
-  padding: 16px 0;
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 16px 0 16px 16px;
 }
