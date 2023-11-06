@@ -1,12 +1,26 @@
+import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { useParams } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 
 import ClueCarousel from '~/components/ClueCarousel';
 import PuzzleGrid from '~/components/PuzzleGrid';
 import SolverAppBar from '~/components/SolverAppBar';
-import { PuzzleProvider, usePuzzleStore } from '~/store/puzzle';
+import { PuzzleProvider, loadPuzzleStore, usePuzzleStore } from '~/store/puzzle';
 import { SelectionProvider } from '~/store/selection';
+import { login } from '~/util/login.server';
+
 import styles from './$id.puzzle.module.css';
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  // if route doesn't match a real puzzle, redirect back to home
+  if (!params.id) return redirect('/');
+  const { getState } = await loadPuzzleStore(params.id);
+  if (!getState().puzzle) return redirect('/');
+
+  // otherwise ensure session and load route
+  const cookie = request.headers.get('Cookie');
+  return login(cookie, params.id!);
+}
 
 const View = () => {
   const { puzzle } = usePuzzleStore();
