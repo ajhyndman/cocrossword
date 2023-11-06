@@ -1,5 +1,6 @@
 import { createStore } from '~/store/redux-kafka';
 import { loadStore } from './redux.server';
+import { CHAT_COLORS } from '~/util/constants';
 
 type User = {
   id: string;
@@ -14,7 +15,7 @@ export type State = {
 export type Action =
   | {
       type: 'USER_JOINED';
-      payload: User;
+      payload: Pick<User, 'id' | 'name'>;
     }
   | {
       type: 'USER_RENAMED';
@@ -28,8 +29,13 @@ export const reducer = (state: State, { type, payload }: Action) => {
     case 'USER_JOINED':
       // if user already exists, do not recreate them
       if (state.users[payload.id]) return state;
-      // otherwise, insert new user
-      return { ...state, users: { ...state.users, [payload.id]: payload } };
+
+      // otherwise, try to pick a new color
+      const userCount = Object.keys(state.users).length;
+      const color = CHAT_COLORS[userCount % CHAT_COLORS.length];
+
+      // then insert new user
+      return { ...state, users: { ...state.users, [payload.id]: { ...payload, color } } };
 
     case 'USER_RENAMED':
       // if user doesn't exist, bail out

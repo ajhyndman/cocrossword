@@ -3,7 +3,7 @@ import { commitSession, getSession } from '~/sessions.server';
 import { loadUsersStore } from '~/store/users';
 import { randomItem } from './randomItem';
 import { json } from '@remix-run/node';
-import { CHAT_COLORS, MIDDLE_EARTH_NAMES } from './constants';
+import { MIDDLE_EARTH_NAMES } from './constants';
 
 export async function login(cookie: string | null, id: string) {
   const session = await getSession(cookie);
@@ -23,12 +23,10 @@ export async function login(cookie: string | null, id: string) {
 
   // generate a new user if none exists
   if (!user) {
-    // pick a random color
-    const color = randomItem(CHAT_COLORS);
     // generate a placeholder name
     const name = randomItem(MIDDLE_EARTH_NAMES);
 
-    dispatch({ type: 'USER_JOINED', payload: { id: userId, color, name } });
+    dispatch({ type: 'USER_JOINED', payload: { id: userId, name } });
   }
 
   return json({ userId }, { headers });

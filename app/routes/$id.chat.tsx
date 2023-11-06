@@ -1,17 +1,13 @@
 import { useLoaderData, useParams } from '@remix-run/react';
-import { json, LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from '@remix-run/node';
 import { useCallback, useMemo, useState } from 'react';
-import { v4 } from 'uuid';
 
 import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
 import IconButton from '~/components/IconButton';
 import TopAppBar from '~/components/TopAppBar';
-import { getSession, commitSession } from '~/sessions.server';
 import { ChatProvider, useChatStore } from '~/store/chat';
-import { UsersProvider, loadUsersStore, useUsersStore } from '~/store/users';
-import { CHAT_COLORS, MIDDLE_EARTH_NAMES } from '~/util/constants';
-import { randomItem } from '~/util/randomItem';
+import { UsersProvider, useUsersStore } from '~/store/users';
 import { login } from '~/util/login.server';
 
 import styles from './$id.chat.module.css';
