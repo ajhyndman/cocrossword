@@ -19,6 +19,10 @@ export async function action({ request }: ActionFunctionArgs) {
     ],
   });
 
+  if (type === 'NEW_PUZZLE') {
+    return redirect(`/${key}/puzzle`);
+  }
+
   return null;
 }
 
