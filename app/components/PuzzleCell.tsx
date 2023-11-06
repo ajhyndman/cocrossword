@@ -1,40 +1,40 @@
-import { memo, useLayoutEffect, useRef } from 'react';
+import { memo, useLayoutEffect, useMemo, useRef } from 'react';
 import cx from 'classnames';
 
 import { useSelectionStore } from '~/store/selection';
 import { usePuzzleStore } from '~/store/puzzle';
-import { getActiveClues } from '~/util/getActiveClues';
 import { getClueForSelection } from '~/util/getClueForSelection';
 import styles from './PuzzleCell.module.css';
 import { getPrevIndex } from '~/util/cursor';
 
 type Props = {
+  activeClues: number[];
   number?: number;
   index: number;
   content: string;
-  onChange?: (event: React.ChangeEvent) => void;
 };
 
-export default memo(({ index, number, content }: Props) => {
+export default memo(({ activeClues, index, number, content }: Props) => {
   const { dispatch, selection } = useSelectionStore();
   const { dispatch: dispatchKafka, puzzle } = usePuzzleStore();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
 
-  if (!puzzle) return null;
-
-  // const clues = useSelector(selectActiveClues);
-  const clues = getActiveClues(puzzle, selection);
   const clueForCell = getClueForSelection(puzzle!, {
     index,
     direction: selection.direction,
   });
-
   const state =
-    selection.index === index ? 'focus' : clues?.[0] === clueForCell ? 'secondary' : undefined;
+    selection.index === index
+      ? 'focus'
+      : activeClues?.[0] === clueForCell
+      ? 'secondary'
+      : undefined;
   const isBlackCell = content === '.';
   const cellContent = !isBlackCell && content !== '-' && content;
+
+  if (!puzzle) return null;
 
   const handleBackspace = (event: React.KeyboardEvent) => {
     if (event.key === 'Backspace') {

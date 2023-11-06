@@ -4,13 +4,16 @@ import { usePuzzleStore } from '~/store/puzzle';
 import { useSelectionStore } from '~/store/selection';
 import styles from './PuzzleGrid.module.css';
 import PuzzleCell from './PuzzleCell';
+import { getActiveClues } from '~/util/getActiveClues';
 
 export default () => {
   const { puzzle } = usePuzzleStore();
-  const { dispatch } = useSelectionStore();
+  const { dispatch, selection } = useSelectionStore();
 
   if (!puzzle) return null;
   const numbering = gridNumbering(puzzle);
+
+  const activeClues = getActiveClues(puzzle, selection);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     switch (event.key) {
@@ -41,9 +44,17 @@ export default () => {
       style={{ gridTemplateColumns: `repeat(${puzzle.width}, 33px)` }}
       onKeyDown={handleKeyDown}
     >
-      {[...puzzle.state!].map((char, i) => (
-        <PuzzleCell key={i} index={i} number={numbering[i]} content={char} />
-      ))}
+      {[...puzzle.state!].map((char, i) => {
+        return (
+          <PuzzleCell
+            key={i}
+            index={i}
+            number={numbering[i]}
+            activeClues={activeClues}
+            content={char}
+          />
+        );
+      })}
     </div>
   );
 };
