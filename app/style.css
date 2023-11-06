@@ -10,6 +10,11 @@ body {
   color: var(--black-pearl);
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 input {
   /* prevent ios from automatically zooming when an input is focused */
   font-size: inherit;
