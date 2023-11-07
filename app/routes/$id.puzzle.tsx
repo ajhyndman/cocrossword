@@ -1,12 +1,14 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { useParams } from '@remix-run/react';
+import { useLoaderData, useParams } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 
 import ClueCarousel from '~/components/ClueCarousel';
 import PuzzleGrid from '~/components/PuzzleGrid';
 import SolverAppBar from '~/components/SolverAppBar';
+import { ActivityProvider } from '~/store/activity';
 import { PuzzleProvider, loadPuzzleStore, usePuzzleStore } from '~/store/puzzle';
 import { SelectionProvider } from '~/store/selection';
+import { UsersProvider } from '~/store/users';
 import { login } from '~/util/login.server';
 
 import styles from './$id.puzzle.module.css';
@@ -22,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return login(cookie, params.id!);
 }
 
-const View = () => {
+const View = ({ userId }: { userId: string }) => {
   const { puzzle } = usePuzzleStore();
   const [height, setHeight] = useState<number>();
 
@@ -48,7 +50,7 @@ const View = () => {
     <SelectionProvider puzzle={puzzle}>
       <div className={styles.container} style={{ ...(height && { height }) }}>
         <div className={styles.puzzle}>
-          <PuzzleGrid />
+          <PuzzleGrid userId={userId} />
         </div>
         <div className={styles.sticky}>
           <ClueCarousel />
@@ -65,10 +67,15 @@ const View = () => {
 
 export default () => {
   const { id } = useParams();
+  const { userId } = useLoaderData<typeof loader>();
 
   return (
-    <PuzzleProvider KEY={id!}>
-      <View />
-    </PuzzleProvider>
+    <UsersProvider KEY={id!}>
+      <ActivityProvider KEY={id!}>
+        <PuzzleProvider KEY={id!}>
+          <View userId={userId} />
+        </PuzzleProvider>
+      </ActivityProvider>
+    </UsersProvider>
   );
 };

@@ -1,14 +1,52 @@
 import { gridNumbering } from '@ajhyndman/puz';
+import { useEffect, useMemo } from 'react';
 
+import { useActivityStore } from '~/store/activity';
 import { usePuzzleStore } from '~/store/puzzle';
 import { useSelectionStore } from '~/store/selection';
+import { getActiveClues } from '~/util/getActiveClues';
 import styles from './PuzzleGrid.module.css';
 import PuzzleCell from './PuzzleCell';
-import { getActiveClues } from '~/util/getActiveClues';
+import { useUsersStore } from '~/store/users';
 
-export default () => {
+type Props = {
+  userId: string;
+};
+
+export default ({ userId }: Props) => {
+  const {
+    state: { users },
+  } = useUsersStore();
   const { puzzle } = usePuzzleStore();
   const { dispatch, selection } = useSelectionStore();
+  const {
+    dispatch: dispatchActivity,
+    state: { selections },
+  } = useActivityStore();
+
+  const selectionIndices = useMemo(() => {
+    const selectionIndices: string[][] = [];
+    Object.entries(selections).forEach(([id, index]) => {
+      if (!index || id === userId) return;
+      if (!selectionIndices[index]) {
+        selectionIndices[index] = [];
+      }
+      const color = users[id].color;
+      selectionIndices[index].push(color);
+    });
+    return selectionIndices;
+  }, [users, selections]);
+
+  useEffect(() => {
+    // whenever selection updates, notify peers of new position
+    if (!selection.index) {
+      dispatchActivity({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
+    }
+    dispatchActivity({
+      type: 'USER_SELECTION_CHANGED',
+      payload: { id: userId, index: selection.index! },
+    });
+  }, [selection.index]);
 
   if (!puzzle) return null;
   const numbering = gridNumbering(puzzle);
@@ -52,6 +90,7 @@ export default () => {
             number={numbering[i]}
             activeClues={activeClues}
             content={char}
+            selections={selectionIndices[i]}
           />
         );
       })}

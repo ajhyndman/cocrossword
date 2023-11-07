@@ -1,20 +1,21 @@
-import { memo, useLayoutEffect, useMemo, useRef } from 'react';
+import { memo, useLayoutEffect, useRef } from 'react';
 import cx from 'classnames';
 
 import { useSelectionStore } from '~/store/selection';
 import { usePuzzleStore } from '~/store/puzzle';
+import { getPrevIndex } from '~/util/cursor';
 import { getClueForSelection } from '~/util/getClueForSelection';
 import styles from './PuzzleCell.module.css';
-import { getPrevIndex } from '~/util/cursor';
 
 type Props = {
   activeClues: number[];
-  number?: number;
-  index: number;
   content: string;
+  index: number;
+  number?: number;
+  selections?: string[];
 };
 
-export default memo(({ activeClues, index, number, content }: Props) => {
+export default memo(({ activeClues, index, number, content, selections }: Props) => {
   const { dispatch, selection } = useSelectionStore();
   const { dispatch: dispatchKafka, puzzle } = usePuzzleStore();
 
@@ -83,6 +84,13 @@ export default memo(({ activeClues, index, number, content }: Props) => {
         <span className={styles.content} aria-hidden>
           {cellContent}
         </span>
+      )}
+      {selections && (
+        <div className={styles.cursors}>
+          {selections.map((color) => (
+            <div key={color} className={styles.cursor} style={{ backgroundColor: color }} />
+          ))}
+        </div>
       )}
       {!isBlackCell && (
         <input
