@@ -48,6 +48,8 @@ function getKey<Action extends BaseKafkaAction>(action: Action) {
   return `${action.index}:${action.client}`;
 }
 
+const EVENT_SOURCE_POOL: { [key: string]: EventSource } = {};
+
 export function createStore<State, Action extends BaseAction>(
   resource: string,
   reducer: Reducer<State, Action>,
@@ -123,7 +125,10 @@ export function createStore<State, Action extends BaseAction>(
 
     // subscribe to kafka events
     useEffect(() => {
-      const eventSource = new EventSource(`${resource}?key=${props.KEY}`);
+      if (!EVENT_SOURCE_POOL[props.KEY]) {
+        EVENT_SOURCE_POOL[props.KEY] = new EventSource(`${resource}?key=${props.KEY}`);
+      }
+      const eventSource = EVENT_SOURCE_POOL[props.KEY];
       const handleEvent = (event: MessageEvent<string>) => {
         // parse batch
         const actions = JSON.parse(event.data);
@@ -139,7 +144,6 @@ export function createStore<State, Action extends BaseAction>(
       eventSource.addEventListener(props.KEY, handleEvent);
       return () => {
         eventSource.removeEventListener(props.KEY, handleEvent);
-        eventSource.close();
       };
     }, [pushAction]);
 
