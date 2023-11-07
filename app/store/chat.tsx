@@ -1,19 +1,12 @@
 import { createStore } from '~/store/redux-kafka';
 import { loadStore } from './redux.server';
 
-type User = {
-  id: string;
-  name: string;
-  color: string;
-};
-
 type Message = {
   author: string;
   body: string;
 };
 
 export type State = {
-  users: { [id: string]: User };
   messages: Message[];
 };
 
@@ -22,7 +15,7 @@ export type Action = {
   payload: Message;
 };
 
-const DEFAULT_STATE = { users: {}, messages: [] };
+const DEFAULT_STATE = { messages: [] };
 
 export const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
