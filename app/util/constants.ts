@@ -6,14 +6,18 @@ export const REGEX_INPUT = /^[A-Za-z0-9@#$%&+?]+$/;
 
 export const CHAT_COLORS = [
   // list of colors that may be assigned to a user
-  '#405695',
-  '#409395',
-  '#509540',
-  '#714095',
-  '#954058',
-  '#95408E',
-  '#957840',
-  '#BB51B3',
+  '#609EEB',
+  '#EB60BF',
+  '#EBBA60',
+  '#72EB60',
+  '#54D3EA',
+  '#C654EB',
+  '#EB9854',
+  '#B8EB54',
+  '#54EBA3',
+  '#6954EB',
+  '#EB6754',
+  '#EBD754',
 ];
 
 export const MIDDLE_EARTH_NAMES = [
