@@ -1,35 +1,8 @@
-import { getKafkaClient } from './client';
-import { Log } from './log';
-import type { KafkaMessage } from 'kafkajs';
+import * as development from './index.development';
+import * as production from './index.production';
 
-let init: Promise<Log<KafkaMessage>>;
+export const dispatch =
+  process.env.NODE_ENV === 'production' ? production.dispatch : development.dispatch;
 
-export async function dispatch(key: string, action: any) {
-  const { producer } = await getKafkaClient();
-  await producer.send({
-    topic: 'crossword-actions',
-    messages: [{ key, value: JSON.stringify(action) }],
-  });
-}
-
-export async function getMessageLog() {
-  if (init) return init;
-
-  init = new Promise(async (resolve) => {
-    const messageLog = new Log<KafkaMessage>();
-    const { consumer } = await getKafkaClient();
-
-    await consumer.run({
-      eachMessage: async ({ topic, partition, message }) => {
-        messageLog.push(message);
-      },
-    });
-    await consumer.seek({ topic: 'crossword-actions', partition: 0, offset: '0' });
-
-    resolve(messageLog);
-
-    console.info('kafkajs :: local log populated');
-  });
-
-  return init;
-}
+export const getMessageLog =
+  process.env.NODE_ENV === 'production' ? production.getMessageLog : development.getMessageLog;
