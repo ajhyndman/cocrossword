@@ -25,9 +25,9 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useFetcher } from '@remix-run/react';
 
 import { CLIENT_ID } from '~/util/constants';
+import throttle from 'lodash.throttle';
 
 type BaseAction = {
   type: string;
@@ -48,7 +48,39 @@ function getKey<Action extends BaseKafkaAction>(action: Action) {
   return `${action.index}:${action.client}`;
 }
 
+// TODO: It would be much safer to move these into a common provider instead
+// of abusing global scope.
+const ALL_ACTIONS: Record<string, BaseKafkaAction> = {};
 const EVENT_SOURCE_POOL: { [key: string]: EventSource } = {};
+let ACTION_QUEUE: [string, BaseKafkaAction][] = [];
+
+const flushActions = throttle(
+  async () => {
+    // no-op if queue is empty
+    if (ACTION_QUEUE.length === 0) return;
+
+    const actions = ACTION_QUEUE;
+    ACTION_QUEUE = [];
+
+    try {
+      await fetch('/dispatch', {
+        method: 'POST',
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(actions),
+      });
+    } catch (error) {
+      console.error(error);
+
+      // push failed actions back into queue
+      ACTION_QUEUE = actions.concat(ACTION_QUEUE);
+    }
+  },
+  100,
+  { leading: false },
+);
 
 export function createStore<State, Action extends BaseAction>(
   resource: string,
@@ -65,14 +97,12 @@ export function createStore<State, Action extends BaseAction>(
     children: ReactNode;
     KEY: string;
   }) => {
-    const actions = useRef<Record<string, BaseKafkaAction>>({});
     const animationFrameCallback = useRef(-1);
-    const fetcher = useFetcher();
     const [state, setState] = useState(init);
 
     // get the most recent kafka index consumed by this client
     const getCursor = useCallback(() => {
-      const keys = Object.keys(actions.current);
+      const keys = Object.keys(ALL_ACTIONS);
       keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
       const last = keys[keys.length - 1];
       if (!last) return 0;
@@ -81,11 +111,12 @@ export function createStore<State, Action extends BaseAction>(
 
     // rebuild state and trigger a re-render
     const rebuildState = useCallback(() => {
-      const keys = Object.keys(actions.current);
+      const keys = Object.keys(ALL_ACTIONS);
       keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-      const sortedActions = keys.map((key) => actions.current[key]);
+      const sortedActions = keys.map((key) => ALL_ACTIONS[key]);
       // @ts-ignore (use BaseAction as BaseKafkaAction)
       const state = sortedActions.reduce(reducer, init) as State;
+      console.log(state);
       setState(state);
     }, []);
 
@@ -93,35 +124,37 @@ export function createStore<State, Action extends BaseAction>(
     const pushAction = useCallback(
       (action: BaseKafkaAction) => {
         const key = getKey(action);
-        if (!actions.current[key]) {
-          actions.current[key] = action;
-          window.cancelAnimationFrame(animationFrameCallback.current);
-          animationFrameCallback.current = window.requestAnimationFrame(rebuildState);
+        if (!ALL_ACTIONS[key]) {
+          ALL_ACTIONS[key] = action;
+        } else {
+          console.debug('dropped action with duplicate key', action);
         }
+        // rebuild state before next render
+        window.cancelAnimationFrame(animationFrameCallback.current);
+        animationFrameCallback.current = window.requestAnimationFrame(rebuildState);
       },
       [rebuildState],
     );
 
     // public facing 'dispatch' function
-    const dispatch = useCallback((action: Action) => {
-      const cursor = getCursor();
-      // @ts-ignore (use BaseAction as BaseKafkaAction)
-      action.index = cursor + 1;
-      // @ts-ignore (use BaseAction as BaseKafkaAction)
-      action.client = CLIENT_ID;
-
-      // optimistically update UI
-      pushAction(action as unknown as BaseKafkaAction);
-
-      fetcher.submit(
-        {
-          key: props.KEY,
+    const dispatch = useCallback(
+      (action: Action) => {
+        const cursor = getCursor();
+        const kafkaAction = {
           ...action,
-          payload: JSON.stringify(action.payload),
-        },
-        { method: 'POST', action: resource },
-      );
-    }, []);
+          index: cursor + 1,
+          client: CLIENT_ID,
+        };
+
+        // optimistically update UI
+        pushAction(kafkaAction);
+
+        // enqueue action to be flushed to server
+        ACTION_QUEUE.push([props.KEY, kafkaAction]);
+        flushActions();
+      },
+      [getCursor, pushAction],
+    );
 
     // subscribe to kafka events
     useEffect(() => {
@@ -142,10 +175,11 @@ export function createStore<State, Action extends BaseAction>(
       };
 
       eventSource.addEventListener(props.KEY, handleEvent);
+
       return () => {
         eventSource.removeEventListener(props.KEY, handleEvent);
       };
-    }, [pushAction]);
+    }, [pushAction, rebuildState]);
 
     return (
       <StoreContext.Provider value={{ dispatch, state }}>{props.children}</StoreContext.Provider>
