@@ -116,7 +116,6 @@ export function createStore<State, Action extends BaseAction>(
       const sortedActions = keys.map((key) => ALL_ACTIONS[key]);
       // @ts-ignore (use BaseAction as BaseKafkaAction)
       const state = sortedActions.reduce(reducer, init) as State;
-      console.log(state);
       setState(state);
     }, []);
 
