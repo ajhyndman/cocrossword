@@ -63,12 +63,14 @@
 
 /* input should be visually hidden but interactable */
 .input {
-  clip: rect(0 0 0 0);
+  bottom: 0;
   clip-path: inset(50%);
+  clip: rect(0 0 0 0);
   height: 1px;
   opacity: 0;
   overflow: hidden;
   position: absolute;
+  right: 0;
   white-space: nowrap;
   width: 1px;
 }
