@@ -22,7 +22,7 @@ export type Action =
       payload: { id: string; name: string };
     };
 
-const DEFAULT_STATE = { users: {}, messages: [] };
+const DEFAULT_STATE: State = { users: {} };
 
 export const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
