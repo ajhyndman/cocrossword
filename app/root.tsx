@@ -3,7 +3,6 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@re
 import { useEffect } from 'react';
 import resetCss from 'reset-css/reset.css';
 
-import { PuzzleProvider } from '~/store/puzzle';
 import styles from '~/style.css';
 
 export const links = () => [
