@@ -1,8 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { eventStream } from 'remix-utils/sse/server';
 
-import { getKafkaClient } from '~/kafkajs/client';
-import { dispatch, getMessageLog } from '~/kafkajs/index';
+import { dispatch, getMessageLog } from '~/kafkajs';
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
