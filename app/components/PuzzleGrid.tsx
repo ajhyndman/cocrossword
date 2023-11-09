@@ -1,13 +1,11 @@
 import { gridNumbering } from '@ajhyndman/puz';
 import { useEffect, useMemo } from 'react';
 
-import { useActivityStore } from '~/store/activity';
-import { usePuzzleStore } from '~/store/puzzle';
-import { useSelectionStore } from '~/store/selection';
+import { useSelectionStore } from '~/store/local/selection';
+import { useStore } from '~/store/remote';
 import { getActiveClues } from '~/util/getActiveClues';
 import styles from './PuzzleGrid.module.css';
 import PuzzleCell from './PuzzleCell';
-import { useUsersStore } from '~/store/users';
 
 type Props = {
   userId: string;
@@ -15,14 +13,10 @@ type Props = {
 
 export default ({ userId }: Props) => {
   const {
-    state: { users },
-  } = useUsersStore();
-  const { puzzle } = usePuzzleStore();
+    dispatch: dispatchRemote,
+    state: { users, selections, puzzle },
+  } = useStore();
   const { dispatch, selection } = useSelectionStore();
-  const {
-    dispatch: dispatchActivity,
-    state: { selections },
-  } = useActivityStore();
 
   const selectionIndices = useMemo(() => {
     const selectionIndices: string[][] = [];
@@ -40,9 +34,9 @@ export default ({ userId }: Props) => {
   useEffect(() => {
     // whenever selection updates, notify peers of new position
     if (selection.index == null) {
-      dispatchActivity({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
+      dispatchRemote({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
     } else {
-      dispatchActivity({
+      dispatchRemote({
         type: 'USER_SELECTION_CHANGED',
         payload: { id: userId, index: selection.index! },
       });

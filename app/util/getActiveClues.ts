@@ -1,6 +1,6 @@
 import type { Puzzle } from '@ajhyndman/puz';
 
-import { Selection } from '~/store/selection';
+import { Selection } from '~/store/local/selection';
 import { getClueForSelection } from './getClueForSelection';
 
 export const getActiveClues = (puzzle: Puzzle, selection: Selection) => {

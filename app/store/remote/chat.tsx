@@ -1,5 +1,5 @@
 import { createStore } from '~/store/redux-kafka';
-import { loadStore } from './redux.server';
+import { loadStore } from '../redux.server';
 
 type Message = {
   author: string;
@@ -15,7 +15,7 @@ export type Action = {
   payload: Message;
 };
 
-const DEFAULT_STATE = { messages: [] };
+export const DEFAULT_STATE = { messages: [] };
 
 export const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
@@ -30,11 +30,11 @@ export const reducer = (state: State, { type, payload }: Action) => {
   }
 };
 
-// server
-export const loadChatStore = (key: string) => loadStore(reducer, DEFAULT_STATE, key);
+// // server
+// export const loadChatStore = (key: string) => loadStore(reducer, DEFAULT_STATE, key);
 
-// client
-const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
+// // client
+// const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
 
-export const ChatProvider = Provider;
-export const useChatStore = useStore;
+// export const ChatProvider = Provider;
+// export const useChatStore = useStore;

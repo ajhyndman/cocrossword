@@ -5,10 +5,8 @@ import { useEffect, useState } from 'react';
 import ClueCarousel from '~/components/ClueCarousel';
 import PuzzleGrid from '~/components/PuzzleGrid';
 import SolverAppBar from '~/components/SolverAppBar';
-import { ActivityProvider } from '~/store/activity';
-import { PuzzleProvider, loadPuzzleStore, usePuzzleStore } from '~/store/puzzle';
-import { SelectionProvider } from '~/store/selection';
-import { UsersProvider } from '~/store/users';
+import { Provider, loadStore, useStore } from '~/store/remote';
+import { SelectionProvider } from '~/store/local/selection';
 import { login } from '~/util/login.server';
 
 import styles from './$id.puzzle.module.css';
@@ -16,7 +14,7 @@ import styles from './$id.puzzle.module.css';
 export async function loader({ request, params }: LoaderFunctionArgs) {
   // if route doesn't match a real puzzle, redirect back to home
   if (!params.id) return redirect('/');
-  const { getState } = await loadPuzzleStore(params.id);
+  const { getState } = await loadStore(params.id);
   if (!getState().puzzle) return redirect('/');
 
   // otherwise ensure session and load route
@@ -25,7 +23,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 const View = ({ userId }: { userId: string }) => {
-  const { puzzle } = usePuzzleStore();
+  const {
+    state: { puzzle },
+  } = useStore();
   const [height, setHeight] = useState<number>();
 
   // **WORKAROUND**
@@ -70,12 +70,8 @@ export default () => {
   const { userId } = useLoaderData<typeof loader>();
 
   return (
-    <UsersProvider KEY={id!}>
-      <ActivityProvider KEY={id!}>
-        <PuzzleProvider KEY={id!}>
-          <View userId={userId} />
-        </PuzzleProvider>
-      </ActivityProvider>
-    </UsersProvider>
+    <Provider KEY={id!}>
+      <View userId={userId} />
+    </Provider>
   );
 };

@@ -1,8 +1,8 @@
 import { memo, useLayoutEffect, useRef } from 'react';
 import cx from 'classnames';
 
-import { useSelectionStore } from '~/store/selection';
-import { usePuzzleStore } from '~/store/puzzle';
+import { useSelectionStore } from '~/store/local/selection';
+import { useStore } from '~/store/remote';
 import { getPrevIndex } from '~/util/cursor';
 import { getClueForSelection } from '~/util/getClueForSelection';
 import styles from './PuzzleCell.module.css';
@@ -17,7 +17,10 @@ type Props = {
 
 export default memo(({ activeClues, index, number, content, selections }: Props) => {
   const { dispatch, selection } = useSelectionStore();
-  const { dispatch: dispatchKafka, puzzle } = usePuzzleStore();
+  const {
+    dispatch: dispatchKafka,
+    state: { puzzle },
+  } = useStore();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);

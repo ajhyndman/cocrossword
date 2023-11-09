@@ -1,15 +1,17 @@
 import { memo } from 'react';
 import { enumerateClues } from '@ajhyndman/puz';
 
-import { useSelectionStore } from '~/store/selection';
-import { usePuzzleStore } from '~/store/puzzle';
+import { useSelectionStore } from '~/store/local/selection';
+import { useStore } from '~/store/remote';
 import Clue from './Clue';
 import styles from './ClueCarousel.module.css';
 import { getActiveClues } from '~/util/getActiveClues';
 
 export default memo(() => {
   const { dispatch, selection } = useSelectionStore();
-  const { puzzle } = usePuzzleStore();
+  const {
+    state: { puzzle },
+  } = useStore();
 
   if (!puzzle) return null;
 

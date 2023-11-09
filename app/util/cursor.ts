@@ -1,5 +1,6 @@
 import type { Puzzle } from '@ajhyndman/puz';
-import type { Selection } from '~/store/selection';
+
+import type { Selection } from '~/store/local/selection';
 
 export function getNextIndex(puzzle: Puzzle, selection: Selection) {
   if (selection.index == null) return selection.index;

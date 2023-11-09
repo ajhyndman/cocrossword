@@ -1,8 +1,9 @@
 import { v4 } from 'uuid';
-import { commitSession, getSession } from '~/sessions.server';
-import { loadUsersStore } from '~/store/users';
-import { randomItem } from './randomItem';
 import { json } from '@remix-run/node';
+
+import { commitSession, getSession } from '~/sessions.server';
+import { loadStore } from '~/store/remote';
+import { randomItem } from './randomItem';
 import { MIDDLE_EARTH_NAMES } from './constants';
 
 export async function login(cookie: string | null, id: string) {
@@ -18,7 +19,7 @@ export async function login(cookie: string | null, id: string) {
     headers = { 'Set-Cookie': await commitSession(session) };
   }
 
-  const { dispatch, getState } = await loadUsersStore(id);
+  const { dispatch, getState } = await loadStore(id);
   const user = getState().users[userId];
 
   // generate a new user if none exists

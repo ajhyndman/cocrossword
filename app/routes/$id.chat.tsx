@@ -6,8 +6,7 @@ import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
 import IconButton from '~/components/IconButton';
 import TopAppBar from '~/components/TopAppBar';
-import { ChatProvider, useChatStore } from '~/store/chat';
-import { UsersProvider, useUsersStore } from '~/store/users';
+import { Provider, useStore } from '~/store/remote';
 import { login } from '~/util/login.server';
 
 import styles from './$id.chat.module.css';
@@ -20,13 +19,9 @@ export async function loader({ request, params: { id } }: LoaderFunctionArgs) {
 const View = () => {
   const { userId } = useLoaderData<typeof loader>();
   const {
-    dispatch: userDispatch,
-    state: { users },
-  } = useUsersStore();
-  const {
-    dispatch: chatDispatch,
-    state: { messages },
-  } = useChatStore();
+    dispatch,
+    state: { users, messages },
+  } = useStore();
   const [value, setValue] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false);
 
@@ -36,7 +31,7 @@ const View = () => {
     if (!value) return;
 
     // dispatch message
-    chatDispatch({ type: 'NEW_MESSAGE', payload: { author: userId, body: value } });
+    dispatch({ type: 'NEW_MESSAGE', payload: { author: userId, body: value } });
 
     // clear input state
     setValue('');
@@ -54,7 +49,7 @@ const View = () => {
   );
 
   const handleBlur = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
-    userDispatch({ type: 'USER_RENAMED', payload: { id: userId, name: event.target.value } });
+    dispatch({ type: 'USER_RENAMED', payload: { id: userId, name: event.target.value } });
     setIsEditing(false);
   }, []);
 
@@ -113,10 +108,8 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <UsersProvider KEY={id!}>
-      <ChatProvider KEY={id!}>
-        <View />
-      </ChatProvider>
-    </UsersProvider>
+    <Provider KEY={id!}>
+      <View />
+    </Provider>
   );
 };

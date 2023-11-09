@@ -1,6 +1,6 @@
 import { gridNumbering, Puzzle } from '@ajhyndman/puz';
 
-import { Selection } from '~/store/selection';
+import { Selection } from '~/store/local/selection';
 
 export const getClueForSelection = (puzzle: Puzzle, selection: Selection): number => {
   if (selection.index == null) return -1;

@@ -1,15 +1,17 @@
 import { Link } from '@remix-run/react';
+import { isCorrect } from '@ajhyndman/puz';
 
-import { useSelectionStore } from '~/store/selection';
+import { useSelectionStore } from '~/store/local/selection';
+import { useStore } from '~/store/remote';
 import BottomAppBar from './BottomAppBar';
 import FloatingActionButton from './FloatingActionButton';
 import IconButton from './IconButton';
-import { usePuzzleStore } from '~/store/puzzle';
-import { isCorrect } from '@ajhyndman/puz';
 
 export default () => {
   const { dispatch, selection } = useSelectionStore();
-  const { puzzle } = usePuzzleStore();
+  const {
+    state: { puzzle },
+  } = useStore();
 
   const checkSolution = () => {
     if (isCorrect(puzzle!)) {

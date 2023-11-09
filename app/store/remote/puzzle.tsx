@@ -1,7 +1,7 @@
 import { type Puzzle } from '@ajhyndman/puz';
 
-import { createStore } from '~/store/redux-kafka';
-import { loadStore } from './redux.server';
+// import { createStore } from '~/store/redux-kafka';
+// import { loadStore } from '../redux.server';
 
 export type State = {
   puzzle?: Puzzle;
@@ -18,9 +18,9 @@ export type Action =
       payload: { index: number; value: string };
     };
 
-const DEFAULT_STATE = {};
+export const DEFAULT_STATE = {};
 
-const reducer = (state: State, { type, payload }: Action) => {
+export const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
     case 'NEW_PUZZLE':
       return { ...state, puzzle: payload };
@@ -40,15 +40,15 @@ const reducer = (state: State, { type, payload }: Action) => {
   }
 };
 
-// server
-export const loadPuzzleStore = (key: string) => loadStore(reducer, DEFAULT_STATE, key);
+// // server
+// export const loadPuzzleStore = (key: string) => loadStore(reducer, DEFAULT_STATE, key);
 
-// client
-const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
+// // client
+// const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
 
-export const PuzzleProvider = Provider;
+// export const PuzzleProvider = Provider;
 
-export const usePuzzleStore = () => {
-  const { dispatch, state } = useStore();
-  return { dispatch, puzzle: state.puzzle };
-};
+// export const usePuzzleStore = () => {
+//   const { dispatch, state } = useStore();
+//   return { dispatch, puzzle: state.puzzle };
+// };

@@ -1,5 +1,5 @@
-import { createStore } from '~/store/redux-kafka';
-import { loadStore } from './redux.server';
+// import { createStore } from '~/store/redux-kafka';
+// import { loadStore } from '../redux.server';
 import { CHAT_COLORS } from '~/util/constants';
 
 type User = {
@@ -22,7 +22,7 @@ export type Action =
       payload: { id: string; name: string };
     };
 
-const DEFAULT_STATE: State = { users: {} };
+export const DEFAULT_STATE: State = { users: {} };
 
 export const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
@@ -51,11 +51,11 @@ export const reducer = (state: State, { type, payload }: Action) => {
   }
 };
 
-// server
-export const loadUsersStore = (key: string) => loadStore(reducer, DEFAULT_STATE, key);
+// // server
+// export const loadUsersStore = (key: string) => loadStore(reducer, DEFAULT_STATE, key);
 
-// client
-const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
+// // client
+// const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
 
-export const UsersProvider = Provider;
-export const useUsersStore = useStore;
+// export const UsersProvider = Provider;
+// export const useUsersStore = useStore;
