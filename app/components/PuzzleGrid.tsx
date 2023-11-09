@@ -27,7 +27,7 @@ export default ({ userId }: Props) => {
   const selectionIndices = useMemo(() => {
     const selectionIndices: string[][] = [];
     Object.entries(selections).forEach(([id, index]) => {
-      if (!index || id === userId) return;
+      if (index == null || id === userId) return;
       if (!selectionIndices[index]) {
         selectionIndices[index] = [];
       }
@@ -39,13 +39,14 @@ export default ({ userId }: Props) => {
 
   useEffect(() => {
     // whenever selection updates, notify peers of new position
-    if (!selection.index) {
+    if (selection.index == null) {
       dispatchActivity({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
+    } else {
+      dispatchActivity({
+        type: 'USER_SELECTION_CHANGED',
+        payload: { id: userId, index: selection.index! },
+      });
     }
-    dispatchActivity({
-      type: 'USER_SELECTION_CHANGED',
-      payload: { id: userId, index: selection.index! },
-    });
   }, [selection.index]);
 
   if (!puzzle) return null;
