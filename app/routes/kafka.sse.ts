@@ -2,7 +2,7 @@ import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/nod
 import { eventStream } from 'remix-utils/sse/server';
 
 import { getKafkaClient } from '~/kafkajs/client';
-import { getMessageLog } from '~/kafkajs/index';
+import { dispatch, getMessageLog } from '~/kafkajs/index';
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
@@ -11,13 +11,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const client = body.get('client');
   const type = body.get('type') as string;
   const payload = body.get('payload') as string;
-  const { producer } = await getKafkaClient();
-  await producer.send({
-    topic: 'crossword-actions',
-    messages: [
-      { key, value: JSON.stringify({ index, client, type, payload: JSON.parse(payload) }) },
-    ],
-  });
+  await dispatch(key, { index, client, type, payload: JSON.parse(payload) });
 
   if (type === 'NEW_PUZZLE') {
     return redirect(`/${key}/puzzle`);

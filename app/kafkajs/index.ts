@@ -4,6 +4,14 @@ import type { KafkaMessage } from 'kafkajs';
 
 let init: Promise<Log<KafkaMessage>>;
 
+export async function dispatch(key: string, action: any) {
+  const { producer } = await getKafkaClient();
+  await producer.send({
+    topic: 'crossword-actions',
+    messages: [{ key, value: JSON.stringify(action) }],
+  });
+}
+
 export async function getMessageLog() {
   if (init) return init;
 
