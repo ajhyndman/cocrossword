@@ -1,5 +1,4 @@
-import { getMessageLog } from '~/kafkajs';
-import { getKafkaClient } from '~/kafkajs/client';
+import { getMessageLog, dispatch as dispatchEvent } from '~/kafkajs';
 
 type BaseAction = {
   type: string;
@@ -26,7 +25,6 @@ export async function loadStore<State, Action extends BaseAction>(
   key: string,
 ) {
   const messageLog = await getMessageLog();
-  const { producer } = await getKafkaClient();
 
   function getActions(): BaseKafkaAction[] {
     return messageLog
@@ -51,18 +49,10 @@ export async function loadStore<State, Action extends BaseAction>(
   async function dispatch(action: Action) {
     const cursor = getCursor();
 
-    await producer.send({
-      topic: 'crossword-actions',
-      messages: [
-        {
-          key,
-          value: JSON.stringify({
-            index: cursor + 1,
-            client: 'SERVER',
-            ...action,
-          }),
-        },
-      ],
+    return await dispatchEvent(key, {
+      index: cursor + 1,
+      client: 'SERVER',
+      ...action,
     });
   }
 
