@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-import { isCorrect } from '@ajhyndman/puz';
+import { isCorrect, printBinaryFile } from '@ajhyndman/puz';
 
 import { useSelectionStore } from '~/store/local/selection';
 import { useStore } from '~/store/remote';
@@ -21,9 +21,29 @@ export default () => {
     }
   };
 
+  // export the current puzzle state as a .puz binary file
+  const handleDownload = () => {
+    if (puzzle) {
+      const buffer = printBinaryFile(puzzle);
+      const file = new File([buffer], 'download.puz');
+      const url = URL.createObjectURL(file);
+      const a = document.createElement('a');
+      a.download = file.name;
+      a.href = url;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  };
+
   const handleRotateSelectionClick = () => {
     // if element is already selected, "focus" event won't be triggered
     dispatch({ type: 'ROTATE_SELECTION' });
+  };
+
+  const showInfo = () => {
+    if (puzzle) {
+      window.alert(`${puzzle.title}\n\n${puzzle.author}\n${puzzle.copyright}`);
+    }
   };
 
   return (
@@ -33,8 +53,9 @@ export default () => {
           <Link relative="path" to="../chat">
             <IconButton name="chat" />
           </Link>
+          <IconButton name="info" onClick={showInfo} />
           <IconButton name="check_box" onClick={checkSolution} />
-          {/* <IconButton name="info" /> */}
+          <IconButton name="download" onClick={handleDownload} />
           {/* <IconButton name="edit" /> */}
         </>
       }
