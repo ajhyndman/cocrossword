@@ -19,15 +19,15 @@ export default ({ userId }: Props) => {
   const { dispatch, selection } = useSelectionStore();
 
   const selectionIndices = useMemo(() => {
-    const selectionIndices: string[][] = [];
+    const selectionIndices: { color: string; name: string }[][] = [];
     Object.entries(selections).forEach(([id, index]) => {
       if (index == null || id === userId) return;
-      const color = users[id]?.color;
-      if (color) {
+      const user = users[id];
+      if (user) {
         if (!selectionIndices[index]) {
           selectionIndices[index] = [];
         }
-        selectionIndices[index].push(color);
+        selectionIndices[index].push({ color: user.color, name: user.name });
       }
     });
     return selectionIndices;

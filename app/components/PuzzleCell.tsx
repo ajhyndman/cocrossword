@@ -12,7 +12,7 @@ type Props = {
   content: string;
   index: number;
   number?: number;
-  selections?: string[];
+  selections?: { color: string; name: string }[];
 };
 
 export default memo(({ activeClues, index, number, content, selections }: Props) => {
@@ -90,8 +90,13 @@ export default memo(({ activeClues, index, number, content, selections }: Props)
       )}
       {selections && (
         <div className={styles.cursors}>
-          {selections.map((color) => (
-            <div key={color} className={styles.cursor} style={{ backgroundColor: color }} />
+          {selections.map(({ color, name }) => (
+            <div
+              key={color}
+              title={name}
+              className={styles.cursor}
+              style={{ backgroundColor: color }}
+            />
           ))}
         </div>
       )}
