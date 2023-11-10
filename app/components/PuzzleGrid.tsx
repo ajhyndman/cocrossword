@@ -22,11 +22,13 @@ export default ({ userId }: Props) => {
     const selectionIndices: string[][] = [];
     Object.entries(selections).forEach(([id, index]) => {
       if (index == null || id === userId) return;
-      if (!selectionIndices[index]) {
-        selectionIndices[index] = [];
+      const color = users[id]?.color;
+      if (color) {
+        if (!selectionIndices[index]) {
+          selectionIndices[index] = [];
+        }
+        selectionIndices[index].push(color);
       }
-      const color = users[id].color;
-      selectionIndices[index].push(color);
     });
     return selectionIndices;
   }, [users, selections]);
