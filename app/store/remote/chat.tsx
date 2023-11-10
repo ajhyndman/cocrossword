@@ -1,6 +1,3 @@
-import { createStore } from '~/store/redux-kafka';
-import { loadStore } from '../redux.server';
-
 type Message = {
   author: string;
   body: string;
@@ -29,12 +26,3 @@ export const reducer = (state: State, { type, payload }: Action) => {
       return state;
   }
 };
-
-// // server
-// export const loadChatStore = (key: string) => loadStore(reducer, DEFAULT_STATE, key);
-
-// // client
-// const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
-
-// export const ChatProvider = Provider;
-// export const useChatStore = useStore;

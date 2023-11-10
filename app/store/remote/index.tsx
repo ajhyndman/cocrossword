@@ -38,7 +38,7 @@ const DEFAULT_STATE = {
 };
 
 const composeReducers = (...reducers: Reducer<any, any>[]): Reducer<any, any> => {
-  return reducers.reduce((f, g) => (state, action) => g(f(state, action), action));
+  return reducers.reduce((f, g) => (state, action) => f(g(state, action), action));
 };
 
 const reducer: Reducer<State, Action> = composeReducers(

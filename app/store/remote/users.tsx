@@ -1,5 +1,3 @@
-// import { createStore } from '~/store/redux-kafka';
-// import { loadStore } from '../redux.server';
 import { CHAT_COLORS } from '~/util/constants';
 
 type User = {
@@ -50,12 +48,3 @@ export const reducer = (state: State, { type, payload }: Action) => {
       return state;
   }
 };
-
-// // server
-// export const loadUsersStore = (key: string) => loadStore(reducer, DEFAULT_STATE, key);
-
-// // client
-// const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
-
-// export const UsersProvider = Provider;
-// export const useUsersStore = useStore;

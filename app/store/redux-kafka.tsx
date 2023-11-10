@@ -48,10 +48,11 @@ function getKey<Action extends BaseKafkaAction>(action: Action) {
   return `${action.index}:${action.client}`;
 }
 
-// TODO: It would be much safer to move these into a common provider instead
-// of abusing global scope.
-const ALL_ACTIONS: Record<string, BaseKafkaAction> = {};
-const EVENT_SOURCE_POOL: { [key: string]: EventSource } = {};
+// // TODO: It would be much safer to move these into a common provider instead
+// // of abusing global scope.
+// const ALL_ACTIONS: Record<string, BaseKafkaAction> = {};
+// const EVENT_SOURCE_POOL: { [key: string]: EventSource } = {};
+
 let ACTION_QUEUE: [string, BaseKafkaAction][] = [];
 
 const flushActions = throttle(
@@ -97,12 +98,13 @@ export function createStore<State, Action extends BaseAction>(
     children: ReactNode;
     KEY: string;
   }) => {
+    const actions = useRef<Record<string, BaseKafkaAction>>({});
     const animationFrameCallback = useRef(-1);
     const [state, setState] = useState(init);
 
     // get the most recent kafka index consumed by this client
     const getCursor = useCallback(() => {
-      const keys = Object.keys(ALL_ACTIONS);
+      const keys = Object.keys(actions.current);
       keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
       const last = keys[keys.length - 1];
       if (!last) return 0;
@@ -111,9 +113,9 @@ export function createStore<State, Action extends BaseAction>(
 
     // rebuild state and trigger a re-render
     const rebuildState = useCallback(() => {
-      const keys = Object.keys(ALL_ACTIONS);
+      const keys = Object.keys(actions.current);
       keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-      const sortedActions = keys.map((key) => ALL_ACTIONS[key]);
+      const sortedActions = keys.map((key) => actions.current[key]);
       // @ts-ignore (use BaseAction as BaseKafkaAction)
       const state = sortedActions.reduce(reducer, init) as State;
       setState(state);
@@ -123,8 +125,8 @@ export function createStore<State, Action extends BaseAction>(
     const pushAction = useCallback(
       (action: BaseKafkaAction) => {
         const key = getKey(action);
-        if (!ALL_ACTIONS[key]) {
-          ALL_ACTIONS[key] = action;
+        if (!actions.current[key]) {
+          actions.current[key] = action;
         } else {
           console.debug('dropped action with duplicate key', action);
         }
@@ -157,10 +159,7 @@ export function createStore<State, Action extends BaseAction>(
 
     // subscribe to kafka events
     useEffect(() => {
-      if (!EVENT_SOURCE_POOL[props.KEY]) {
-        EVENT_SOURCE_POOL[props.KEY] = new EventSource(`${resource}?key=${props.KEY}`);
-      }
-      const eventSource = EVENT_SOURCE_POOL[props.KEY];
+      const eventSource = new EventSource(`${resource}?key=${props.KEY}`);
       const handleEvent = (event: MessageEvent<string>) => {
         // parse batch
         const actions = JSON.parse(event.data);
@@ -177,6 +176,7 @@ export function createStore<State, Action extends BaseAction>(
 
       return () => {
         eventSource.removeEventListener(props.KEY, handleEvent);
+        eventSource.close();
       };
     }, [pushAction, rebuildState]);
 

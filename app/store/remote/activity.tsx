@@ -1,5 +1,3 @@
-import { createStore } from '~/store/redux-kafka';
-
 export type State = {
   selections: {
     [id: string]: number | undefined;
@@ -28,18 +26,12 @@ export const DEFAULT_STATE: State = {
 export const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
     case 'USER_SELECTION_CHANGED':
-      return { selections: { ...state.selections, [payload.id]: payload.index } };
+      return { ...state, selections: { ...state.selections, [payload.id]: payload.index } };
 
     case 'USER_SELECTION_CLEARED':
-      return { selections: { ...state.selections, [payload.id]: undefined } };
+      return { ...state, selections: { ...state.selections, [payload.id]: undefined } };
 
     default:
       return state;
   }
 };
-
-// // client
-// const { Provider, useStore } = createStore('/kafka/sse', reducer, DEFAULT_STATE);
-
-// export const ActivityProvider = Provider;
-// export const useActivityStore = useStore;
