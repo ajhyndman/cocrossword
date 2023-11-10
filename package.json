@@ -14,6 +14,7 @@
   "scripts": {
     "build": "remix build",
     "serve": "remix-serve dist/index.js",
+    "serve:local": "dotenv remix-serve dist/index.js",
     "dev": "remix dev"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "@types/lodash.debounce": "^4.0.8",
     "@types/lodash.throttle": "^4.1.9",
     "@types/react": "18.2.21",
-    "@types/react-dom": "18.2.7"
+    "@types/react-dom": "18.2.7",
+    "dotenv-cli": "^7.3.0"
   }
 }
