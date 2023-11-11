@@ -1,0 +1,16 @@
+.container {
+  align-self: center;
+  box-sizing: border-box;
+  max-width: 600px;
+  min-height: 100dvh; /* subtract height of top bar */
+  padding: 18px 16px 0;
+  width: 100%;
+  font-family: Georgia, Times, "Times New Roman";
+  line-height: 1.5;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
