@@ -4,15 +4,19 @@
   display: flex;
   flex-direction: column;
   max-width: 600px;
-  min-height: calc(100dvh - 60px); /* subtract height of top bar */
+  height: calc(100dvh - 60px); /* subtract height of top bar */
   padding: 18px 16px 0;
   width: 100%;
+  overflow: scroll;
+  overscroll-behavior: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .anchor {
   overflow-anchor: auto;
   /* also serves as a spacer for the fixed chat input pane */
   height: 80px;
+  flex-shrink: 0;
 }
 
 .fixed {
