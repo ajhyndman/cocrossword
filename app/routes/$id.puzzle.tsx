@@ -7,6 +7,7 @@ import { loadStore, useStore } from '~/store/remote';
 import { SelectionProvider } from '~/store/local/selection';
 
 import styles from './$id.puzzle.module.css';
+import Toolbar from '~/components/Toolbar';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   // if route doesn't match a real puzzle, redirect back to home
@@ -31,6 +32,7 @@ export default () => {
         <PuzzleGrid userId={userId} />
       </div>
       <div className={styles.sticky}>
+        <Toolbar />
         <ClueCarousel />
       </div>
     </SelectionProvider>

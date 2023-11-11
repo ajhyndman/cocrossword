@@ -5,6 +5,7 @@
 .sticky {
   bottom: 36px; /* height of tabs navigation */
   position: sticky;
+  z-index: 1;
 }
 
 .puzzle {
