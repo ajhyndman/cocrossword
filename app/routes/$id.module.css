@@ -1,0 +1,17 @@
+.container {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  /* create new container context for @container rules */
+  container-type: size;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.sticky {
+  bottom: 0; /* height of tabs navigation */
+  position: sticky;
+}

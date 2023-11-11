@@ -1,11 +1,12 @@
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 18px 16px 0;
-  min-height: calc(100dvh - 60px); /* subtract height of top bar */
+  align-self: center;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  max-width: 600px;
+  min-height: calc(100dvh - 60px); /* subtract height of top bar */
+  padding: 18px 16px 0;
+  width: 100%;
 }
 
 .anchor {
@@ -16,7 +17,8 @@
 
 .fixed {
   position: fixed;
-  bottom: 0;
+  /* height of tabs navigation */
+  bottom: 36px;
   left: 0;
   right: 0;
   box-sizing: border-box;

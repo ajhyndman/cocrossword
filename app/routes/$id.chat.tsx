@@ -13,7 +13,7 @@ export default () => {
   const { userId } = useOutletContext<{ userId: string }>();
   const {
     dispatch,
-    state: { users, messages, readReceipts },
+    state: { users, messages },
   } = useStore();
   const [value, setValue] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false);
@@ -72,11 +72,6 @@ export default () => {
             {!isEditing && <IconButton name="edit" onClick={() => setIsEditing(true)} />}
           </>
         }
-        right={
-          <>
-            <IconButton name="group" />
-          </>
-        }
       />
       <div className={styles.container}>
         {messages.map((message, i) => {
@@ -101,13 +96,3 @@ export default () => {
     </>
   );
 };
-
-// export default () => {
-//   const { id } = useParams();
-
-//   return (
-//     <Provider KEY={id!}>
-//       <View />
-//     </Provider>
-//   );
-// };

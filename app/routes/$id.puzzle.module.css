@@ -1,19 +1,10 @@
-.container {
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  /* create new container context for @container rules */
-  container-type: size;
-}
-
 .fixed {
   position: fixed;
 }
 
 .sticky {
+  bottom: 36px; /* height of tabs navigation */
   position: sticky;
-  bottom: 0;
 }
 
 .puzzle {
