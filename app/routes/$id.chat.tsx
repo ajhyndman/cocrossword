@@ -1,23 +1,16 @@
-import { useLoaderData, useParams } from '@remix-run/react';
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { useOutletContext } from '@remix-run/react';
 import { useCallback, useMemo, useState } from 'react';
 
 import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
 import IconButton from '~/components/IconButton';
 import TopAppBar from '~/components/TopAppBar';
-import { Provider, useStore } from '~/store/remote';
-import { login } from '~/util/login.server';
+import { useStore } from '~/store/remote';
 
 import styles from './$id.chat.module.css';
 
-export async function loader({ request, params: { id } }: LoaderFunctionArgs) {
-  const cookie = request.headers.get('Cookie');
-  return login(cookie, id!);
-}
-
-const View = () => {
-  const { userId } = useLoaderData<typeof loader>();
+export default () => {
+  const { userId } = useOutletContext<{ userId: string }>();
   const {
     dispatch,
     state: { users, messages },
@@ -104,12 +97,12 @@ const View = () => {
   );
 };
 
-export default () => {
-  const { id } = useParams();
+// export default () => {
+//   const { id } = useParams();
 
-  return (
-    <Provider KEY={id!}>
-      <View />
-    </Provider>
-  );
-};
+//   return (
+//     <Provider KEY={id!}>
+//       <View />
+//     </Provider>
+//   );
+// };

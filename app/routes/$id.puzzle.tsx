@@ -1,13 +1,12 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { useLoaderData, useParams } from '@remix-run/react';
+import { useOutletContext } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 
 import ClueCarousel from '~/components/ClueCarousel';
 import PuzzleGrid from '~/components/PuzzleGrid';
 import SolverAppBar from '~/components/SolverAppBar';
-import { Provider, loadStore, useStore } from '~/store/remote';
+import { loadStore, useStore } from '~/store/remote';
 import { SelectionProvider } from '~/store/local/selection';
-import { login } from '~/util/login.server';
 
 import styles from './$id.puzzle.module.css';
 
@@ -17,12 +16,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { getState } = await loadStore(params.id);
   if (!getState().puzzle) return redirect('/');
 
-  // otherwise ensure session and load route
-  const cookie = request.headers.get('Cookie');
-  return login(cookie, params.id!);
+  return null;
 }
 
-const View = ({ userId }: { userId: string }) => {
+export default () => {
+  const { userId } = useOutletContext<{ userId: string }>();
   const {
     state: { puzzle },
   } = useStore();
@@ -62,16 +60,5 @@ const View = ({ userId }: { userId: string }) => {
         <div className={styles.fixed} />
       </div>
     </SelectionProvider>
-  );
-};
-
-export default () => {
-  const { id } = useParams();
-  const { userId } = useLoaderData<typeof loader>();
-
-  return (
-    <Provider KEY={id!}>
-      <View userId={userId} />
-    </Provider>
   );
 };
