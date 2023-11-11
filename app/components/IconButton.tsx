@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 import styles from './IconButton.module.css';
 
 type Props = {
@@ -8,7 +10,7 @@ type Props = {
 
 export default ({ name, notify, onClick }: Props) => (
   <button className={styles.button} onClick={onClick}>
-    <span className={`material-icons ${styles.icon}`}>{name}</span>
+    <span className={classNames('material-icons', styles.icon)}>{name}</span>
     {notify && <div className={styles.badge} />}
   </button>
 );
