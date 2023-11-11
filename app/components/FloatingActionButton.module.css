@@ -20,3 +20,17 @@
   display: block;
   font-size: 24px;
 }
+
+.button.small {
+  height: 40px;
+  width: 40px;
+}
+
+.button.large {
+  height: 96px;
+  width: 96px;
+}
+
+.button.large .icon {
+  font-size: 36px;
+}
