@@ -3,8 +3,8 @@ import { memo } from 'react';
 import styles from './TopAppBar.module.css';
 
 type Props = {
-  left: React.ReactNode;
-  right: React.ReactNode;
+  left?: React.ReactNode;
+  right?: React.ReactNode;
 };
 
 export default memo(({ left, right }: Props) => (
