@@ -1,5 +1,5 @@
 import { useOutletContext } from '@remix-run/react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
@@ -13,10 +13,15 @@ export default () => {
   const { userId } = useOutletContext<{ userId: string }>();
   const {
     dispatch,
-    state: { users, messages },
+    state: { users, messages, readReceipts },
   } = useStore();
   const [value, setValue] = useState<string>('');
   const [isEditing, setIsEditing] = useState(false);
+
+  // while page is open, mark latest message as read
+  useEffect(() => {
+    dispatch({ type: 'READ_MESSAGE', payload: { id: userId, index: messages.length } });
+  }, [userId, messages.length]);
 
   const user = useMemo(() => users[userId], [users, userId]);
 

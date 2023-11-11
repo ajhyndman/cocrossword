@@ -10,7 +10,7 @@ import { SelectionProvider } from '~/store/local/selection';
 
 import styles from './$id.puzzle.module.css';
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   // if route doesn't match a real puzzle, redirect back to home
   if (!params.id) return redirect('/');
   const { getState } = await loadStore(params.id);

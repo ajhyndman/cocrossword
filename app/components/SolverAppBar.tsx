@@ -1,17 +1,23 @@
-import { Link } from '@remix-run/react';
 import { isCorrect, printBinaryFile } from '@ajhyndman/puz';
+import { Link, useOutletContext } from '@remix-run/react';
 
 import { useSelectionStore } from '~/store/local/selection';
 import { useStore } from '~/store/remote';
 import BottomAppBar from './BottomAppBar';
 import FloatingActionButton from './FloatingActionButton';
 import IconButton from './IconButton';
+import { useMemo } from 'react';
 
 export default () => {
+  const { userId } = useOutletContext<{ userId: string }>();
   const { dispatch, selection } = useSelectionStore();
   const {
-    state: { puzzle },
+    state: { puzzle, readReceipts, messages },
   } = useStore();
+
+  const hasUnreadMessages = useMemo(() => {
+    return messages.length > (readReceipts[userId] ?? 0);
+  }, [userId, readReceipts[userId], messages.length]);
 
   const checkSolution = () => {
     if (isCorrect(puzzle!)) {
@@ -51,7 +57,7 @@ export default () => {
       left={
         <>
           <Link relative="path" to="../chat">
-            <IconButton name="chat" />
+            <IconButton name="chat" notify={hasUnreadMessages} />
           </Link>
           <IconButton name="info" onClick={showInfo} />
           <IconButton name="check_box" onClick={checkSolution} />
