@@ -5,6 +5,8 @@ body {
   --mystic: #DFE5EC;
   --san-juan: #2B476A;
   --white: #FFFFFF;
+  --botticelli: #D1DCE8;
+  --bermuda-gray: #6E899F;
 
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: var(--black-pearl);
