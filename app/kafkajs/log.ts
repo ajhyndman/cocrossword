@@ -10,10 +10,11 @@ const BROADCAST_INTERVAL = 1000 / 60;
  */
 export class Log<T> {
   private cursor: number = 0;
-  private log: T[] = [];
+  private log: T[];
   private subscribers: Set<Subscriber<T>> = new Set();
 
-  constructor() {
+  constructor(messages?: T[]) {
+    this.log = messages ?? [];
     this.push = this.push.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.getLog = this.getLog.bind(this);
