@@ -43,7 +43,19 @@ export default ({ userId }: Props) => {
         payload: { id: userId, index: selection.index! },
       });
     }
-  }, [selection.index]);
+  }, [selection.index, userId]);
+
+  // clear selection on unmount or page hide
+  useEffect(() => {
+    const clearSelection = () =>
+      dispatchRemote({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
+
+    window.addEventListener('visibilitychange', clearSelection);
+    return () => {
+      clearSelection();
+      window.removeEventListener('visibilitychange', clearSelection);
+    };
+  }, [userId]);
 
   if (!puzzle) return null;
   const numbering = gridNumbering(puzzle);
