@@ -22,7 +22,8 @@ export default ({ id, userId }: Props) => {
       tabs={[
         { icon: 'window', href: `/${id}/puzzle` },
         { icon: 'chat', href: `/${id}/chat`, notify: hasUnreadMessages },
-        { icon: 'group', href: `/${id}/players` },
+        // { icon: 'group', href: `/${id}/players` },
+        { icon: 'info', href: `/${id}/info` },
       ]}
     />
   );
