@@ -11,7 +11,9 @@ type Props = {
 export default ({ onChange, placeholder, value }: Props) => {
   return (
     <textarea
+      autoCapitalize="false"
       autoFocus
+      role="textbox"
       rows={1}
       className={styles.input}
       onChange={onChange}

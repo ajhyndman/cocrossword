@@ -105,12 +105,16 @@ export default memo(({ activeClues, index, number, content, selections }: Props)
           autoCapitalize="characters"
           autoCorrect="off"
           autoComplete="off"
+          spellCheck={false}
+          aria-expanded={false}
+          role="textbox"
           ref={inputRef}
           className={styles.input}
           onKeyDown={handleBackspace}
           onInput={handleInput}
           onFocus={handleFocus}
           value=""
+          type="search"
         ></input>
       )}
     </label>
