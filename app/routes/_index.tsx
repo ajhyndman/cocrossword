@@ -17,8 +17,7 @@ export default () => {
     return uuid.split('-')[0];
   }, []);
 
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const submitFile = async (file?: File) => {
     if (file != null && valueRef.current) {
       try {
         const buffer = await file.arrayBuffer();
@@ -32,8 +31,38 @@ export default () => {
     }
   };
 
+  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    submitFile(file);
+  };
+
+  const handleDrag = (event: React.DragEvent<HTMLFormElement>) => {
+    // Prevent default behavior (Prevent file from being opened)
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLFormElement>) => {
+    // Prevent default behavior (Prevent file from being opened)
+    event.preventDefault();
+
+    // Use DataTransferItemList interface to access the file(s)
+    [...event.dataTransfer?.items!].forEach((item, i) => {
+      // If dropped items aren't files, reject them
+      if (item.kind === 'file') {
+        const file = item.getAsFile();
+        submitFile(file!);
+      }
+    });
+  };
+
   return (
-    <Form action="/kafka/sse" method="POST" ref={formRef}>
+    <Form
+      action="/kafka/sse"
+      method="POST"
+      ref={formRef}
+      onDragOver={handleDrag}
+      onDrop={handleDrop}
+    >
       <div className={styles.container}>
         <DropZone onChange={handleUpload} />
         <input name="key" type="hidden" value={gameId} />
