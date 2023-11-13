@@ -20,7 +20,7 @@ export const DEFAULT_STATE = {};
 export const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
     case 'NEW_PUZZLE':
-      return { ...state, puzzle: payload, isCorrect: false };
+      return { ...state, puzzle: payload, isCorrect: isCorrect(payload) };
 
     case 'CELL_CHANGED':
       // if puzzle is already correct, ignore this action
