@@ -49,7 +49,7 @@ export default memo(
     };
     const handleClick = (event: React.MouseEvent) => {
       // if element is already selected, "focus" event won't be triggered
-      if (event.target === labelRef.current) {
+      if (state === 'focus' && event.target === labelRef.current) {
         onRotate();
       }
     };
