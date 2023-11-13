@@ -46,14 +46,6 @@ export default () => {
     [submitMessage],
   );
 
-  // after input has been focused, scroll chat messages to bottom
-  const handleFocus = useCallback(() => {
-    // wait for 100ms to give some time for soft keyboard to resolve
-    setTimeout(() => {
-      scrollingElement.current?.scroll({ top: scrollingElement.current?.scrollHeight });
-    }, 100);
-  }, []);
-
   // on load, scroll chat window to bottom
   useEffect(() => {
     scrollingElement.current?.scroll({ top: scrollingElement.current?.scrollHeight });
@@ -74,7 +66,6 @@ export default () => {
           <ChatInput
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            onFocus={handleFocus}
             placeholder={`Message as ${user.name}`}
           />
           <IconButton name="send" onClick={submitMessage} />
