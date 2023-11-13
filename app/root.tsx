@@ -3,9 +3,11 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@re
 import { useEffect } from 'react';
 import resetCss from 'reset-css/reset.css';
 
+import favicon from '~/favicon.png';
 import styles from '~/style.css';
 
 export const links = () => [
+  { rel: 'icon', href: favicon },
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
   { rel: 'stylesheet', href: resetCss },
@@ -38,7 +40,6 @@ export default function App() {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="data:image/x-icon;base64,AA" />
         <meta charSet="utf-8" />
         <meta
           name="viewport"
