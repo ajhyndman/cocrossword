@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   max-width: 600px;
-  height: calc(100dvh - 60px); /* subtract height of top bar */
+  height: 100dvh;
   padding: 18px 16px 0;
   width: 100%;
   overflow: scroll;

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
 import IconButton from '~/components/IconButton';
-import TopAppBar from '~/components/TopAppBar';
 import { useStore } from '~/store/remote';
 
 import styles from './$id.chat.module.css';
@@ -16,7 +15,6 @@ export default () => {
     state: { users, messages },
   } = useStore();
   const [value, setValue] = useState<string>('');
-  const [isEditing, setIsEditing] = useState(false);
 
   // while page is open, mark latest message as read
   useEffect(() => {
@@ -46,33 +44,10 @@ export default () => {
     [submitMessage],
   );
 
-  const handleBlur = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
-    dispatch({ type: 'USER_RENAMED', payload: { id: userId, name: event.target.value } });
-    setIsEditing(false);
-  }, []);
-
   if (!user) return null;
 
   return (
     <>
-      <TopAppBar
-        left={
-          <>
-            {isEditing ? (
-              <input
-                autoFocus
-                className={styles.titleInput}
-                defaultValue={user.name}
-                onBlur={handleBlur}
-                maxLength={50}
-              />
-            ) : (
-              <span className={styles.title}>{user.name}</span>
-            )}
-            {!isEditing && <IconButton name="edit" onClick={() => setIsEditing(true)} />}
-          </>
-        }
-      />
       <div className={styles.container}>
         {messages.map((message, i) => {
           const user = users[message.author];
