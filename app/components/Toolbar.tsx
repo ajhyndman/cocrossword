@@ -20,7 +20,7 @@ export default () => {
     if (isCorrect(puzzle!)) {
       window.alert('Congratulations!\n\nYou solved this puzzle.');
     } else {
-      window.alert('Nope!\n\nThis puzzle is not yet correct. Please try again');
+      window.alert('Nope!\n\nThis puzzle is not yet correct. Please try again.');
     }
   };
 
