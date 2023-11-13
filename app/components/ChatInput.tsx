@@ -1,14 +1,15 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FocusEvent } from 'react';
 
 import styles from './ChatInput.module.css';
 
 type Props = {
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+  onFocus: (event: FocusEvent) => void;
   placeholder: string;
   value?: string;
 };
 
-export default ({ onChange, placeholder, value }: Props) => {
+export default ({ onChange, onFocus, placeholder, value }: Props) => {
   return (
     <textarea
       autoCapitalize="false"
@@ -17,6 +18,7 @@ export default ({ onChange, placeholder, value }: Props) => {
       rows={1}
       className={styles.input}
       onChange={onChange}
+      onFocus={onFocus}
       value={value}
       placeholder={placeholder}
     />
