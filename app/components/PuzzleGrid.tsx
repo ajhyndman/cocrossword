@@ -16,7 +16,7 @@ type Props = {
 export default ({ userId }: Props) => {
   const {
     dispatch: dispatchRemote,
-    state: { users, selections, puzzle },
+    state: { isCorrect, users, selections, puzzle },
   } = useStore();
   const { dispatch, selection } = useSelectionStore();
 
@@ -36,10 +36,14 @@ export default ({ userId }: Props) => {
   }, [users, selections]);
 
   useEffect(() => {
+    if (isCorrect) {
+      window.alert('Congratulations!\n\nYou solved this puzzle.');
+    }
+  }, [isCorrect]);
+
+  useEffect(() => {
     // whenever selection updates, notify peers of new position
-    if (selection.index == null) {
-      dispatchRemote({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
-    } else {
+    if (selection.index != null) {
       dispatchRemote({
         type: 'USER_SELECTION_CHANGED',
         payload: { id: userId, index: selection.index! },
@@ -47,17 +51,17 @@ export default ({ userId }: Props) => {
     }
   }, [selection.index, userId]);
 
-  // clear selection on unmount or page hide
-  useEffect(() => {
-    const clearSelection = () =>
-      dispatchRemote({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
+  // // clear selection on unmount or page hide
+  // useEffect(() => {
+  //   const clearSelection = () =>
+  //     dispatchRemote({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
 
-    window.addEventListener('visibilitychange', clearSelection);
-    return () => {
-      clearSelection();
-      window.removeEventListener('visibilitychange', clearSelection);
-    };
-  }, [userId]);
+  //   window.addEventListener('visibilitychange', clearSelection);
+  //   return () => {
+  //     clearSelection();
+  //     window.removeEventListener('visibilitychange', clearSelection);
+  //   };
+  // }, [userId]);
 
   // derive clue to cell mappings
   const numbering = useMemo(() => gridNumbering(puzzle!), [puzzle?.solution, puzzle?.width]);
@@ -93,6 +97,7 @@ export default ({ userId }: Props) => {
   // cell event handlers
   const handleCellBackspace = useCallback(
     (index: number, cellContent: false | string) => {
+      if (isCorrect) return;
       let deletedIndex = index;
       if (cellContent === false) {
         deletedIndex = getPrevIndex(puzzle!, selection)!;
@@ -100,7 +105,7 @@ export default ({ userId }: Props) => {
       }
       dispatchRemote({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
     },
-    [dispatch, dispatchRemote, puzzle?.solution],
+    [dispatch, dispatchRemote, puzzle?.solution, isCorrect],
   );
   const handleCellFocus = useCallback(
     (index: number) => {
@@ -110,10 +115,11 @@ export default ({ userId }: Props) => {
   );
   const handleCellInput = useCallback(
     (index: number, value: string) => {
+      if (isCorrect) return;
       dispatchRemote({ type: 'CELL_CHANGED', payload: { index, value } });
       dispatch({ type: 'ADVANCE_CURSOR' });
     },
-    [dispatch, dispatchRemote],
+    [dispatch, dispatchRemote, isCorrect],
   );
   const handleCellRotate = useCallback(() => {
     dispatch({ type: 'ROTATE_SELECTION' });
@@ -135,6 +141,8 @@ export default ({ userId }: Props) => {
             ? 'focus'
             : activeClues?.[0] === clueForCell
             ? 'secondary'
+            : isCorrect
+            ? 'solved'
             : undefined;
 
         return (

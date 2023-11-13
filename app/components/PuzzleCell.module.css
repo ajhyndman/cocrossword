@@ -58,6 +58,10 @@
   background: var(--mystic);
 }
 
+.solved {
+  color: var(--bermuda-gray);
+}
+
 .black {
   background: var(--black-pearl);
 }

@@ -67,6 +67,7 @@ export default memo(
         className={cx(styles.cell, {
           [styles.focus]: state === 'focus',
           [styles.active]: state === 'secondary',
+          [styles.solved]: state === 'solved',
           [styles.black]: isBlackCell,
         })}
       >
