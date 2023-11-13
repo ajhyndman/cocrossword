@@ -1,10 +1,6 @@
 import { memo, useLayoutEffect, useRef } from 'react';
 import cx from 'classnames';
 
-import { useSelectionStore } from '~/store/local/selection';
-import { useStore } from '~/store/remote';
-import { getPrevIndex } from '~/util/cursor';
-import { getClueForSelection } from '~/util/getClueForSelection';
 import styles from './PuzzleCell.module.css';
 
 type Props = {
@@ -12,111 +8,104 @@ type Props = {
   content: string;
   index: number;
   number?: number;
+  state?: 'focus' | 'secondary' | 'solved';
   selections?: { color: string; name: string }[];
+  onBackspace: (index: number, cellContent: false | string) => void;
+  onFocus: (index: number) => void;
+  onInput: (index: number, value: string) => void;
+  onRotate: () => void;
 };
 
-export default memo(({ activeClues, index, number, content, selections }: Props) => {
-  const { dispatch, selection } = useSelectionStore();
-  const {
-    dispatch: dispatchKafka,
-    state: { puzzle },
-  } = useStore();
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  const labelRef = useRef<HTMLLabelElement>(null);
-
-  const clueForCell = getClueForSelection(puzzle!, {
+export default memo(
+  ({
     index,
-    direction: selection.direction,
-  });
-  const state =
-    selection.index === index
-      ? 'focus'
-      : activeClues?.[0] === clueForCell
-      ? 'secondary'
-      : undefined;
-  const isBlackCell = content === '.';
-  const cellContent = !isBlackCell && content !== '-' && content;
+    number,
+    content,
+    state,
+    selections,
+    onBackspace,
+    onFocus,
+    onInput,
+    onRotate,
+  }: Props) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const labelRef = useRef<HTMLLabelElement>(null);
 
-  if (!puzzle) return null;
+    const isBlackCell = content === '.';
+    const cellContent = !isBlackCell && content !== '-' && content;
 
-  const handleBackspace = (event: React.KeyboardEvent) => {
-    if (event.key === 'Backspace') {
-      let deletedIndex = index;
-      if (cellContent === false) {
-        deletedIndex = getPrevIndex(puzzle, selection)!;
-        dispatch({ type: 'RETREAT_CURSOR' });
+    const handleBackspace = (event: React.KeyboardEvent) => {
+      if (event.key === 'Backspace') {
+        onBackspace(index, cellContent);
       }
-      dispatchKafka({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
-    }
-  };
-  const handleFocus = (event: React.FocusEvent) => {
-    dispatch({ type: 'SELECT', payload: { index } });
-  };
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // @ts-ignore TS doesn't guarantee that nativeEvent.data is present
-    const value = event.nativeEvent.data;
-    dispatchKafka({ type: 'CELL_CHANGED', payload: { index, value } });
-    dispatch({ type: 'ADVANCE_CURSOR' });
-  };
-  const handleClick = (event: React.MouseEvent) => {
-    // if element is already selected, "focus" event won't be triggered
-    if (selection.index === index && event.target === labelRef.current) {
-      dispatch({ type: 'ROTATE_SELECTION' });
-    }
-  };
+    };
+    const handleFocus = (event: React.FocusEvent) => {
+      onFocus(index);
+    };
+    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+      // @ts-ignore TS doesn't guarantee that nativeEvent.data is present
+      const value = event.nativeEvent.data;
+      onInput(index, value);
+    };
+    const handleClick = (event: React.MouseEvent) => {
+      // if element is already selected, "focus" event won't be triggered
+      if (event.target === labelRef.current) {
+        onRotate();
+      }
+    };
 
-  useLayoutEffect(() => {
-    if (selection.index === index) {
-      inputRef.current?.focus();
-    }
-  }, [selection.index]);
+    useLayoutEffect(() => {
+      if (state === 'focus') {
+        inputRef.current?.focus();
+      }
+    }, [state]);
 
-  return (
-    <label
-      ref={labelRef}
-      onClick={handleClick}
-      className={cx(styles.cell, {
-        [styles.focus]: state === 'focus',
-        [styles.active]: state === 'secondary',
-        [styles.black]: isBlackCell,
-      })}
-    >
-      {number && <span className={styles.number}>{number}</span>}
-      {cellContent && (
-        <span className={styles.content} aria-hidden>
-          {cellContent}
-        </span>
-      )}
-      {selections && (
-        <div className={styles.cursors}>
-          {selections.map(({ color, name }) => (
-            <div
-              key={color}
-              title={name}
-              className={styles.cursor}
-              style={{ backgroundColor: color }}
-            />
-          ))}
-        </div>
-      )}
-      {!isBlackCell && (
-        <input
-          autoCapitalize="characters"
-          autoCorrect="off"
-          autoComplete="off"
-          spellCheck={false}
-          aria-expanded={false}
-          role="textbox"
-          ref={inputRef}
-          className={styles.input}
-          onKeyDown={handleBackspace}
-          onInput={handleInput}
-          onFocus={handleFocus}
-          value=""
-          type="search"
-        ></input>
-      )}
-    </label>
-  );
-});
+    return (
+      <label
+        ref={labelRef}
+        onClick={handleClick}
+        className={cx(styles.cell, {
+          [styles.focus]: state === 'focus',
+          [styles.active]: state === 'secondary',
+          [styles.black]: isBlackCell,
+        })}
+      >
+        {number && <span className={styles.number}>{number}</span>}
+        {cellContent && (
+          <span className={styles.content} aria-hidden>
+            {cellContent}
+          </span>
+        )}
+        {selections && (
+          <div className={styles.cursors}>
+            {selections.map(({ color, name }) => (
+              <div
+                key={color}
+                title={name}
+                className={styles.cursor}
+                style={{ backgroundColor: color }}
+              />
+            ))}
+          </div>
+        )}
+        {!isBlackCell && (
+          <input
+            autoCapitalize="characters"
+            autoCorrect="off"
+            autoComplete="off"
+            spellCheck={false}
+            aria-expanded={false}
+            role="textbox"
+            ref={inputRef}
+            className={styles.input}
+            onKeyDown={handleBackspace}
+            onInput={handleInput}
+            onFocus={handleFocus}
+            value=""
+            type="search"
+          ></input>
+        )}
+      </label>
+    );
+  },
+);

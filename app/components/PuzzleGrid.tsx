@@ -1,9 +1,11 @@
 import { gridNumbering } from '@ajhyndman/puz';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useSelectionStore } from '~/store/local/selection';
 import { useStore } from '~/store/remote';
+import { getPrevIndex } from '~/util/cursor';
 import { getActiveClues } from '~/util/getActiveClues';
+import { getClueForSelection } from '~/util/getClueForSelection';
 import styles from './PuzzleGrid.module.css';
 import PuzzleCell from './PuzzleCell';
 
@@ -57,11 +59,14 @@ export default ({ userId }: Props) => {
     };
   }, [userId]);
 
-  if (!puzzle) return null;
-  const numbering = gridNumbering(puzzle);
+  // derive clue to cell mappings
+  const numbering = useMemo(() => gridNumbering(puzzle!), [puzzle?.solution, puzzle?.width]);
+  const activeClues = useMemo(
+    () => getActiveClues(puzzle!, selection),
+    [puzzle?.solution, puzzle?.width, selection],
+  );
 
-  const activeClues = getActiveClues(puzzle, selection);
-
+  // handle keyboard navigation
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     switch (event.key) {
       case 'ArrowDown':
@@ -85,13 +90,53 @@ export default ({ userId }: Props) => {
     }
   };
 
+  // cell event handlers
+  const handleCellBackspace = useCallback(
+    (index: number, cellContent: false | string) => {
+      let deletedIndex = index;
+      if (cellContent === false) {
+        deletedIndex = getPrevIndex(puzzle!, selection)!;
+        dispatch({ type: 'RETREAT_CURSOR' });
+      }
+      dispatchRemote({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
+    },
+    [dispatch, dispatchRemote, puzzle?.solution],
+  );
+  const handleCellFocus = useCallback(
+    (index: number) => {
+      dispatch({ type: 'SELECT', payload: { index } });
+    },
+    [dispatch],
+  );
+  const handleCellInput = useCallback(
+    (index: number, value: string) => {
+      dispatchRemote({ type: 'CELL_CHANGED', payload: { index, value } });
+      dispatch({ type: 'ADVANCE_CURSOR' });
+    },
+    [dispatch, dispatchRemote],
+  );
+  const handleCellRotate = useCallback(() => {
+    dispatch({ type: 'ROTATE_SELECTION' });
+  }, [dispatch]);
+
   return (
     <div
       className={styles.grid}
-      style={{ gridTemplateColumns: `repeat(${puzzle.width}, 33px)` }}
+      style={{ gridTemplateColumns: `repeat(${puzzle!.width}, 33px)` }}
       onKeyDown={handleKeyDown}
     >
-      {[...puzzle.state!].map((char, i) => {
+      {[...puzzle!.state!].map((char, i) => {
+        const clueForCell = getClueForSelection(puzzle!, {
+          index: i,
+          direction: selection.direction,
+        });
+        const state =
+          selection.index === i
+            ? 'focus'
+            : activeClues?.[0] === clueForCell
+            ? 'secondary'
+            : undefined;
+
         return (
           <PuzzleCell
             key={i}
@@ -100,6 +145,11 @@ export default ({ userId }: Props) => {
             activeClues={activeClues}
             content={char}
             selections={selectionIndices[i]}
+            state={state}
+            onBackspace={handleCellBackspace}
+            onFocus={handleCellFocus}
+            onInput={handleCellInput}
+            onRotate={handleCellRotate}
           />
         );
       })}
