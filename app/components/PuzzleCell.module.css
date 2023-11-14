@@ -65,7 +65,8 @@
 }
 
 .pencil .content {
-  color: var(--bermuda-gray);
+  color: var(--casper);
+
 }
 
 .revealed .content {
