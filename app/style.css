@@ -10,6 +10,9 @@ body {
   --san-juan: #2B476A;
   --white: #FFFFFF;
 
+  --red-ink: #A03138;
+  --green-ink: #1B975D;
+
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: var(--black-pearl);
 }

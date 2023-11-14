@@ -61,7 +61,8 @@
 }
 
 .incorrect .content {
-  text-decoration: #A03138 wavy underline;
+  color: var(--red-ink);
+  text-decoration: var(--red-ink) wavy underline;
 }
 
 .pencil .content {
@@ -70,7 +71,8 @@
 }
 
 .revealed .content {
-  text-decoration: #1B975D underline;
+  color: var(--green-ink);
+  text-decoration: var(--green-ink) underline;
 }
 
 .focus {
