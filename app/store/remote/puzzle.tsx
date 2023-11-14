@@ -33,7 +33,7 @@ export const reducer = (state: State, { type, payload }: Action) => {
         // if action has no contents
         payload.value == null ||
         // if , or character is invalid
-        VALID_INPUT_REGEX.test(payload.value)
+        !VALID_INPUT_REGEX.test(payload.value)
       ) {
         // ignore this action
         return state;
