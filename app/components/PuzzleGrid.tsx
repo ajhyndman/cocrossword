@@ -105,7 +105,7 @@ export default ({ userId }: Props) => {
       }
       dispatchRemote({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
     },
-    [dispatch, dispatchRemote, puzzle?.solution, isCorrect],
+    [dispatch, dispatchRemote, puzzle?.solution, isCorrect, selection],
   );
   const handleCellFocus = useCallback(
     (index: number) => {
