@@ -45,9 +45,15 @@ export const reducer = (state: State, { type, payload }: Action) => {
 
       // also set markup flag
       const markupGrid = state.puzzle.markupGrid ?? [];
-      markupGrid[payload.index] = { ...markupGrid[payload.index], unknown_08: payload.isPencil };
+      markupGrid[payload.index] = {
+        ...markupGrid[payload.index],
+        unknown_08: payload.isPencil,
+      };
+      // clear any previous checked state
+      delete markupGrid[payload.index].incorrect;
+      delete markupGrid[payload.index].revealed;
 
-      return { ...state, puzzle, isCorrect: isCorrect(puzzle) };
+      return { ...state, puzzle, isCorrect: isCorrect(puzzle, true) };
 
     default:
       return state;
