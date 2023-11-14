@@ -116,10 +116,13 @@ export default ({ userId }: Props) => {
   const handleCellInput = useCallback(
     (index: number, value: string) => {
       if (isCorrect) return;
-      dispatchRemote({ type: 'CELL_CHANGED', payload: { index, value } });
+      dispatchRemote({
+        type: 'CELL_CHANGED',
+        payload: { index, value, isPencil: selection.isPencil },
+      });
       dispatch({ type: 'ADVANCE_CURSOR' });
     },
-    [dispatch, dispatchRemote, isCorrect],
+    [dispatch, dispatchRemote, isCorrect, selection.isPencil],
   );
   const handleCellRotate = useCallback(() => {
     dispatch({ type: 'ROTATE_SELECTION' });

@@ -8,6 +8,7 @@ import { getNextIndex, getPrevIndex } from '~/util/cursor';
 export type Selection = {
   readonly index?: number;
   readonly direction: 'column' | 'row';
+  readonly isPencil?: boolean;
 };
 
 export type SelectionAction =
@@ -20,7 +21,8 @@ export type SelectionAction =
       payload: { key: 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' };
     }
   | { type: 'PREVIOUS_CLUE'; payload?: undefined }
-  | { type: 'NEXT_CLUE'; payload?: undefined };
+  | { type: 'NEXT_CLUE'; payload?: undefined }
+  | { type: 'TOGGLE_PENCIL'; payload?: undefined };
 
 const DEFAULT_SELECTION: Selection = { direction: 'row' };
 
@@ -98,6 +100,10 @@ const reducer =
         const nextClue = clues[clueCategory][(clueIndex + numClues - 1) % numClues].number;
         const nextIndex = numbering.findIndex((number) => number === nextClue);
         return { ...state, index: nextIndex };
+      }
+
+      case 'TOGGLE_PENCIL': {
+        return { ...state, isPencil: !state.isPencil };
       }
 
       default:

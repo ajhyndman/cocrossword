@@ -4,9 +4,14 @@ import { useState } from 'react';
 import { useStore } from '~/store/remote';
 import FloatingActionButton from './FloatingActionButton';
 import styles from './Toolbar.module.css';
+import { useSelectionStore } from '~/store/local/selection';
 
 export default () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const {
+    dispatch,
+    selection: { isPencil },
+  } = useSelectionStore();
   const {
     state: { puzzle },
   } = useStore();
@@ -38,6 +43,10 @@ export default () => {
     }
   };
 
+  const handleTogglePencil = () => {
+    dispatch({ type: 'TOGGLE_PENCIL' });
+  };
+
   return (
     <div className={styles.container}>
       <FloatingActionButton
@@ -48,7 +57,11 @@ export default () => {
       />
       {isExpanded && (
         <>
-          {/* <FloatingActionButton name="edit" size="small" /> */}
+          <FloatingActionButton
+            name={isPencil ? 'edit_off' : 'edit'}
+            size="small"
+            onClick={handleTogglePencil}
+          />
           <FloatingActionButton name="check_box" size="small" onClick={checkSolution} />
           <FloatingActionButton name="download" size="small" onClick={handleDownload} />
         </>

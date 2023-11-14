@@ -60,17 +60,26 @@
   bottom: 0;
 }
 
-.incorrect {
-  background: var(--we-peep);
+.incorrect .content {
+  text-decoration: #A03138 wavy underline;
 }
 
-.revealed {
-  background: var(--iceberg);
+.pencil .content {
+  color: var(--bermuda-gray);
+  text-transform: lowercase;
+}
+
+.revealed .content {
+  text-decoration: #1B975D underline;
 }
 
 .focus {
   background: var(--fountain-blue);
   color: var(--white);
+}
+
+.pencil.focus .content {
+  color: var(--botticelli)
 }
 
 .active {
