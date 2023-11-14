@@ -45,8 +45,7 @@ export const reducer = (state: State, { type, payload }: Action) => {
 
       // also set markup flag
       const markupGrid = state.puzzle.markupGrid ?? [];
-      markupGrid[payload.index] = markupGrid[payload.index] ?? {};
-      markupGrid[payload.index].unknown_01 = payload.isPencil;
+      markupGrid[payload.index] = { ...markupGrid[payload.index], unknown_08: payload.isPencil };
 
       return { ...state, puzzle, isCorrect: isCorrect(puzzle) };
 

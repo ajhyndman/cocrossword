@@ -24,6 +24,8 @@ export default () => {
     state: { puzzle },
   } = useStore();
 
+  console.log(puzzle);
+
   if (!puzzle) return null;
 
   return (
