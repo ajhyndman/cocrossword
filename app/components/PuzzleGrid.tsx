@@ -51,17 +51,17 @@ export default ({ userId }: Props) => {
     }
   }, [selection.index, userId]);
 
-  // // clear selection on unmount or page hide
-  // useEffect(() => {
-  //   const clearSelection = () =>
-  //     dispatchRemote({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
+  // clear selection on unmount or page hide
+  useEffect(() => {
+    const clearSelection = () =>
+      dispatchRemote({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
 
-  //   window.addEventListener('visibilitychange', clearSelection);
-  //   return () => {
-  //     clearSelection();
-  //     window.removeEventListener('visibilitychange', clearSelection);
-  //   };
-  // }, [userId]);
+    window.addEventListener('visibilitychange', clearSelection);
+    return () => {
+      clearSelection();
+      window.removeEventListener('visibilitychange', clearSelection);
+    };
+  }, [userId]);
 
   // derive clue to cell mappings
   const numbering = useMemo(() => gridNumbering(puzzle!), [puzzle?.solution, puzzle?.width]);
