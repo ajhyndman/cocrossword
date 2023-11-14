@@ -15,6 +15,8 @@ export type Action =
       payload: { index: number; value: string; isPencil?: boolean };
     };
 
+const VALID_INPUT_REGEX = /^[-A-Za-z0-9@#$%&+?]+$/;
+
 export const DEFAULT_STATE = {};
 
 export const reducer = (state: State, { type, payload }: Action) => {
@@ -23,13 +25,19 @@ export const reducer = (state: State, { type, payload }: Action) => {
       return { ...state, puzzle: payload, isCorrect: isCorrect(payload) };
 
     case 'CELL_CHANGED':
-      // if puzzle is already correct, ignore this action
-      if (state.isCorrect) return state;
-      // if no puzzle set yet, ignore this action
-      if (!state.puzzle?.state) return state;
-      // if action has no contents, ignore this action
-      if (payload.value == null) return state;
-
+      if (
+        // if puzzle is already correct
+        state.isCorrect ||
+        // if no puzzle set yet
+        !state.puzzle?.state ||
+        // if action has no contents
+        payload.value == null ||
+        // if , or character is invalid
+        VALID_INPUT_REGEX.test(payload.value)
+      ) {
+        // ignore this action
+        return state;
+      }
       // update the character at the given position
       const nextState = [...state.puzzle.state];
       nextState[payload.index] = payload.value.slice(0, 1).toUpperCase();
