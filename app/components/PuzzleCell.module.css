@@ -49,6 +49,25 @@
   z-index: 1;
 }
 
+.circled::after {
+  content: '';
+  border-radius: 100%;
+  border: solid 1px var(--black-pearl);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.incorrect {
+  background: var(--we-peep);
+}
+
+.revealed {
+  background: var(--iceberg);
+}
+
 .focus {
   background: var(--fountain-blue);
   color: var(--white);

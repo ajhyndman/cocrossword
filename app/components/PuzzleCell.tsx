@@ -1,3 +1,4 @@
+import { SquareMarkup } from '@ajhyndman/puz';
 import { memo, useLayoutEffect, useRef } from 'react';
 import cx from 'classnames';
 
@@ -8,8 +9,9 @@ type Props = {
   content: string;
   index: number;
   number?: number;
-  state?: 'focus' | 'secondary' | 'solved';
   selections?: { color: string; name: string }[];
+  state?: 'focus' | 'secondary' | 'solved';
+  markup?: SquareMarkup;
   onBackspace: (index: number, cellContent: false | string) => void;
   onFocus: (index: number) => void;
   onInput: (index: number, value: string) => void;
@@ -23,6 +25,7 @@ export default memo(
     content,
     state,
     selections,
+    markup,
     onBackspace,
     onFocus,
     onInput,
@@ -69,6 +72,10 @@ export default memo(
           [styles.active]: state === 'secondary',
           [styles.solved]: state === 'solved',
           [styles.black]: isBlackCell,
+          [styles.circled]: markup?.circled,
+          [styles.incorrect]: markup?.incorrect,
+          [styles.revealed]: markup?.revealed,
+          [styles.pencil]: markup?.unknown_01,
         })}
       >
         {number && <span className={styles.number}>{number}</span>}

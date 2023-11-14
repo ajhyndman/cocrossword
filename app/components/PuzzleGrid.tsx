@@ -154,6 +154,7 @@ export default ({ userId }: Props) => {
             content={char}
             selections={selectionIndices[i]}
             state={state}
+            markup={puzzle!.markupGrid?.[i]}
             onBackspace={handleCellBackspace}
             onFocus={handleCellFocus}
             onInput={handleCellInput}
