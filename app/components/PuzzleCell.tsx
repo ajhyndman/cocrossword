@@ -39,6 +39,12 @@ export default memo(
         onBackspace(index, cellContent);
       }
     };
+    const handleClick = (event: React.MouseEvent) => {
+      // if element is already selected, "focus" event won't be triggered
+      if (state === 'focus' && event.target === labelRef.current) {
+        onRotate();
+      }
+    };
     const handleFocus = (event: React.FocusEvent) => {
       onFocus(index);
     };
@@ -46,12 +52,6 @@ export default memo(
       // @ts-ignore TS doesn't guarantee that nativeEvent.data is present
       const value = event.nativeEvent.data;
       onInput(index, value);
-    };
-    const handleClick = (event: React.MouseEvent) => {
-      // if element is already selected, "focus" event won't be triggered
-      if (state === 'focus' && event.target === labelRef.current) {
-        onRotate();
-      }
     };
 
     useLayoutEffect(() => {
