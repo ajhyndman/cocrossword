@@ -81,6 +81,11 @@
 
 .focus {
   background: var(--fountain-blue);
+}
+
+/* NOTE: uses extra selectors for specificity */
+.focus .content,
+.focus .content .superscript {
   color: var(--white);
 }
 
