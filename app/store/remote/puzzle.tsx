@@ -52,6 +52,7 @@ export const reducer = (state: State, { type, payload }: Action) => {
 
       // also set markup flag
       const markupGrid = state.puzzle.markupGrid?.slice() ?? [];
+      markupGrid.length = state.puzzle.state.length;
       markupGrid[payload.index] = {
         ...markupGrid[payload.index],
         unknown_08: payload.isPencil,
@@ -80,6 +81,7 @@ export const reducer = (state: State, { type, payload }: Action) => {
       }
       // set markup flag
       const markupGrid = state.puzzle.markupGrid?.slice() ?? [];
+      markupGrid.length = state.puzzle.state.length;
       // set bit flag 04,which we will use as starred
       markupGrid[payload.index] = {
         ...markupGrid[payload.index],
@@ -101,6 +103,7 @@ export const reducer = (state: State, { type, payload }: Action) => {
       }
       // also set markup flag
       const markupGrid = state.puzzle.markupGrid?.slice() ?? [];
+      markupGrid.length = state.puzzle.state.length;
       state.puzzle.state.split('').forEach((char, i) => {
         // if cell has been populated, and does not match solution
         if (char !== '-' && state.puzzle?.solution?.[i] !== char) {
