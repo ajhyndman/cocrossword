@@ -17,11 +17,6 @@ export default () => {
     state: { puzzle },
   } = useStore();
 
-  const close = () => {
-    // close toolbar _after_ any other event handlers are triggered
-    setTimeout(() => setIsExpanded(false), 100);
-  };
-
   const checkSolution = () => {
     dispatchRemote({ type: 'CHECK_PUZZLE' });
   };
@@ -48,7 +43,6 @@ export default () => {
     <div className={styles.container}>
       <FloatingActionButton
         label="Close"
-        onBlur={close}
         onClick={() => setIsExpanded(!isExpanded)}
         name={isExpanded ? 'close' : 'more_horiz'}
         transparent
