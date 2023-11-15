@@ -1,4 +1,4 @@
-import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 
 type Subscriber<T> = (entries: T[]) => void;
 
@@ -18,7 +18,7 @@ export class Log<T> {
     this.push = this.push.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.getLog = this.getLog.bind(this);
-    this.broadcast = debounce(this.broadcast.bind(this), BROADCAST_INTERVAL);
+    this.broadcast = throttle(this.broadcast.bind(this), BROADCAST_INTERVAL);
   }
 
   broadcast() {
