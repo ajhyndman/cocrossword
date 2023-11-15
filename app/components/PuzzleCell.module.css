@@ -84,6 +84,7 @@
 }
 
 /* NOTE: uses extra selectors for specificity */
+.focus,
 .focus .content,
 .focus .content .superscript {
   color: var(--white);
