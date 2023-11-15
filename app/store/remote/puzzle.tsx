@@ -15,6 +15,10 @@ export type Action =
       payload: { index: number; value: string; isPencil?: boolean };
     }
   | {
+      type: 'TOGGLE_STARRED';
+      payload: { index: number };
+    }
+  | {
       type: 'CHECK_PUZZLE';
       payload?: undefined;
     };
@@ -24,6 +28,7 @@ const VALID_INPUT_REGEX = /^[-A-Za-z0-9@#$%&+?]+$/;
 export const DEFAULT_STATE = {};
 
 export const reducer = (state: State, { type, payload }: Action) => {
+  console.log(state.puzzle);
   switch (type) {
     case 'NEW_PUZZLE':
       return { ...state, puzzle: payload, isCorrect: isCorrect(payload) };
@@ -59,6 +64,30 @@ export const reducer = (state: State, { type, payload }: Action) => {
       const puzzle: Puzzle = { ...state.puzzle, state: nextState.join(''), markupGrid };
 
       return { ...state, puzzle, isCorrect: isCorrect(puzzle, true) };
+    }
+
+    // NOTE: This only sets a markup flag (for now)
+    case 'TOGGLE_STARRED': {
+      if (
+        // if puzzle is already correct
+        state.isCorrect ||
+        // if no puzzle set yet
+        !state.puzzle?.state ||
+        // no cell currently selected
+        payload?.index == null
+      ) {
+        // ignore this action
+        return state;
+      }
+      // set markup flag
+      const markupGrid = state.puzzle.markupGrid?.slice() ?? [];
+      // set bit flag 04,which we will use as starred
+      markupGrid[payload.index] = {
+        ...markupGrid[payload.index],
+        unknown_04: !markupGrid[payload.index]?.unknown_04,
+      };
+
+      return { ...state, puzzle: { ...state.puzzle, markupGrid } };
     }
 
     case 'CHECK_PUZZLE': {

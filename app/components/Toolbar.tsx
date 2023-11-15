@@ -10,7 +10,7 @@ export default () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const {
     dispatch,
-    selection: { isPencil },
+    selection: { index, isPencil },
   } = useSelectionStore();
   const {
     dispatch: dispatchRemote,
@@ -39,6 +39,12 @@ export default () => {
     dispatch({ type: 'TOGGLE_PENCIL' });
   };
 
+  const handleToggleRebus = () => {
+    if (index) {
+      dispatchRemote({ type: 'TOGGLE_STARRED', payload: { index } });
+    }
+  };
+
   return (
     <div className={styles.container}>
       <FloatingActionButton
@@ -54,6 +60,12 @@ export default () => {
             name={isPencil ? 'edit_off' : 'edit'}
             size="small"
             onClick={handleTogglePencil}
+          />
+          <FloatingActionButton
+            label="Star/Unstar square"
+            name="star"
+            size="small"
+            onClick={handleToggleRebus}
           />
           <FloatingActionButton
             label="Check puzzle"

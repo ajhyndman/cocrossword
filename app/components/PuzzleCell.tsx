@@ -76,12 +76,14 @@ export default memo(
           [styles.incorrect]: markup?.incorrect,
           [styles.revealed]: markup?.revealed,
           [styles.pencil]: markup?.unknown_08,
+          [styles.starred]: markup?.unknown_04,
         })}
       >
         {number && <span className={styles.number}>{number}</span>}
         {cellContent && (
           <span className={styles.content} aria-hidden>
             {cellContent.toLocaleUpperCase()}
+            {markup?.unknown_04 && <sup className={styles.superscript}>*</sup>}
           </span>
         )}
         {selections && (
