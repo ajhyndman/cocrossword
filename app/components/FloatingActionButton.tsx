@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import styles from './FloatingActionButton.module.css';
 
 type Props = {
+  label: string;
   name: string;
   onBlur?: () => void;
   onClick?: () => void;
@@ -10,8 +11,9 @@ type Props = {
   transparent?: boolean;
 };
 
-export default ({ name, onBlur, onClick, size, transparent }: Props) => (
+export default ({ label, name, onBlur, onClick, size, transparent }: Props) => (
   <button
+    title={label}
     className={classNames(styles.button, {
       [styles.small]: size === 'small',
       [styles.large]: size === 'large',
