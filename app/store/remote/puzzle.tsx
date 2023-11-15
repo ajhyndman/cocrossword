@@ -28,7 +28,6 @@ const VALID_INPUT_REGEX = /^[-A-Za-z0-9@#$%&+?]+$/;
 export const DEFAULT_STATE = {};
 
 export const reducer = (state: State, { type, payload }: Action) => {
-  console.log(state.puzzle);
   switch (type) {
     case 'NEW_PUZZLE':
       return { ...state, puzzle: payload, isCorrect: isCorrect(payload) };
