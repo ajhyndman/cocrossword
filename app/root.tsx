@@ -1,3 +1,4 @@
+import { useSWEffect, LiveReload as LiveReloadPwa } from '@remix-pwa/sw';
 import { cssBundleHref } from '@remix-run/css-bundle';
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
 import { useEffect } from 'react';
@@ -24,6 +25,8 @@ export const links = () => [
 ];
 
 export default function App() {
+  useSWEffect();
+
   useEffect(() => {
     // disable pinch zoom on iOS devices
     document?.addEventListener(
@@ -55,6 +58,7 @@ export default function App() {
         <Scripts />
         <ScrollRestoration />
         <LiveReload />
+        <LiveReloadPwa />
       </body>
     </html>
   );
