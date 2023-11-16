@@ -1,4 +1,4 @@
-/** @type {import('@remix-pwa/dev').WorkerConfig} */
+/** @type {import('@remix-run/dev').AppConfig} */
 export default {
   // appDirectory: "app",
   assetsBuildDirectory: 'public/dist',
@@ -13,9 +13,4 @@ export default {
     modules: { buffer: true },
   },
   serverBuildPath: 'dist/index.js',
-  workerBuildDirectory: './public/dist',
-
-  // work around a bug with esm import resolution
-  // see: https://github.com/remix-pwa/monorepo/issues/112
-  serverDependenciesToBundle: [/@remix-pwa\/.*/],
 };
