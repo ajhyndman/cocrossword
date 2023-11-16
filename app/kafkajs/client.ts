@@ -14,6 +14,7 @@ export async function isHealthy() {
 export function getKafkaClient() {
   if (
     !process.env.KAFKA_BROKER_URL ||
+    !process.env.KAFKA_CONSUMER_GROUP ||
     !process.env.KAFKA_SASL_USERNAME ||
     !process.env.KAFKA_SASL_PASSWORD
   ) {
@@ -23,9 +24,8 @@ export function getKafkaClient() {
   if (!singleton) {
     singleton = new Promise(async (resolve) => {
       const kafka = new Kafka({
-        clientId: `crossword-app-${process.env.NODE_ENV}`,
         brokers: [process.env.KAFKA_BROKER_URL!],
-        connectionTimeout: 45000,
+        connectionTimeout: SESSION_TIMEOUT,
         logLevel: logLevel.ERROR,
         ssl: true,
         sasl: {
@@ -35,6 +35,7 @@ export function getKafkaClient() {
         },
       });
       const producer = kafka.producer();
+      const consumer = kafka.consumer({ groupId: process.env.KAFKA_CONSUMER_GROUP! });
 
       consumer.on('consumer.heartbeat', ({ timestamp }) => {
         lastHeartbeat = timestamp;
