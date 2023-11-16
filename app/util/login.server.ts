@@ -5,8 +5,16 @@ import { commitSession, getSession } from '~/sessions.server';
 import { loadStore } from '~/store/remote';
 import { randomItem } from './randomItem';
 import { MIDDLE_EARTH_NAMES } from './constants';
+import isbot from 'isbot';
 
-export async function login(cookie: string | null, id: string) {
+export async function login(request: Request, id: string) {
+  // if this is a bot request, do not assign a session
+  if (isbot(request.headers.get('User-Agent'))) {
+    return {};
+  }
+
+  // if there is a real puzzle, return session
+  const cookie = request.headers.get('Cookie');
   const session = await getSession(cookie);
 
   let userId = session.get('userId');

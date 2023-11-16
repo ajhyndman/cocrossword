@@ -16,9 +16,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const { getState } = await loadStore(params.id);
   if (!getState().puzzle) return redirect('/');
 
-  // if there is a real puzzle, return session
-  const cookie = request.headers.get('Cookie');
-  return login(cookie, params.id!);
+  return login(request, params.id!);
 }
 
 export default () => {
