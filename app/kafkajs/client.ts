@@ -2,6 +2,15 @@ import { Kafka, Consumer, Producer, logLevel } from 'kafkajs';
 
 let singleton: Promise<{ consumer: Consumer; producer: Producer }>;
 
+const SESSION_TIMEOUT = 45000;
+
+let lastHeartbeat = 0;
+
+export async function isHealthy() {
+  // Consumer has heartbeat within the session timeout, so it is healthy
+  return Date.now() - lastHeartbeat < SESSION_TIMEOUT;
+}
+
 export function getKafkaClient() {
   if (
     !process.env.KAFKA_BROKER_URL ||
@@ -26,7 +35,10 @@ export function getKafkaClient() {
         },
       });
       const producer = kafka.producer();
-      const consumer = kafka.consumer({ groupId: 'node-group' });
+
+      consumer.on('consumer.heartbeat', ({ timestamp }) => {
+        lastHeartbeat = timestamp;
+      });
 
       await producer.connect();
       await consumer.connect();
