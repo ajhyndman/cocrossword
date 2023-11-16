@@ -3,7 +3,9 @@ import { getKafkaClient } from './client';
 import { Log } from './log';
 import type { KafkaMessage, Message } from 'kafkajs';
 
-let init: Promise<Log<KafkaMessage>>;
+type KafkaAction = Pick<KafkaMessage, 'key' | 'value'>;
+
+let init: Promise<Log<KafkaAction>>;
 let MESSAGE_QUEUE: Message[] = [];
 
 const flushMessages = throttle(async () => {
@@ -22,12 +24,12 @@ export async function getMessageLog() {
   if (init) return init;
 
   init = new Promise(async (resolve) => {
-    const messageLog = new Log<KafkaMessage>();
+    const messageLog = new Log<KafkaAction>();
     const { consumer } = await getKafkaClient();
 
     await consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
-        messageLog.push(message);
+        messageLog.push({ key: message.key, value: message.value });
       },
     });
     await consumer.seek({ topic: 'crossword-actions', partition: 0, offset: '0' });
