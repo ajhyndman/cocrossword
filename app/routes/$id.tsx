@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { Outlet, useLoaderData, useParams } from '@remix-run/react';
 
 import { Provider } from '~/store/remote';
@@ -6,10 +6,19 @@ import { login } from '~/util/login.server';
 import styles from './$id.module.css';
 import { useEffect, useState } from 'react';
 import NavigationTabs from '~/components/NavigationTabs';
+import { loadStore } from '~/store/remote';
 
-export async function loader({ request, params: { id } }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
+  // if no ID passed, redirect to home
+  if (!params.id) return redirect('/');
+
+  // if puzzle hasn't been initialized, redirect to home
+  const { getState } = await loadStore(params.id);
+  if (!getState().puzzle) return redirect('/');
+
+  // if there is a real puzzle, return session
   const cookie = request.headers.get('Cookie');
-  return login(cookie, id!);
+  return login(cookie, params.id!);
 }
 
 export default () => {
