@@ -36,6 +36,7 @@ const DEFAULT_STATE = {
   ...USERS_DEFAULT_STATE,
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const composeReducers = (...reducers: Reducer<any, any>[]): Reducer<any, any> => {
   return reducers.reduce((f, g) => (state, action) => f(g(state, action), action));
 };

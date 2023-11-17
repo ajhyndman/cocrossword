@@ -20,7 +20,7 @@ export default function View() {
   // while page is open, mark latest message as read
   useEffect(() => {
     dispatch({ type: 'READ_MESSAGE', payload: { id: userId, index: messages.length } });
-  }, [userId, messages.length]);
+  }, [dispatch, userId, messages.length]);
 
   const user = useMemo(() => users[userId], [users, userId]);
 
@@ -32,7 +32,7 @@ export default function View() {
 
     // clear input state
     setValue('');
-  }, [userId, value]);
+  }, [dispatch, userId, value]);
 
   const handleEnter = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {

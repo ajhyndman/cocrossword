@@ -74,7 +74,6 @@ const reducer =
 
       case 'NEXT_CLUE': {
         if (state.index == null) return state;
-        // @ts-ignore TS thinks the state reference is mutable
         const selectedClue = getClueForSelection(puzzle, state);
         const numbering = gridNumbering(puzzle);
         const clues = enumerateClues(puzzle);
@@ -89,7 +88,6 @@ const reducer =
 
       case 'PREVIOUS_CLUE': {
         if (state.index == null) return state;
-        // @ts-ignore TS thinks the state reference is mutable
         const selectedClue = getClueForSelection(puzzle, state);
         const numbering = gridNumbering(puzzle);
         const clues = enumerateClues(puzzle);

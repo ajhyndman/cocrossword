@@ -31,14 +31,14 @@ import { CLIENT_ID } from '~/util/constants';
 
 type BaseAction = {
   type: string;
-  payload?: any;
+  payload?: unknown;
 };
 
-type BaseKafkaAction = {
+export type BaseKafkaAction = {
   index: number;
   client: string;
   type: string;
-  payload?: any;
+  payload?: unknown;
 };
 
 export type Reducer<State, Action extends BaseAction> = (state: State, action: Action) => State;
@@ -116,7 +116,7 @@ export function createStore<State, Action extends BaseAction>(
       const keys = Object.keys(actions.current);
       keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
       const sortedActions = keys.map((key) => actions.current[key]);
-      // @ts-ignore (use BaseAction as BaseKafkaAction)
+      // @ts-expect-error (use BaseAction as BaseKafkaAction)
       const state = sortedActions.reduce(reducer, init) as State;
       setState(state);
     }, []);
@@ -154,7 +154,7 @@ export function createStore<State, Action extends BaseAction>(
         ACTION_QUEUE.push([props.KEY, kafkaAction]);
         flushActions();
       },
-      [getCursor, pushAction],
+      [props.KEY, getCursor, pushAction],
     );
 
     // subscribe to kafka events
@@ -178,7 +178,7 @@ export function createStore<State, Action extends BaseAction>(
         eventSource.removeEventListener(props.KEY, handleEvent);
         eventSource.close();
       };
-    }, [pushAction, rebuildState]);
+    }, [props.KEY, pushAction, rebuildState]);
 
     return (
       <StoreContext.Provider value={{ dispatch, state }}>{props.children}</StoreContext.Provider>

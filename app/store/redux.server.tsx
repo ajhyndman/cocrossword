@@ -2,14 +2,14 @@ import { getMessageLog, dispatch as dispatchEvent } from '~/kafkajs';
 
 type BaseAction = {
   type: string;
-  payload?: any;
+  payload?: unknown;
 };
 
 type BaseKafkaAction = {
   index: number;
   client: string;
   type: string;
-  payload?: any;
+  payload?: unknown;
 };
 
 export type Reducer<State, Action extends BaseAction> = (state: State, action: Action) => State;
@@ -40,7 +40,7 @@ export async function loadStore<State, Action extends BaseAction>(
   function getState(): State {
     const actions = getActions();
     actions.sort((a, b) => getKey(a).localeCompare(getKey(b)));
-    // @ts-ignore accept this cast
+    // @ts-expect-error accept this cast
     const state = (actions as Action[]).reduce(reducer, init);
 
     return state;

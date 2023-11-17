@@ -34,7 +34,7 @@ export const DEFAULT_STATE: State = { users: {} };
 
 export const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
-    case 'USER_JOINED':
+    case 'USER_JOINED': {
       // if user already exists, do not recreate them
       if (state.users[payload.id]) return state;
 
@@ -44,8 +44,9 @@ export const reducer = (state: State, { type, payload }: Action) => {
 
       // then insert new user
       return { ...state, users: { ...state.users, [payload.id]: { ...payload, color } } };
+    }
 
-    case 'USER_RENAMED':
+    case 'USER_RENAMED': {
       // if user doesn't exist, bail out
       if (!state.users[payload.id]) return state;
       // otherwise, override only the user's name
@@ -53,6 +54,7 @@ export const reducer = (state: State, { type, payload }: Action) => {
         ...state,
         users: { ...state.users, [payload.id]: { ...state.users[payload.id], name: payload.name } },
       };
+    }
 
     default:
       return state;

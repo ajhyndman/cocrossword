@@ -13,7 +13,7 @@ const LOG_FILE = path.join(TEMP_DIR, 'log');
 
 let log: Log<Message>;
 
-export async function dispatch(key: string, action: any) {
+export async function dispatch(key: string, action: unknown) {
   const log = await getMessageLog();
   const message = { key, value: JSON.stringify(action) };
 

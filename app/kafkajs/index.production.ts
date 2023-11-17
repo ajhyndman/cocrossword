@@ -16,7 +16,7 @@ const flushMessages = throttle(async () => {
   await producer.send({ topic: 'crossword-actions', messages });
 }, 10);
 
-export async function dispatch(key: string, action: any) {
+export async function dispatch(key: string, action: unknown) {
   MESSAGE_QUEUE.push({ key, value: JSON.stringify(action) });
   flushMessages();
 }
@@ -24,12 +24,13 @@ export async function dispatch(key: string, action: any) {
 export async function getMessageLog() {
   if (init) return init;
 
+  // eslint-disable-next-line no-async-promise-executor
   init = new Promise(async (resolve) => {
     const messageLog = new Log<KafkaAction>();
     const { consumer } = await getKafkaClient();
 
     await consumer.run({
-      eachMessage: async ({ topic, partition, message }) => {
+      eachMessage: async ({ message }) => {
         messageLog.push({ key: message.key, value: message.value });
       },
     });

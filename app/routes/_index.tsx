@@ -46,7 +46,7 @@ export default function View() {
     event.preventDefault();
 
     // Use DataTransferItemList interface to access the file(s)
-    [...event.dataTransfer?.items!].forEach((item, i) => {
+    [...event.dataTransfer.items].forEach((item) => {
       // If dropped items aren't files, reject them
       if (item.kind === 'file') {
         const file = item.getAsFile();

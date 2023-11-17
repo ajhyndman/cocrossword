@@ -14,7 +14,7 @@ export async function login(request: Request, id: string) {
 
   // if this is a bot request, do not assign a session
   if (isbot(userAgent)) {
-    return {};
+    return { userId: 'BOT' };
   }
 
   // if there is a real puzzle, return session

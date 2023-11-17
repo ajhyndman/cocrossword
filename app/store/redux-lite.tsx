@@ -18,7 +18,7 @@ import { createContext, ReactNode, useContext, useRef, useState } from 'react';
 
 type BaseAction = {
   type: string;
-  payload?: any;
+  payload?: unknown;
 };
 
 export type Reducer<State, Action extends BaseAction> = (state: State, action: Action) => State;

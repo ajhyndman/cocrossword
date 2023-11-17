@@ -22,6 +22,7 @@ export function getKafkaClient() {
   }
 
   if (!singleton) {
+    // eslint-disable-next-line no-async-promise-executor
     singleton = new Promise(async (resolve) => {
       const kafka = new Kafka({
         brokers: [process.env.KAFKA_BROKER_URL!],
