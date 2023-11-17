@@ -1,7 +1,8 @@
 import throttle from 'lodash.throttle';
+import type { KafkaMessage, Message } from 'kafkajs';
+
 import { getKafkaClient } from './client';
 import { Log } from './log';
-import type { KafkaMessage, Message } from 'kafkajs';
 
 type KafkaAction = Pick<KafkaMessage, 'key' | 'value'>;
 

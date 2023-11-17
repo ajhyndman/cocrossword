@@ -1,5 +1,4 @@
 import { useStore } from '~/store/remote';
-
 import styles from './$id.info.module.css';
 
 export default () => {

@@ -1,6 +1,5 @@
 import { Reducer, createStore } from '~/store/redux-kafka';
 import { loadStore as loadStoreGeneric } from '~/store/redux.server';
-
 import {
   Action as ActivityAction,
   State as ActivityState,

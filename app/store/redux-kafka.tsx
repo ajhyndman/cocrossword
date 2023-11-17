@@ -25,9 +25,9 @@ import {
   useRef,
   useState,
 } from 'react';
+import throttle from 'lodash.throttle';
 
 import { CLIENT_ID } from '~/util/constants';
-import throttle from 'lodash.throttle';
 
 type BaseAction = {
   type: string;

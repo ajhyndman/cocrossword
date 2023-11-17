@@ -143,10 +143,10 @@ export default ({ userId }: Props) => {
           selection.index === i
             ? 'focus'
             : activeClues?.[0] === clueForCell
-            ? 'secondary'
-            : isCorrect
-            ? 'solved'
-            : undefined;
+              ? 'secondary'
+              : isCorrect
+                ? 'solved'
+                : undefined;
 
         return (
           <PuzzleCell

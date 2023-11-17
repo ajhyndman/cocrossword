@@ -1,7 +1,8 @@
 import { useOutletContext } from '@remix-run/react';
+import { useMemo } from 'react';
+
 import Tabs from './Tabs';
 import { useStore } from '~/store/remote';
-import { useMemo } from 'react';
 
 type Props = {
   id: string;

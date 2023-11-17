@@ -4,7 +4,6 @@ import ClueCarousel from '~/components/ClueCarousel';
 import PuzzleGrid from '~/components/PuzzleGrid';
 import { useStore } from '~/store/remote';
 import { SelectionProvider } from '~/store/local/selection';
-
 import styles from './$id.puzzle.module.css';
 import Toolbar from '~/components/Toolbar';
 

@@ -5,7 +5,6 @@ import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
 import IconButton from '~/components/IconButton';
 import { useStore } from '~/store/remote';
-
 import styles from './$id.chat.module.css';
 
 export default () => {

@@ -1,12 +1,11 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { Outlet, useLoaderData, useParams } from '@remix-run/react';
+import { useEffect, useState } from 'react';
 
-import { Provider } from '~/store/remote';
+import { Provider, loadStore } from '~/store/remote';
 import { login } from '~/util/login.server';
 import styles from './$id.module.css';
-import { useEffect, useState } from 'react';
 import NavigationTabs from '~/components/NavigationTabs';
-import { loadStore } from '~/store/remote';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   // if no ID passed, redirect to home
