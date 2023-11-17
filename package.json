@@ -19,7 +19,8 @@
     "dev:remix": "remix dev",
     "dev:worker": "remix-pwa dev",
     "serve": "remix-serve dist/index.js",
-    "serve:local": "dotenv remix-serve dist/index.js"
+    "serve:local": "dotenv remix-serve dist/index.js",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@ajhyndman/puz": "^0.3.0",
