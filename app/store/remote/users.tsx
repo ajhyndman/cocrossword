@@ -1,12 +1,19 @@
 import { CHAT_COLORS } from '~/util/constants';
 
-export type DeviceType = 'console' | 'mobile' | 'tablet' | 'smarttv' | 'wearable' | 'embedded';
+export type DeviceType =
+  | 'console'
+  | 'desktop'
+  | 'embedded'
+  | 'mobile'
+  | 'smarttv'
+  | 'tablet'
+  | 'wearable';
 
 type User = {
   id: string;
-  name: string;
   color: string;
   deviceType?: DeviceType;
+  name: string;
 };
 
 export type State = {

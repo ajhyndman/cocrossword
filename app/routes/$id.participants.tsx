@@ -5,6 +5,27 @@ import classNames from 'classnames';
 import IconButton from '~/components/IconButton';
 import { useStore } from '~/store/remote';
 import styles from './$id.participants.module.css';
+import { DeviceType } from '~/store/remote/users';
+
+function getDeviceTypeIcon(deviceType?: DeviceType) {
+  switch (deviceType) {
+    case 'console':
+      return 'videogame_asset';
+    case 'desktop':
+      return 'computer';
+    case 'mobile':
+      return 'smartphone';
+    case 'smarttv':
+      return 'live_tv';
+    case 'tablet':
+      return 'tablet';
+    case 'wearable':
+      return 'watch';
+    case 'embedded':
+    default:
+      return 'person';
+  }
+}
 
 export default () => {
   const { userId } = useOutletContext<{ userId: string }>();
@@ -26,10 +47,10 @@ export default () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Participants</h1>
       <ul className={styles.list}>
-        {userList.map(({ id, color, name }) => (
+        {userList.map(({ id, color, deviceType, name }) => (
           <li key={id} className={styles.listItem}>
             <span className={classNames('material-icons', styles.icon)} style={{ color }}>
-              person
+              {getDeviceTypeIcon(deviceType)}
             </span>
 
             <span className={styles.name} style={{ color }}>

@@ -40,7 +40,7 @@ export async function login(request: Request, id: string) {
     const name = randomItem(MIDDLE_EARTH_NAMES);
 
     const parser = new UAParser(userAgent);
-    const deviceType = parser.getDevice().type as DeviceType;
+    const deviceType = (parser.getDevice().type ?? 'desktop') as DeviceType;
 
     dispatch({ type: 'USER_JOINED', payload: { id: userId, name, deviceType } });
   }
