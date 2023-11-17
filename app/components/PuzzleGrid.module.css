@@ -1,6 +1,10 @@
 .grid {
-  border-bottom: 1px solid var(--black-pearl);
-  border-right: 1px solid var(--black-pearl);
+  border-style: solid;
+  border-color: var(--black-pearl);
+  border-top-width: 1px;
+  border-left-width: 1px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
   display: grid;
   grid-auto-rows: 33px;
   margin: 0 auto;
