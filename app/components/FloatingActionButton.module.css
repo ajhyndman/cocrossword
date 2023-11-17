@@ -4,6 +4,7 @@
   border: none;
   border-radius: 16px;
   cursor: pointer;
+  color: inherit;
   display: flex;
   height: 56px;
   justify-content: center;

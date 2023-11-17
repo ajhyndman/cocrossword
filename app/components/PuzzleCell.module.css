@@ -62,7 +62,9 @@
 
 .incorrect .content {
   color: var(--red-ink);
-  text-decoration: var(--red-ink) wavy underline;
+  text-decoration: underline;
+  text-decoration-color: var(--red-ink);
+  text-decoration-style: wavy;
 }
 
 .starred .content,
@@ -76,7 +78,8 @@
 
 .revealed .content {
   color: var(--green-ink);
-  text-decoration: var(--green-ink) underline;
+  text-decoration-color: var(--green-ink);
+  text-decoration: underline;
 }
 
 .focus {
