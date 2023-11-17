@@ -6,7 +6,7 @@ type Props = {
   message: string;
 };
 
-export default ({ author, color, message }: Props) => {
+export default function ChatMessage({ author, color, message }: Props) {
   return (
     <div className={styles.container}>
       <span className={styles.author} style={{ color }}>
@@ -15,4 +15,4 @@ export default ({ author, color, message }: Props) => {
       <span className={styles.message}>{message}</span>
     </div>
   );
-};
+}

@@ -1,7 +1,7 @@
 import { useStore } from '~/store/remote';
 import styles from './$id.info.module.css';
 
-export default () => {
+export default function View() {
   const {
     state: { puzzle },
   } = useStore();
@@ -13,4 +13,4 @@ export default () => {
       <p>{puzzle?.copyright}</p>
     </div>
   );
-};
+}

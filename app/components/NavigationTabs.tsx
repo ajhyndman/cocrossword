@@ -9,7 +9,7 @@ type Props = {
   userId: string;
 };
 
-export default ({ id, userId }: Props) => {
+export default function NavigationTabs({ id, userId }: Props) {
   const {
     state: { readReceipts, messages },
   } = useStore();
@@ -28,4 +28,4 @@ export default ({ id, userId }: Props) => {
       ]}
     />
   );
-};
+}

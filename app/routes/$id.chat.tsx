@@ -7,7 +7,7 @@ import IconButton from '~/components/IconButton';
 import { useStore } from '~/store/remote';
 import styles from './$id.chat.module.css';
 
-export default () => {
+export default function View() {
   const scrollingElement = useRef<HTMLDivElement>(null);
 
   const { userId } = useOutletContext<{ userId: string }>();
@@ -72,4 +72,4 @@ export default () => {
       </div>
     </div>
   );
-};
+}

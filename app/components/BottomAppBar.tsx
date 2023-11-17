@@ -7,9 +7,11 @@ type Props = {
   right: React.ReactNode;
 };
 
-export default memo(({ left, right }: Props) => (
-  <div className={styles.container}>
-    <span className={styles.left}>{left}</span>
-    <span className={styles.right}>{right}</span>
-  </div>
-));
+export default memo(function BottomAppBar({ left, right }: Props) {
+  return (
+    <div className={styles.container}>
+      <span className={styles.left}>{left}</span>
+      <span className={styles.right}>{right}</span>
+    </div>
+  );
+});

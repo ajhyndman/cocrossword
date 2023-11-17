@@ -6,9 +6,11 @@ type Props = {
   isActive?: boolean;
 };
 
-export default ({ index, content, isActive = false }: Props) => (
-  <li className={`${styles.listItem} ${isActive ? styles.active : ''}`}>
-    <span className={styles.index}>{index}</span>
-    <span>{content}</span>
-  </li>
-);
+export default function Clue({ index, content, isActive = false }: Props) {
+  return (
+    <li className={`${styles.listItem} ${isActive ? styles.active : ''}`}>
+      <span className={styles.index}>{index}</span>
+      <span>{content}</span>
+    </li>
+  );
+}

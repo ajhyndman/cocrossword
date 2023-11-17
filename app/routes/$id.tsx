@@ -18,7 +18,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   return login(request, params.id!);
 }
 
-export default () => {
+export default function View() {
   const { id } = useParams();
   const { userId } = useLoaderData<typeof loader>();
   const [height, setHeight] = useState<number>();
@@ -50,4 +50,4 @@ export default () => {
       </div>
     </Provider>
   );
-};
+}

@@ -13,7 +13,7 @@ type Props = {
   userId: string;
 };
 
-export default ({ userId }: Props) => {
+export default function PuzzleGrid({ userId }: Props) {
   const {
     dispatch: dispatchRemote,
     state: { isCorrect, users, selections, puzzle },
@@ -167,4 +167,4 @@ export default ({ userId }: Props) => {
       })}
     </div>
   );
-};
+}

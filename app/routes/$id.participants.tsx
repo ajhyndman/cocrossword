@@ -27,7 +27,7 @@ function getDeviceTypeIcon(deviceType?: DeviceType) {
   }
 }
 
-export default () => {
+export default function View() {
   const { userId } = useOutletContext<{ userId: string }>();
   const {
     dispatch,
@@ -80,4 +80,4 @@ export default () => {
       </ul>
     </div>
   );
-};
+}

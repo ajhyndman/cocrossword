@@ -13,7 +13,7 @@ type Props = {
   tabs: Tab[];
 };
 
-export default ({ tabs }: Props) => {
+export default function Tabs({ tabs }: Props) {
   const matches = useMatches();
 
   return (
@@ -35,4 +35,4 @@ export default ({ tabs }: Props) => {
       })}
     </div>
   );
-};
+}

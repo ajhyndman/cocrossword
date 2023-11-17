@@ -11,17 +11,26 @@ type Props = {
   transparent?: boolean;
 };
 
-export default ({ label, name, onBlur, onClick, size, transparent }: Props) => (
-  <button
-    title={label}
-    className={classNames(styles.button, {
-      [styles.small]: size === 'small',
-      [styles.large]: size === 'large',
-      [styles.transparent]: transparent,
-    })}
-    onBlur={onBlur}
-    onClick={onClick}
-  >
-    <span className={classNames('material-icons', styles.icon)}>{name}</span>
-  </button>
-);
+export default function FloatingActionButton({
+  label,
+  name,
+  onBlur,
+  onClick,
+  size,
+  transparent,
+}: Props) {
+  return (
+    <button
+      title={label}
+      className={classNames(styles.button, {
+        [styles.small]: size === 'small',
+        [styles.large]: size === 'large',
+        [styles.transparent]: transparent,
+      })}
+      onBlur={onBlur}
+      onClick={onClick}
+    >
+      <span className={classNames('material-icons', styles.icon)}>{name}</span>
+    </button>
+  );
+}

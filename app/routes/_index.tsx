@@ -7,7 +7,7 @@ import DropZone from '~/components/DropZone';
 import { CLIENT_ID } from '~/util/constants';
 import styles from './_index.module.css';
 
-export default () => {
+export default function View() {
   const valueRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const submit = useSubmit();
@@ -74,4 +74,4 @@ export default () => {
       </div>
     </Form>
   );
-};
+}

@@ -6,7 +6,7 @@ import FloatingActionButton from './FloatingActionButton';
 import styles from './Toolbar.module.css';
 import { useSelectionStore } from '~/store/local/selection';
 
-export default () => {
+export default function Toolbar() {
   const [isExpanded, setIsExpanded] = useState(false);
   const {
     dispatch,
@@ -83,4 +83,4 @@ export default () => {
       )}
     </div>
   );
-};
+}

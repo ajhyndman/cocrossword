@@ -8,7 +8,7 @@ type Props = {
   value?: string;
 };
 
-export default ({ onChange, placeholder, value }: Props) => {
+export default function ChatInput({ onChange, placeholder, value }: Props) {
   return (
     <textarea
       autoCapitalize="false"
@@ -21,4 +21,4 @@ export default ({ onChange, placeholder, value }: Props) => {
       placeholder={placeholder}
     />
   );
-};
+}

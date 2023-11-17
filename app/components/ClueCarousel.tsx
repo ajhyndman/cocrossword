@@ -7,7 +7,7 @@ import Clue from './Clue';
 import styles from './ClueCarousel.module.css';
 import { getActiveClues } from '~/util/getActiveClues';
 
-export default memo(() => {
+export default memo(function ClueCarousel() {
   const { dispatch, selection } = useSelectionStore();
   const {
     state: { puzzle },

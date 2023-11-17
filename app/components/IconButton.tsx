@@ -8,9 +8,11 @@ type Props = {
   onClick?: () => void;
 };
 
-export default ({ name, notify, onClick }: Props) => (
-  <button className={styles.button} onClick={onClick}>
-    <span className={classNames('material-icons', styles.icon)}>{name}</span>
-    {notify && <div className={styles.badge} />}
-  </button>
-);
+export default function IconButton({ name, notify, onClick }: Props) {
+  return (
+    <button className={styles.button} onClick={onClick}>
+      <span className={classNames('material-icons', styles.icon)}>{name}</span>
+      {notify && <div className={styles.badge} />}
+    </button>
+  );
+}

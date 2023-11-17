@@ -7,7 +7,7 @@ import { SelectionProvider } from '~/store/local/selection';
 import styles from './$id.puzzle.module.css';
 import Toolbar from '~/components/Toolbar';
 
-export default () => {
+export default function View() {
   const { userId } = useOutletContext<{ userId: string }>();
   const {
     state: { puzzle },
@@ -26,4 +26,4 @@ export default () => {
       </div>
     </SelectionProvider>
   );
-};
+}
