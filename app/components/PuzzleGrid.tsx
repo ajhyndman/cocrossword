@@ -98,11 +98,11 @@ export default function PuzzleGrid({ userId }: Props) {
   };
 
   // cell event handlers
-  const handleCellBackspace = useCallback(
-    (index: number, cellContent: false | string) => {
+  const handleCellDelete = useCallback(
+    (index: number, cellContent: false | string, backspace?: boolean) => {
       if (isCorrect) return;
       let deletedIndex = index;
-      if (cellContent === false) {
+      if (backspace && cellContent === false) {
         deletedIndex = getPrevIndex({ solution, width }, selection)!;
         dispatch({ type: 'RETREAT_CURSOR' });
       }
@@ -161,7 +161,7 @@ export default function PuzzleGrid({ userId }: Props) {
             selections={selectionIndices[i]}
             state={state}
             markup={puzzle!.markupGrid?.[i]}
-            onBackspace={handleCellBackspace}
+            onDelete={handleCellDelete}
             onFocus={handleCellFocus}
             onInput={handleCellInput}
             onRotate={handleCellRotate}

@@ -12,7 +12,7 @@ type Props = {
   selections?: { color: string; name: string }[];
   state?: 'focus' | 'secondary' | 'solved';
   markup?: SquareMarkup;
-  onBackspace: (index: number, cellContent: false | string) => void;
+  onDelete: (index: number, cellContent: false | string, backspace?: boolean) => void;
   onFocus: (index: number) => void;
   onInput: (index: number, value: string) => void;
   onRotate: () => void;
@@ -25,7 +25,7 @@ export default memo(function PuzzleCell({
   state,
   selections,
   markup,
-  onBackspace,
+  onDelete,
   onFocus,
   onInput,
   onRotate,
@@ -36,9 +36,11 @@ export default memo(function PuzzleCell({
   const isBlackCell = content === '.';
   const cellContent = !isBlackCell && content !== '-' && content;
 
-  const handleBackspace = (event: React.KeyboardEvent) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Backspace') {
-      onBackspace(index, cellContent);
+      onDelete(index, cellContent, true);
+    } else if (event.key === 'Delete') {
+      onDelete(index, cellContent);
     }
   };
   const handleClick = (event: React.MouseEvent) => {
@@ -107,7 +109,7 @@ export default memo(function PuzzleCell({
           role="textbox"
           ref={inputRef}
           className={styles.input}
-          onKeyDown={handleBackspace}
+          onKeyDown={handleKeyDown}
           onInput={handleInput}
           onFocus={handleFocus}
           value=""
