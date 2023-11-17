@@ -20,6 +20,9 @@ export default function PuzzleGrid({ userId }: Props) {
   } = useStore();
   const { dispatch, selection } = useSelectionStore();
 
+  const solution = puzzle!.solution;
+  const width = puzzle!.width;
+
   const selectionIndices = useMemo(() => {
     const selectionIndices: { color: string; name: string }[][] = [];
     Object.entries(selections).forEach(([id, index]) => {
@@ -33,7 +36,7 @@ export default function PuzzleGrid({ userId }: Props) {
       }
     });
     return selectionIndices;
-  }, [users, selections]);
+  }, [userId, users, selections]);
 
   useEffect(() => {
     if (isCorrect) {
@@ -49,7 +52,7 @@ export default function PuzzleGrid({ userId }: Props) {
         payload: { id: userId, index: selection.index! },
       });
     }
-  }, [selection.index, userId]);
+  }, [dispatchRemote, selection.index, userId]);
 
   // clear selection on unmount or page hide
   useEffect(() => {
@@ -61,13 +64,13 @@ export default function PuzzleGrid({ userId }: Props) {
       clearSelection();
       window.removeEventListener('visibilitychange', clearSelection);
     };
-  }, [userId]);
+  }, [dispatchRemote, userId]);
 
   // derive clue to cell mappings
-  const numbering = useMemo(() => gridNumbering(puzzle!), [puzzle?.solution, puzzle?.width]);
+  const numbering = useMemo(() => gridNumbering({ solution, width }), [solution, width]);
   const activeClues = useMemo(
-    () => getActiveClues(puzzle!, selection),
-    [puzzle?.solution, puzzle?.width, selection],
+    () => getActiveClues({ solution, width }, selection),
+    [solution, width, selection],
   );
 
   // handle keyboard navigation
@@ -100,12 +103,12 @@ export default function PuzzleGrid({ userId }: Props) {
       if (isCorrect) return;
       let deletedIndex = index;
       if (cellContent === false) {
-        deletedIndex = getPrevIndex(puzzle!, selection)!;
+        deletedIndex = getPrevIndex({ solution, width }, selection)!;
         dispatch({ type: 'RETREAT_CURSOR' });
       }
       dispatchRemote({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
     },
-    [dispatch, dispatchRemote, puzzle?.solution, isCorrect, selection],
+    [dispatch, dispatchRemote, solution, width, isCorrect, selection],
   );
   const handleCellFocus = useCallback(
     (index: number) => {

@@ -1,4 +1,4 @@
-import { isCorrect, printBinaryFile } from '@ajhyndman/puz';
+import { printBinaryFile } from '@ajhyndman/puz';
 import { useState } from 'react';
 
 import { useStore } from '~/store/remote';

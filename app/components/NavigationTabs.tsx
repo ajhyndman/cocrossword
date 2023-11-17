@@ -1,4 +1,3 @@
-import { useOutletContext } from '@remix-run/react';
 import { useMemo } from 'react';
 
 import Tabs from './Tabs';
@@ -14,9 +13,10 @@ export default function NavigationTabs({ id, userId }: Props) {
     state: { readReceipts, messages },
   } = useStore();
 
+  const userReadReceipts = readReceipts[userId];
   const hasUnreadMessages = useMemo(() => {
-    return messages.length > (readReceipts[userId] ?? 0);
-  }, [userId, readReceipts[userId], messages.length]);
+    return messages.length > (userReadReceipts ?? 0);
+  }, [userReadReceipts, messages.length]);
 
   return (
     <Tabs

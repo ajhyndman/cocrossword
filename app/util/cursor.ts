@@ -23,7 +23,7 @@ export function getNextIndex(puzzle: Puzzle, selection: Selection) {
   return nextIndex;
 }
 
-export function getPrevIndex(puzzle: Puzzle, selection: Selection) {
+export function getPrevIndex(puzzle: Pick<Puzzle, 'solution' | 'width'>, selection: Selection) {
   if (selection.index == null) return selection.index;
   let nextIndex = selection.index;
   if (selection.direction === 'row') {

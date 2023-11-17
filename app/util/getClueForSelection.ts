@@ -2,7 +2,10 @@ import { gridNumbering, Puzzle } from '@ajhyndman/puz';
 
 import { Selection } from '~/store/local/selection';
 
-export const getClueForSelection = (puzzle: Puzzle, selection: Selection): number => {
+export const getClueForSelection = (
+  puzzle: Pick<Puzzle, 'solution' | 'width'>,
+  selection: Selection,
+): number => {
   if (selection.index == null) return -1;
 
   const numbering = gridNumbering(puzzle);

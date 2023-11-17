@@ -47,11 +47,11 @@ export default memo(function PuzzleCell({
       onRotate();
     }
   };
-  const handleFocus = (event: React.FocusEvent) => {
+  const handleFocus = () => {
     onFocus(index);
   };
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // @ts-ignore TS doesn't guarantee that nativeEvent.data is present
+    // @ts-expect-error TS doesn't guarantee that nativeEvent.data is present
     const value = event.nativeEvent.data;
     onInput(index, value);
   };
