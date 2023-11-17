@@ -1,15 +1,19 @@
+import isbot from 'isbot';
+import { UAParser } from 'ua-parser-js';
 import { v4 } from 'uuid';
 import { json } from '@remix-run/node';
 
 import { commitSession, getSession } from '~/sessions.server';
+import { DeviceType } from '~/store/remote/users';
 import { loadStore } from '~/store/remote';
 import { randomItem } from './randomItem';
 import { MIDDLE_EARTH_NAMES } from './constants';
-import isbot from 'isbot';
 
 export async function login(request: Request, id: string) {
+  const userAgent = request.headers.get('User-Agent') ?? '';
+
   // if this is a bot request, do not assign a session
-  if (isbot(request.headers.get('User-Agent'))) {
+  if (isbot(userAgent)) {
     return {};
   }
 
@@ -35,7 +39,10 @@ export async function login(request: Request, id: string) {
     // generate a placeholder name
     const name = randomItem(MIDDLE_EARTH_NAMES);
 
-    dispatch({ type: 'USER_JOINED', payload: { id: userId, name } });
+    const parser = new UAParser(userAgent);
+    const deviceType = parser.getDevice().type as DeviceType;
+
+    dispatch({ type: 'USER_JOINED', payload: { id: userId, name, deviceType } });
   }
 
   return json({ userId }, { headers });

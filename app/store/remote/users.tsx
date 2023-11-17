@@ -1,9 +1,12 @@
 import { CHAT_COLORS } from '~/util/constants';
 
+export type DeviceType = 'console' | 'mobile' | 'tablet' | 'smarttv' | 'wearable' | 'embedded';
+
 type User = {
   id: string;
   name: string;
   color: string;
+  deviceType?: DeviceType;
 };
 
 export type State = {
@@ -13,7 +16,7 @@ export type State = {
 export type Action =
   | {
       type: 'USER_JOINED';
-      payload: Pick<User, 'id' | 'name'>;
+      payload: Pick<User, 'id' | 'name' | 'deviceType'>;
     }
   | {
       type: 'USER_RENAMED';
