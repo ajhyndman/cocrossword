@@ -50,6 +50,13 @@ export default function View() {
     window.scroll({ top: document.body.scrollHeight });
   }, []);
 
+  // if overflow-anchor not supported, scroll on every new message
+  useEffect(() => {
+    if (!CSS.supports('overflow-anchor', 'none')) {
+      window.scroll({ top: document.body.scrollHeight });
+    }
+  }, [messages.length]);
+
   if (!user) return null;
 
   return (
