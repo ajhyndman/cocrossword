@@ -25,7 +25,7 @@ export default memo(function ClueCarousel() {
   if (!clue) return null;
 
   return (
-    <div className={styles.appBar}>
+    <div className={styles.container}>
       <button className={styles.button} onClick={() => dispatch({ type: 'PREVIOUS_CLUE' })}>
         <span className="material-icons">arrow_left</span>
       </button>
