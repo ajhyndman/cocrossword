@@ -4,8 +4,9 @@ import classNames from 'classnames';
 
 import IconButton from '~/components/IconButton';
 import { useStore } from '~/store/remote';
-import styles from './$id.participants.module.css';
 import { DeviceType } from '~/store/remote/users';
+import styles from './$id.participants.module.css';
+import { OutletContext } from './$id';
 
 function getDeviceTypeIcon(deviceType?: DeviceType) {
   switch (deviceType) {
@@ -28,7 +29,7 @@ function getDeviceTypeIcon(deviceType?: DeviceType) {
 }
 
 export default function View() {
-  const { userId } = useOutletContext<{ userId: string }>();
+  const { userId } = useOutletContext<OutletContext>();
   const {
     dispatch,
     state: { users },

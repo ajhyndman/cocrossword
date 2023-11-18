@@ -1,11 +1,18 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { Outlet, useLoaderData, useParams } from '@remix-run/react';
-import { useEffect, useState } from 'react';
+import { Outlet, useLoaderData, useMatches, useParams } from '@remix-run/react';
+import { type RefObject, useRef, useState, useEffect } from 'react';
 
+import NavigationTabs from '~/components/NavigationTabs';
 import { Provider, loadStore } from '~/store/remote';
 import { login } from '~/util/login.server';
 import styles from './$id.module.css';
-import NavigationTabs from '~/components/NavigationTabs';
+
+export type OutletContext = {
+  bottomSheet: RefObject<HTMLDivElement>;
+  userId: string;
+};
+
+const IOS = typeof document !== 'undefined' && /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   // if no ID passed, redirect to home
@@ -19,31 +26,52 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export default function View() {
+  const matches = useMatches();
   const { id } = useParams();
+  const bottomSheet = useRef<HTMLDivElement>(null);
+  const [bottomSheetOffset, setBottomSheetOffset] = useState<number>();
   const { userId } = useLoaderData<typeof loader>();
-  const [height, setHeight] = useState<number>();
 
   // **WORKAROUND**
   // iOS does not yet support the meta viewport interactive-widget configuration options.
   // https://github.com/bramus/viewport-resize-behavior/blob/main/explainer.md#the-visual-viewport
   useEffect(() => {
-    if (typeof document === 'undefined') return;
-
-    const iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
-    if (iOS) {
-      const handleViewportResize = () => {
-        setHeight(window.visualViewport?.height);
-      };
-      window.visualViewport?.addEventListener('resize', handleViewportResize);
-      return () => window.visualViewport?.removeEventListener('resize', handleViewportResize);
+    function fixBottomSheetPosition() {
+      window.requestAnimationFrame(() =>
+        setBottomSheetOffset(
+          document.documentElement.clientHeight -
+            (window.visualViewport?.offsetTop ?? 0) -
+            (window.visualViewport?.height ?? 0),
+        ),
+      );
     }
-  }, []);
+
+    console.log(matches);
+
+    const isPuzzle = matches.some((match) => match.id === 'routes/$id.puzzle');
+
+    if (IOS && isPuzzle) {
+      window.visualViewport?.addEventListener('resize', fixBottomSheetPosition);
+      window.visualViewport?.addEventListener('scroll', fixBottomSheetPosition);
+      return () => {
+        window.visualViewport?.removeEventListener('resize', fixBottomSheetPosition);
+        window.visualViewport?.removeEventListener('scroll', fixBottomSheetPosition);
+
+        // reset bottom sheet position
+        setBottomSheetOffset(0);
+      };
+    }
+  }, [matches]);
 
   return (
     <Provider KEY={id!}>
-      <div className={styles.container} style={{ ...(height && { height }) }}>
-        <Outlet context={{ userId }} />
-        <div className={styles.sticky}>
+      <div className={styles.container}>
+        <Outlet context={{ userId, bottomSheet }} />
+        <div
+          className={styles.bottomSheet}
+          style={bottomSheetOffset ? { bottom: bottomSheetOffset } : {}}
+        >
+          <div className={styles.bottomSheetPortal} ref={bottomSheet} />
           <NavigationTabs userId={userId} id={id!} />
         </div>
         <div className={styles.fixed} />

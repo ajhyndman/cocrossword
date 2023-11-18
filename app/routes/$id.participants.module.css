@@ -1,6 +1,7 @@
 .container {
   align-self: center;
   box-sizing: border-box;
+  margin: 0 auto;
   max-width: 600px;
   min-height: 100dvh; /* subtract height of top bar */
   padding: 18px 16px 0;

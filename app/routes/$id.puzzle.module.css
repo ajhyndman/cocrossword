@@ -1,19 +1,13 @@
-.fixed {
-  position: fixed;
-}
-
-.sticky {
-  bottom: 36px; /* height of tabs navigation */
-  position: sticky;
-  z-index: 1;
-}
 
 .puzzle {
-  flex-shrink: 1;
+  box-sizing: border-box;
   flex-grow: 1;
+  flex-shrink: 1;
+  margin: 0 auto;
   min-height: 0;
-  overflow: scroll;
-  overscroll-behavior: auto;
-  -webkit-overflow-scrolling: touch;
+  min-height: 100dvh;
   padding: 20px;
+  width: fit-content;
+  /* intrinsic + navbar + clue */
+  padding-bottom: calc(20px + 64px + 36px);
 }

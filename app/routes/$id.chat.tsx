@@ -1,16 +1,16 @@
 import { useOutletContext } from '@remix-run/react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
 import IconButton from '~/components/IconButton';
 import { useStore } from '~/store/remote';
 import styles from './$id.chat.module.css';
+import type { OutletContext } from './$id';
 
 export default function View() {
-  const scrollingElement = useRef<HTMLDivElement>(null);
-
-  const { userId } = useOutletContext<{ userId: string }>();
+  const { bottomSheet, userId } = useOutletContext<OutletContext>();
   const {
     dispatch,
     state: { users, messages },
@@ -47,20 +47,21 @@ export default function View() {
 
   // on load, scroll chat window to bottom
   useEffect(() => {
-    scrollingElement.current?.scroll({ top: scrollingElement.current?.scrollHeight });
+    window.scroll({ top: document.body.scrollHeight });
   }, []);
 
   if (!user) return null;
 
   return (
-    <div className={styles.container} ref={scrollingElement}>
+    <div className={styles.container}>
       {messages.map((message, i) => {
         const user = users[message.author];
         return <ChatMessage key={i} color={user.color} author={user.name} message={message.body} />;
       })}
       <div className={styles.anchor} />
 
-      <div className={styles.fixed}>
+      {createPortal(
+        // @ts-expect-error third party type mismatch React.Node vs React.Element
         <div className={styles.appBar} onKeyDown={handleEnter}>
           <ChatInput
             value={value}
@@ -68,8 +69,9 @@ export default function View() {
             placeholder={`Message as ${user.name}`}
           />
           <IconButton name="send" onClick={submitMessage} />
-        </div>
-      </div>
+        </div>,
+        bottomSheet.current,
+      )}
     </div>
   );
 }

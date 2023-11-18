@@ -3,19 +3,16 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
   max-width: 600px;
-  height: 100dvh;
   padding: 18px 16px 0;
   width: 100%;
-  overflow: scroll;
-  overscroll-behavior: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .anchor {
   overflow-anchor: auto;
   /* also serves as a spacer for the fixed chat input pane */
-  height: 80px;
+  height: calc(80px + 36px);
   flex-shrink: 0;
 }
 
