@@ -1,5 +1,5 @@
 import { useOutletContext } from '@remix-run/react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import ChatInput from '~/components/ChatInput';
@@ -46,12 +46,12 @@ export default function View() {
   );
 
   // on load, scroll chat window to bottom
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.scroll({ top: document.body.scrollHeight });
   }, []);
 
   // if overflow-anchor not supported, scroll on every new message
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!CSS.supports('overflow-anchor', 'none')) {
       window.scroll({ top: document.body.scrollHeight });
     }
