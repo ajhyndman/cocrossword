@@ -1,6 +1,8 @@
 import { useSWEffect, LiveReload as LiveReloadPwa } from '@remix-pwa/sw';
 import { cssBundleHref } from '@remix-run/css-bundle';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import { LoaderFunctionArgs, json } from '@remix-run/node';
+import { Links, LiveReload, Meta, Outlet, Scripts, useLoaderData } from '@remix-run/react';
+import classNames from 'classnames';
 import { useEffect } from 'react';
 import resetCss from 'reset-css/reset.css';
 
@@ -24,8 +26,16 @@ export const links = () => [
   { rel: 'stylesheet', href: styles },
 ];
 
+export function loader({ request }: LoaderFunctionArgs) {
+  const userAgent = request.headers.get('User-Agent')!;
+  const isIos = /(iPad|iPhone|iPod)/g.test(userAgent);
+  return json({ isIos });
+}
+
 export default function App() {
   useSWEffect();
+
+  const { isIos } = useLoaderData<typeof loader>();
 
   useEffect(() => {
     // disable pinch zoom on iOS devices
@@ -52,11 +62,10 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className={classNames({ ios: isIos })}>
         <Outlet />
 
         <Scripts />
-        <ScrollRestoration />
         <LiveReload />
         <LiveReloadPwa />
       </body>

@@ -8,6 +8,7 @@ import IconButton from '~/components/IconButton';
 import { useStore } from '~/store/remote';
 import styles from './$id.chat.module.css';
 import type { OutletContext } from './$id';
+import { usePrevious } from '~/util/usePrevious';
 
 export default function View() {
   const { bottomSheet, userId } = useOutletContext<OutletContext>();
@@ -45,17 +46,24 @@ export default function View() {
     [submitMessage],
   );
 
+  const previousMessageLength = usePrevious(messages.length);
+
   // on load, scroll chat window to bottom
   useLayoutEffect(() => {
     window.scroll({ top: document.body.scrollHeight });
   }, []);
 
-  // if overflow-anchor not supported, scroll on every new message
   useLayoutEffect(() => {
-    if (!CSS.supports('overflow-anchor', 'none')) {
+    if (
+      // if messages just loaded for the first time, or
+      (previousMessageLength === 0 && messages.length !== 0) ||
+      // if overflow-anchor not supported
+      !CSS.supports('overflow-anchor', 'none')
+    ) {
+      // programmatically scroll to bottom
       window.scroll({ top: document.body.scrollHeight });
     }
-  }, [messages.length]);
+  }, [previousMessageLength, messages.length]);
 
   if (!user) return null;
 

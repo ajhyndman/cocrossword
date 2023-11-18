@@ -3,6 +3,14 @@
   min-height: 100dvh;
 }
 
+:global(.ios) .container.isPuzzle {
+  min-height: 0;
+  position: relative;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .fixed {
   position: fixed;
 }
@@ -14,6 +22,10 @@
   position: fixed;
   z-index: 1;
   pointer-events: none;
+}
+
+:global(.ios) .isPuzzle .bottomSheet {
+  position: sticky;
 }
 
 .bottomSheet > * {

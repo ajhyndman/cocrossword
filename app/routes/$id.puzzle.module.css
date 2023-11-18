@@ -11,3 +11,10 @@
   /* intrinsic + navbar + clue */
   padding-bottom: calc(20px + 64px + 36px);
 }
+
+/* on ios, we use position sticky, so no need for extra spacer */
+:global(.ios) .puzzle {
+  padding-bottom: 20px;
+  min-height: 0;
+  flex-shrink: 0;
+}

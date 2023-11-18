@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { Outlet, useLoaderData, useMatches, useParams } from '@remix-run/react';
-import { type RefObject, useRef, useState, useEffect } from 'react';
+import classNames from 'classnames';
+import { type RefObject, useRef, useLayoutEffect } from 'react';
 
 import NavigationTabs from '~/components/NavigationTabs';
 import { Provider, loadStore } from '~/store/remote';
@@ -11,8 +12,6 @@ export type OutletContext = {
   bottomSheet: RefObject<HTMLDivElement>;
   userId: string;
 };
-
-const IOS = typeof document !== 'undefined' && /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   // if no ID passed, redirect to home
@@ -28,49 +27,46 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 export default function View() {
   const matches = useMatches();
   const { id } = useParams();
+  const container = useRef<HTMLDivElement>(null);
   const bottomSheet = useRef<HTMLDivElement>(null);
-  const [bottomSheetOffset, setBottomSheetOffset] = useState<number>();
   const { userId } = useLoaderData<typeof loader>();
+
+  const isPuzzle = matches.some((match) => match.id === 'routes/$id.puzzle');
+
+  function fixContainerHeight() {
+    window.requestAnimationFrame(() => {
+      const viewportHeight = window.visualViewport?.height;
+      container.current!.style.height = viewportHeight + 'px';
+    });
+  }
 
   // **WORKAROUND**
   // iOS does not yet support the meta viewport interactive-widget configuration options.
   // https://github.com/bramus/viewport-resize-behavior/blob/main/explainer.md#the-visual-viewport
-  useEffect(() => {
-    function fixBottomSheetPosition() {
-      window.requestAnimationFrame(() =>
-        setBottomSheetOffset(
-          document.documentElement.clientHeight -
-            (window.visualViewport?.offsetTop ?? 0) -
-            (window.visualViewport?.height ?? 0),
-        ),
-      );
-    }
-
-    console.log(matches);
-
-    const isPuzzle = matches.some((match) => match.id === 'routes/$id.puzzle');
-
-    if (IOS && isPuzzle) {
-      window.visualViewport?.addEventListener('resize', fixBottomSheetPosition);
-      window.visualViewport?.addEventListener('scroll', fixBottomSheetPosition);
+  useLayoutEffect(() => {
+    const isIos =
+      typeof document !== 'undefined' && /(iPad|iPhone|iPod)/g.test(navigator.userAgent);
+    if (isIos && isPuzzle) {
+      fixContainerHeight();
+      window.visualViewport?.addEventListener('resize', fixContainerHeight);
       return () => {
-        window.visualViewport?.removeEventListener('resize', fixBottomSheetPosition);
-        window.visualViewport?.removeEventListener('scroll', fixBottomSheetPosition);
+        // clean up height overrides
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        container.current!.style.height = 'auto';
 
-        // reset bottom sheet position
-        setBottomSheetOffset(0);
+        window.visualViewport?.removeEventListener('resize', fixContainerHeight);
       };
     }
-  }, [matches]);
+  }, [isPuzzle, matches]);
 
   return (
     <Provider KEY={id!}>
-      <div className={styles.container}>
+      <div
+        className={classNames(styles.container, { [styles.isPuzzle]: isPuzzle })}
+        ref={container}
+      >
         <Outlet context={{ userId, bottomSheet }} />
-        <div
-          className={styles.bottomSheet}
-          style={bottomSheetOffset ? { bottom: bottomSheetOffset } : {}}
-        >
+        <div className={styles.bottomSheet}>
           <div className={styles.bottomSheetPortal} ref={bottomSheet} />
           <NavigationTabs userId={userId} id={id!} />
         </div>
