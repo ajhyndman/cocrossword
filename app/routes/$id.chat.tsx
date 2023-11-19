@@ -6,9 +6,13 @@ import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
 import IconButton from '~/components/IconButton';
 import { useStore } from '~/store/remote';
+import { usePrevious } from '~/util/usePrevious';
 import styles from './$id.chat.module.css';
 import type { OutletContext } from './$id';
-import { usePrevious } from '~/util/usePrevious';
+
+const scrollToBottom = () => {
+  window.scroll({ top: document.body.scrollHeight });
+};
 
 export default function View() {
   const { bottomSheet, userId } = useOutletContext<OutletContext>();
@@ -46,12 +50,21 @@ export default function View() {
     [submitMessage],
   );
 
-  const previousMessageLength = usePrevious(messages.length);
+  // on android, when visual viewport resizes, browser preserves scroll top
+  // not scroll bottom
+  useEffect(() => {
+    if (/android/i.test(window.navigator.userAgent)) {
+      window.visualViewport?.addEventListener('resize', scrollToBottom);
+      () => window.visualViewport?.removeEventListener('resize', scrollToBottom);
+    }
+  }, []);
 
   // on load, scroll chat window to bottom
   useLayoutEffect(() => {
-    window.scroll({ top: document.body.scrollHeight });
+    scrollToBottom();
   }, []);
+
+  const previousMessageLength = usePrevious(messages.length);
 
   useLayoutEffect(() => {
     if (
@@ -61,7 +74,7 @@ export default function View() {
       !CSS.supports('overflow-anchor', 'none')
     ) {
       // programmatically scroll to bottom
-      window.scroll({ top: document.body.scrollHeight });
+      scrollToBottom();
     }
   }, [previousMessageLength, messages.length]);
 
