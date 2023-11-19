@@ -9,12 +9,12 @@
   padding: 20px;
   width: fit-content;
   /* intrinsic + toolbar + navbar + clue */
-  padding-bottom: calc(20px + 104px + 64px + 36px);
+  padding-bottom: calc(20px + 72px + 64px + 36px);
 }
 
 /* on ios, we use position sticky, so no need for extra spacer */
 :global(.ios) .puzzle {
-  padding-bottom: calc(20px + 104px);
+  padding-bottom: calc(20px + 72px);
   min-height: 0;
   flex-shrink: 0;
 }
