@@ -4,7 +4,7 @@ This project implements an **online, collaborative crossword solving** applicati
 
 Bring your own crossword puzzle (in .puz format) and solve with friends, family or coworkers!
 
-<img width="684" alt="image" src="https://github.com/ajhyndman/crossword-app/assets/11449340/8f45dec0-0d18-4f8a-a9a5-31ef0ed4db3a">
+<img width="690" alt="image" src="https://github.com/ajhyndman/crossword-app/assets/11449340/ae0cafca-2129-4197-a829-54e15e584e7f">
 
 ## Developing
 
