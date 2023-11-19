@@ -39,9 +39,19 @@ export default function View() {
   const userList = Object.values(users);
   userList.sort((a, b) => (a.id === userId ? -1 : b.id === userId ? 1 : 0));
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    dispatch({ type: 'USER_RENAMED', payload: { id: userId, name: event.target.value } });
+  const changeName = (name: string) => {
+    dispatch({ type: 'USER_RENAMED', payload: { id: userId, name } });
     setEditing(false);
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    changeName(event.target.value);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' || event.key === 'Escape') {
+      changeName(event.currentTarget.value);
+    }
   };
 
   return (
@@ -61,6 +71,7 @@ export default function View() {
                   className={styles.input}
                   defaultValue={name}
                   onBlur={handleBlur}
+                  onKeyDown={handleKeyDown}
                   maxLength={50}
                 />
               ) : (
