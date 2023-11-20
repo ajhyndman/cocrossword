@@ -10,6 +10,8 @@ import { usePrevious } from '~/util/usePrevious';
 import styles from './$id.chat.module.css';
 import type { OutletContext } from './$id';
 
+const MIN_KEYBOARD_HEIGHT = 300;
+
 const scrollToBottom = () => {
   window.scroll({ top: document.body.scrollHeight });
 };
@@ -54,8 +56,17 @@ export default function View() {
   // not scroll bottom
   useEffect(() => {
     if (/android/i.test(window.navigator.userAgent)) {
-      window.visualViewport?.addEventListener('resize', scrollToBottom);
-      return () => window.visualViewport?.removeEventListener('resize', scrollToBottom);
+      const handleViewportResize = () => {
+        if (
+          // guess if keyboard is open
+          window.visualViewport?.height &&
+          window.visualViewport.height + MIN_KEYBOARD_HEIGHT < window.screen.height
+        ) {
+          scrollToBottom();
+        }
+      };
+      window.visualViewport?.addEventListener('resize', handleViewportResize);
+      return () => window.visualViewport?.removeEventListener('resize', handleViewportResize);
     }
   }, []);
 
