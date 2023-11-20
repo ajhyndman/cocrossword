@@ -35,7 +35,10 @@ export default function View() {
     if (!value) return;
 
     // dispatch message
-    dispatch({ type: 'NEW_MESSAGE', payload: { author: userId, body: value } });
+    dispatch({
+      type: 'NEW_MESSAGE',
+      payload: { author: userId, body: value, timestamp: Date.now() },
+    });
 
     // clear input state
     setValue('');
@@ -95,7 +98,15 @@ export default function View() {
     <div className={styles.container}>
       {messages.map((message, i) => {
         const user = users[message.author];
-        return <ChatMessage key={i} color={user.color} author={user.name} message={message.body} />;
+        return (
+          <ChatMessage
+            key={i}
+            color={user.color}
+            author={user.name}
+            message={message.body}
+            timestamp={message.timestamp}
+          />
+        );
       })}
       <div className={styles.anchor} />
 

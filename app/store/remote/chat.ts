@@ -1,6 +1,8 @@
 type Message = {
   author: string;
   body: string;
+  // unicode timestamp (in UTC)
+  timestamp?: number;
 };
 
 export type State = {
