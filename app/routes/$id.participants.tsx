@@ -79,14 +79,7 @@ export default function View() {
               )}
             </span>
 
-            {id === userId && (
-              <>
-                <IconButton name="edit" onClick={() => setEditing('name')} />
-                {/* <button className={styles.button} onClick={() => setEditing('color')}>
-                  <div className={styles.swatch} style={{ backgroundColor: color }} />
-                </button> */}
-              </>
-            )}
+            {id === userId && <IconButton name="edit" onClick={() => setEditing('name')} />}
           </li>
         ))}
       </ul>
