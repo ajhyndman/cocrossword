@@ -55,7 +55,7 @@ export default function View() {
   useEffect(() => {
     if (/android/i.test(window.navigator.userAgent)) {
       window.visualViewport?.addEventListener('resize', scrollToBottom);
-      () => window.visualViewport?.removeEventListener('resize', scrollToBottom);
+      return () => window.visualViewport?.removeEventListener('resize', scrollToBottom);
     }
   }, []);
 
