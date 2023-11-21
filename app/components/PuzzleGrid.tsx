@@ -92,6 +92,10 @@ export default function PuzzleGrid({ userId }: Props) {
         event.preventDefault();
         dispatch({ type: 'ROTATE_SELECTION' });
         break;
+      case '.':
+        event.preventDefault();
+        dispatch({ type: 'TOGGLE_PENCIL' });
+        break;
       default:
       // pass
     }
