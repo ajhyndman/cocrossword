@@ -92,10 +92,6 @@ export default function PuzzleGrid({ userId }: Props) {
         event.preventDefault();
         dispatch({ type: 'ROTATE_SELECTION' });
         break;
-      case '.':
-        event.preventDefault();
-        dispatch({ type: 'TOGGLE_PENCIL' });
-        break;
       default:
       // pass
     }
@@ -123,6 +119,12 @@ export default function PuzzleGrid({ userId }: Props) {
   const handleCellInput = useCallback(
     (index: number, value: string) => {
       if (isCorrect) return;
+
+      if (value === '.') {
+        dispatch({ type: 'TOGGLE_PENCIL' });
+        return;
+      }
+
       dispatchRemote({
         type: 'CELL_CHANGED',
         payload: { index, value, isPencil: selection.isPencil },
