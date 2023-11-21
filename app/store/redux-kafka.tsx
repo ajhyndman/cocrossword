@@ -83,6 +83,28 @@ const flushActions = throttle(
   { leading: false },
 );
 
+/**
+ * A compare function for sorting keys.
+ * Sorts keys lexicographically.  e.g. preserving 10:abcd > 2:abcd.
+ */
+function compareKeys(a: string, b: string) {
+  const [indexStringA, clientA] = a.split(':');
+  const [indexStringB, clientB] = b.split(':');
+
+  const indexA = Number.parseInt(indexStringA);
+  const indexB = Number.parseInt(indexStringB);
+
+  return indexA < indexB
+    ? -1
+    : indexA > indexB
+      ? 1
+      : clientA < clientB
+        ? -1
+        : clientA > clientB
+          ? 1
+          : 0;
+}
+
 export function createStore<State, Action extends BaseAction>(
   resource: string,
   reducer: Reducer<State, Action>,
@@ -105,7 +127,7 @@ export function createStore<State, Action extends BaseAction>(
     // get the most recent kafka index consumed by this client
     const getCursor = useCallback(() => {
       const keys = Object.keys(actions.current);
-      keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+      keys.sort(compareKeys);
       const last = keys[keys.length - 1];
       if (!last) return 0;
       return Number.parseInt(last.split(':')[0]);
@@ -114,7 +136,7 @@ export function createStore<State, Action extends BaseAction>(
     // rebuild state and trigger a re-render
     const rebuildState = useCallback(() => {
       const keys = Object.keys(actions.current);
-      keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+      keys.sort(compareKeys);
       const sortedActions = keys.map((key) => actions.current[key]);
       // @ts-expect-error (use BaseAction as BaseKafkaAction)
       const state = sortedActions.reduce(reducer, init) as State;
