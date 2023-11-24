@@ -24,9 +24,9 @@ export type SelectionAction =
   | { type: 'NEXT_CLUE'; payload?: undefined }
   | { type: 'TOGGLE_PENCIL'; payload?: undefined };
 
-const DEFAULT_SELECTION: Selection = { direction: 'row' };
+export const DEFAULT_SELECTION: Selection = { direction: 'row' };
 
-const reducer =
+export const reducer =
   (puzzle: Puzzle) =>
   (state: Selection, { type, payload }: SelectionAction) => {
     switch (type) {

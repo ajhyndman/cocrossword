@@ -25,11 +25,11 @@ import {
   reducer as usersReducer,
 } from './users';
 
-type Action = ActivityAction | ChatAction | PuzzleAction | UsersAction;
+export type Action = ActivityAction | ChatAction | PuzzleAction | UsersAction;
 
-type State = ActivityState & ChatState & PuzzleState & UsersState;
+export type State = ActivityState & ChatState & PuzzleState & UsersState;
 
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   ...ACTIVITY_DEFAULT_STATE,
   ...CHAT_DEFAULT_STATE,
   ...PUZZLE_DEFAULT_STATE,
@@ -41,7 +41,7 @@ const composeReducers = (...reducers: Reducer<any, any>[]): Reducer<any, any> =>
   return reducers.reduce((f, g) => (state, action) => f(g(state, action), action));
 };
 
-const reducer: Reducer<State, Action> = composeReducers(
+export const reducer: Reducer<State, Action> = composeReducers(
   activityReducer,
   chatReducer,
   puzzleReducer,
