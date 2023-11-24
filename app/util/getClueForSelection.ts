@@ -1,6 +1,6 @@
 import { gridNumbering, Puzzle } from '@ajhyndman/puz';
 
-import { Selection } from '~/store/local/selection';
+import type { Selection } from '~/store/local/selection';
 
 export const getClueForSelection = (
   puzzle: Pick<Puzzle, 'solution' | 'width'>,
