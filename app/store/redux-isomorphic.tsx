@@ -1,5 +1,5 @@
 import throttle from 'lodash.throttle';
-import { type ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { type ReactNode, createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { v4 } from 'uuid';
 
 // - server reducer
@@ -57,8 +57,10 @@ class Store<
   LocalState extends Record<string, never>,
   RemoteState extends Record<string, never>,
 > {
-  // "command" handler
+  // stream key to subscribe/publish to
+  private key: string;
 
+  // "command" handler
   private executor: Executor<LocalState, RemoteState, Command, LocalEvent, RemoteEvent>;
 
   // local-only state
@@ -79,6 +81,7 @@ class Store<
   private flushToServer: (events: [string, RemoteEvent][]) => void;
 
   constructor(
+    key: string,
     executor: Executor<LocalState, RemoteState, Command, LocalEvent, RemoteEvent>,
     localReducer: Reducer<LocalState, LocalEvent>,
     remoteReducer: Reducer<RemoteState, RemoteEvent>,
@@ -86,6 +89,7 @@ class Store<
     initRemote: RemoteState = {} as RemoteState,
     flushToServer: (events: [string, RemoteEvent][]) => void,
   ) {
+    this.key = key;
     this.executor = executor;
     this.localReducer = localReducer;
     this.localState = initLocal;
@@ -127,17 +131,15 @@ class Store<
     this.next();
   };
 
-  private optimisticDispatchRemote =
-    (key: string): Dispatch<Pick<RemoteEvent, 'type' | 'payload'>> =>
-    (event) => {
-      const remoteEvent = { ...event, id: v4() } as RemoteEvent;
-      // optimistic update
-      this.optimisticEvents.push(remoteEvent);
-      // flush to server
-      this.pushRemoteEvent(key, remoteEvent);
+  private optimisticDispatchRemote: Dispatch<Pick<RemoteEvent, 'type' | 'payload'>> = (event) => {
+    const remoteEvent = { ...event, id: v4() } as RemoteEvent;
+    // optimistic update
+    this.optimisticEvents.push(remoteEvent);
+    // flush to server
+    this.pushRemoteEvent(this.key, remoteEvent);
 
-      this.next();
-    };
+    this.next();
+  };
 
   /**
    * Push new events recieved from server into this store
@@ -162,16 +164,14 @@ class Store<
     return () => void this.subscribers.delete(subscriber);
   };
 
-  execute =
-    (key: string): Execute<Command> =>
-    (command) => {
-      this.executor(
-        { local: this.localState, remote: this.remoteState },
-        command,
-        this.dispatchLocal,
-        this.optimisticDispatchRemote(key),
-      );
-    };
+  execute: Execute<Command> = (command) => {
+    this.executor(
+      { local: this.localState, remote: this.remoteState },
+      command,
+      this.dispatchLocal,
+      this.optimisticDispatchRemote,
+    );
+  };
 }
 
 export function createStore<
@@ -189,54 +189,53 @@ export function createStore<
   flushToServer: (events: [string, RemoteEvent][]) => void,
   subscribeToServer: SubscribeToServer<RemoteEvent>,
 ) {
-  // init store ????
-  const store = new Store(
-    executor,
-    localReducer,
-    remoteReducer,
-    initLocal,
-    initRemote,
-    flushToServer,
-  );
-
   // build context
-  const StoreContext = createContext<{ key: string; store: typeof store }>({
-    key: 'UNKNOWN',
-    store,
-  });
+  const StoreContext = createContext<Store<
+    Command,
+    LocalEvent,
+    RemoteEvent,
+    LocalState,
+    RemoteState
+  > | null>(null);
 
   // build provider
   function Provider(props: { KEY: string; children: ReactNode }) {
-    useEffect(() => {
-      const cleanup = subscribeToServer(props.KEY, (event) => {
-        store.serverDispatch(event);
-      });
-      return cleanup;
+    const store = useMemo(() => {
+      // init store
+      return new Store(
+        props.KEY,
+        executor,
+        localReducer,
+        remoteReducer,
+        initLocal,
+        initRemote,
+        flushToServer,
+      );
     }, [props.KEY]);
 
-    return (
-      <StoreContext.Provider value={{ key: props.KEY, store }}>
-        {props.children}
-      </StoreContext.Provider>
-    );
+    useEffect(() => {
+      const cleanup = subscribeToServer(props.KEY, store.serverDispatch);
+      return cleanup;
+    }, [store, props.KEY]);
+
+    return <StoreContext.Provider value={store}>{props.children}</StoreContext.Provider>;
   }
 
   // build hooks
   function useExecute() {
-    const { key, store } = useContext(StoreContext);
-    return store.execute(key);
+    const store = useContext(StoreContext);
+    return store!.execute;
   }
 
   function useSelector<T>(selector: (state: { local: LocalState; remote: RemoteState }) => T): T {
-    const { store } = useContext(StoreContext);
-
+    const store = useContext(StoreContext);
     const [value, setValue] = useState<T>(() => {
-      const snapshot = store.getSnapshot();
+      const snapshot = store!.getSnapshot();
       return selector(snapshot);
     });
 
     useEffect(() => {
-      const unsubscribe = store.subscribe(({ local, remote }) => {
+      const unsubscribe = store!.subscribe(({ local, remote }) => {
         // *only* update state if value has changed
         const nextValue = selector({ local, remote });
         if (value !== nextValue) {
