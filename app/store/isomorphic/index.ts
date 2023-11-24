@@ -55,9 +55,6 @@ const subscribeToServer: SubscribeToServer<RemoteEvent> = (key, subscriber) => {
     const actions = JSON.parse(event.data);
     actions.forEach((a: string) => {
       const action = JSON.parse(a);
-      if (action.index == null || action.client == null) {
-        return;
-      }
       subscriber(action);
     });
   };
