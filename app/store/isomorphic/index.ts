@@ -11,6 +11,7 @@ import {
   reducer as remoteReducer,
   DEFAULT_STATE as REMOTE_DEFAULT_STATE,
 } from '~/store/remote/index';
+import { getMessageLog } from '~/kafkajs/index.development';
 
 type Command = LocalEvent | RemoteEvent;
 
@@ -70,9 +71,29 @@ const subscribeToServer: SubscribeToServer<RemoteEvent> = (key, subscriber) => {
   };
 };
 
-export const serverReducer = remoteReducer;
+export async function loadStore(key: string) {
+  const messageLog = await getMessageLog();
 
-export const { Provider, useExecute, useSelector } = createStore(
+  const remoteEvents = messageLog
+    .getLog()
+    .filter((message) => message.key?.toString() === key)
+    .map((message) => JSON.parse(message.value!.toString()));
+
+  function getState(): RemoteState {
+    return remoteEvents.reduce(remoteReducer, REMOTE_DEFAULT_STATE);
+  }
+
+  return { getState };
+}
+
+export const { Provider, useExecute, useSelector } = createStore<
+  Command,
+  LocalEvent,
+  // @ts-expect-error TODO: refactor so that commands and events are not reused
+  RemoteEvent,
+  LocalState,
+  RemoteState
+>(
   executor,
   localReducer,
   remoteReducer,
