@@ -1,24 +1,18 @@
 import { printBinaryFile } from '@ajhyndman/puz';
 import { useState } from 'react';
 
-import { useStore } from '~/store/remote';
+import { useExecute, useSelector } from '~/store/isomorphic';
 import FloatingActionButton from './FloatingActionButton';
 import styles from './Toolbar.module.css';
-import { useSelectionStore } from '~/store/local/selection';
 
 export default function Toolbar() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const {
-    dispatch,
-    selection: { index, isPencil },
-  } = useSelectionStore();
-  const {
-    dispatch: dispatchRemote,
-    state: { puzzle },
-  } = useStore();
+  const { index, isPencil } = useSelector(({ local }) => local);
+  const puzzle = useSelector(({ remote }) => remote.puzzle);
+  const execute = useExecute();
 
   const checkSolution = () => {
-    dispatchRemote({ type: 'CHECK_PUZZLE' });
+    execute({ type: 'CHECK_PUZZLE' });
   };
 
   // export the current puzzle state as a .puz binary file
@@ -36,12 +30,12 @@ export default function Toolbar() {
   };
 
   const handleTogglePencil = () => {
-    dispatch({ type: 'TOGGLE_PENCIL' });
+    execute({ type: 'TOGGLE_PENCIL' });
   };
 
   const handleToggleRebus = () => {
     if (index) {
-      dispatchRemote({ type: 'TOGGLE_STARRED', payload: { index } });
+      execute({ type: 'TOGGLE_STARRED', payload: { index } });
     }
   };
 

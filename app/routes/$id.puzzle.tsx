@@ -4,21 +4,18 @@ import { createPortal } from 'react-dom';
 import ClueCarousel from '~/components/ClueCarousel';
 import PuzzleGrid from '~/components/PuzzleGrid';
 import Toolbar from '~/components/Toolbar';
-import { useStore } from '~/store/remote';
-import { SelectionProvider } from '~/store/local/selection';
+import { useSelector } from '~/store/isomorphic';
 import styles from './$id.puzzle.module.css';
 import type { OutletContext } from './$id';
 
 export default function View() {
   const { bottomSheet, userId } = useOutletContext<OutletContext>();
-  const {
-    state: { puzzle },
-  } = useStore();
+  const puzzle = useSelector(({ remote }) => remote.puzzle);
 
   if (!puzzle) return null;
 
   return (
-    <SelectionProvider puzzle={puzzle}>
+    <>
       <div className={styles.puzzle}>
         <PuzzleGrid userId={userId} />
       </div>
@@ -30,6 +27,6 @@ export default function View() {
         </>,
         bottomSheet.current,
       )}
-    </SelectionProvider>
+    </>
   );
 }

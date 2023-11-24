@@ -1,3 +1,7 @@
+import { enumerateClues, gridNumbering } from '@ajhyndman/puz';
+
+import { getClueForSelection } from '~/util/getClueForSelection';
+import { getNextIndex, getPrevIndex } from '~/util/cursor';
 import { Executor, SubscribeToServer, createStore } from '~/store/redux-isomorphic';
 import {
   SelectionAction as LocalEvent,
@@ -12,28 +16,104 @@ import {
   DEFAULT_STATE as REMOTE_DEFAULT_STATE,
 } from '~/store/remote/index';
 
-type Command = LocalEvent | RemoteEvent;
+type Command =
+  | { type: 'ADVANCE_CURSOR'; payload?: undefined }
+  | { type: 'RETREAT_CURSOR'; payload?: undefined }
+  | {
+      type: 'KEYBOARD_NAVIGATE';
+      payload: { key: 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' };
+    }
+  | { type: 'PREVIOUS_CLUE'; payload?: undefined }
+  | { type: 'NEXT_CLUE'; payload?: undefined };
+
+type AllActions = Command | LocalEvent | RemoteEvent;
 
 const executor: Executor<
   LocalState,
   RemoteState,
-  Command,
+  AllActions,
   LocalEvent,
   RemoteEvent & { id: string }
-> = (state, command, dispatchLocal, dispatchRemote) => {
+> = ({ local, remote }, command, dispatchLocal, dispatchRemote) => {
   // TODO: differentiate commands and events
   switch (command.type) {
+    case 'ADVANCE_CURSOR': {
+      if (!remote.puzzle || local.index == null) break;
+      const index = getNextIndex(remote.puzzle, local)!;
+      dispatchLocal({ type: 'SELECT', payload: { index } });
+      break;
+    }
+
+    case 'RETREAT_CURSOR': {
+      if (!remote.puzzle || local.index == null) break;
+      const index = getPrevIndex(remote.puzzle, local)!;
+      dispatchLocal({ type: 'SELECT', payload: { index } });
+      break;
+    }
+
+    case 'KEYBOARD_NAVIGATE': {
+      if (!remote.puzzle || local.index == null) break;
+      let nextIndex = local.index;
+      do {
+        switch (command.payload.key) {
+          case 'ArrowDown':
+            nextIndex += remote.puzzle.width;
+            break;
+          case 'ArrowLeft':
+            nextIndex -= 1;
+            break;
+          case 'ArrowRight':
+            nextIndex += 1;
+            break;
+          case 'ArrowUp':
+            nextIndex -= remote.puzzle.width;
+            break;
+        }
+        nextIndex = (nextIndex + remote.puzzle.solution.length) % remote.puzzle.solution.length;
+      } while (remote.puzzle.solution[nextIndex] === '.');
+      dispatchLocal({ type: 'SELECT', payload: { index: nextIndex } });
+      break;
+    }
+
+    case 'NEXT_CLUE': {
+      if (!remote.puzzle || local.index == null) break;
+      const selectedClue = getClueForSelection(remote.puzzle, local);
+      const numbering = gridNumbering(remote.puzzle);
+      const clues = enumerateClues(remote.puzzle);
+      const clueCategory = local.direction === 'row' ? 'across' : 'down';
+      const numClues = clues[clueCategory].length;
+
+      const clueIndex = clues[clueCategory].findIndex(({ number }) => number === selectedClue);
+      const nextClue = clues[clueCategory][(clueIndex + 1) % numClues].number;
+      const nextIndex = numbering.findIndex((number) => number === nextClue);
+      dispatchLocal({ type: 'SELECT', payload: { index: nextIndex } });
+      break;
+    }
+
+    case 'PREVIOUS_CLUE': {
+      if (!remote.puzzle || local.index == null) break;
+      const selectedClue = getClueForSelection(remote.puzzle, local);
+      const numbering = gridNumbering(remote.puzzle);
+      const clues = enumerateClues(remote.puzzle);
+      const clueCategory = local.direction === 'row' ? 'across' : 'down';
+      const numClues = clues[clueCategory].length;
+
+      const clueIndex = clues[clueCategory].findIndex(({ number }) => number === selectedClue);
+      const nextClue = clues[clueCategory][(clueIndex + numClues - 1) % numClues].number;
+      const nextIndex = numbering.findIndex((number) => number === nextClue);
+      dispatchLocal({ type: 'SELECT', payload: { index: nextIndex } });
+      break;
+    }
+
     case 'SELECT':
     case 'ROTATE_SELECTION':
-    case 'ADVANCE_CURSOR':
-    case 'RETREAT_CURSOR':
-    case 'KEYBOARD_NAVIGATE':
-    case 'PREVIOUS_CLUE':
-    case 'NEXT_CLUE':
     case 'TOGGLE_PENCIL':
-      return dispatchLocal(command);
+      dispatchLocal(command);
+      break;
+
     default:
-      return dispatchRemote(command);
+      dispatchRemote(command);
+      break;
   }
 };
 
@@ -68,7 +148,7 @@ const subscribeToServer: SubscribeToServer<RemoteEvent> = (key, subscriber) => {
 };
 
 export const { Provider, useExecute, useSelector } = createStore<
-  Command,
+  AllActions,
   LocalEvent,
   // @ts-expect-error TODO: refactor so that commands and events are not reused
   RemoteEvent,

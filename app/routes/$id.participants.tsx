@@ -3,8 +3,8 @@ import { useState } from 'react';
 import classNames from 'classnames';
 
 import IconButton from '~/components/IconButton';
-import { useStore } from '~/store/remote';
-import { DeviceType } from '~/store/remote/users';
+import { useExecute, useSelector } from '~/store/isomorphic';
+import type { DeviceType } from '~/store/remote/users';
 import styles from './$id.participants.module.css';
 import { OutletContext } from './$id';
 
@@ -30,17 +30,15 @@ function getDeviceTypeIcon(deviceType?: DeviceType) {
 
 export default function View() {
   const { userId } = useOutletContext<OutletContext>();
-  const {
-    dispatch,
-    state: { users },
-  } = useStore();
+  const execute = useExecute();
+  const users = useSelector(({ remote }) => remote.users);
   const [editing, setEditing] = useState<'name' | 'color' | false>(false);
 
   const userList = Object.values(users);
   userList.sort((a, b) => (a.id === userId ? -1 : b.id === userId ? 1 : 0));
 
   const changeName = (name: string) => {
-    dispatch({ type: 'USER_RENAMED', payload: { id: userId, name } });
+    execute({ type: 'USER_RENAMED', payload: { id: userId, name } });
     setEditing(false);
   };
 

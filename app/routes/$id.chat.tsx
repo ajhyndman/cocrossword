@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
 import IconButton from '~/components/IconButton';
-import { useStore } from '~/store/remote';
+import { useExecute, useSelector } from '~/store/isomorphic';
 import { usePrevious } from '~/util/usePrevious';
 import styles from './$id.chat.module.css';
 import type { OutletContext } from './$id';
@@ -18,31 +18,30 @@ const scrollToBottom = () => {
 
 export default function View() {
   const { bottomSheet, userId } = useOutletContext<OutletContext>();
-  const {
-    dispatch,
-    state: { users, messages },
-  } = useStore();
+  const users = useSelector(({ remote }) => remote.users);
+  const messages = useSelector(({ remote }) => remote.messages);
+  const execute = useExecute();
   const [value, setValue] = useState<string>('');
 
   // while page is open, mark latest message as read
   useEffect(() => {
-    dispatch({ type: 'READ_MESSAGE', payload: { id: userId, index: messages.length } });
-  }, [dispatch, userId, messages.length]);
+    execute({ type: 'READ_MESSAGE', payload: { id: userId, index: messages.length } });
+  }, [execute, userId, messages.length]);
 
   const user = useMemo(() => users[userId], [users, userId]);
 
   const submitMessage = useCallback(() => {
     if (!value) return;
 
-    // dispatch message
-    dispatch({
+    // execute message
+    execute({
       type: 'NEW_MESSAGE',
       payload: { author: userId, body: value, timestamp: Date.now() },
     });
 
     // clear input state
     setValue('');
-  }, [dispatch, userId, value]);
+  }, [execute, userId, value]);
 
   const handleEnter = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {

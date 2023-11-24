@@ -1,5 +1,6 @@
-import { getMessageLog } from '~/kafkajs/index';
+import { getMessageLog, dispatch } from '~/kafkajs/index';
 import {
+  Action as RemoteEvent,
   State as RemoteState,
   reducer as remoteReducer,
   DEFAULT_STATE as REMOTE_DEFAULT_STATE,
@@ -17,5 +18,5 @@ export async function loadStore(key: string) {
     return remoteEvents.reduce(remoteReducer, REMOTE_DEFAULT_STATE);
   }
 
-  return { getState };
+  return { dispatch: (event: RemoteEvent) => dispatch(key, event), getState };
 }

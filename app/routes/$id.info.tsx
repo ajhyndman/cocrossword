@@ -1,10 +1,8 @@
-import { useStore } from '~/store/remote';
+import { useSelector } from '~/store/isomorphic';
 import styles from './$id.info.module.css';
 
 export default function View() {
-  const {
-    state: { puzzle },
-  } = useStore();
+  const puzzle = useSelector(({ remote }) => remote.puzzle);
 
   return (
     <div className={styles.container}>
