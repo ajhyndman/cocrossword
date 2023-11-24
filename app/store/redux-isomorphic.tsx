@@ -200,7 +200,10 @@ export function createStore<
   );
 
   // build context
-  const StoreContext = createContext<typeof store>(store);
+  const StoreContext = createContext<{ key: string; store: typeof store }>({
+    key: 'UNKNOWN',
+    store,
+  });
 
   // build provider
   function Provider(props: { KEY: string; children: ReactNode }) {
@@ -211,27 +214,31 @@ export function createStore<
       return cleanup;
     }, [props.KEY]);
 
-    return <StoreContext.Provider value={store}>{props.children}</StoreContext.Provider>;
+    return (
+      <StoreContext.Provider value={{ key: props.KEY, store }}>
+        {props.children}
+      </StoreContext.Provider>
+    );
   }
 
   // build hooks
   function useExecute() {
-    const store = useContext(StoreContext);
-    return store.execute;
+    const { key, store } = useContext(StoreContext);
+    return store.execute(key);
   }
 
-  function useSelector<T>(selector: (local: LocalState, remote: RemoteState) => T): T {
-    const store = useContext(StoreContext);
+  function useSelector<T>(selector: (state: { local: LocalState; remote: RemoteState }) => T): T {
+    const { store } = useContext(StoreContext);
 
     const [value, setValue] = useState<T>(() => {
-      const { local, remote } = store.getSnapshot();
-      return selector(local, remote);
+      const snapshot = store.getSnapshot();
+      return selector(snapshot);
     });
 
     useEffect(() => {
       const unsubscribe = store.subscribe(({ local, remote }) => {
         // *only* update state if value has changed
-        const nextValue = selector(local, remote);
+        const nextValue = selector({ local, remote });
         if (value !== nextValue) {
           setValue(nextValue);
         }
