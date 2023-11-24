@@ -44,16 +44,6 @@ export default function PuzzleGrid({ userId }: Props) {
     }
   }, [isCorrect]);
 
-  useEffect(() => {
-    // whenever selection updates, notify peers of new position
-    if (selection.index != null) {
-      execute({
-        type: 'USER_SELECTION_CHANGED',
-        payload: { id: userId, index: selection.index! },
-      });
-    }
-  }, [execute, selection.index, userId]);
-
   // clear selection on unmount or page hide
   useEffect(() => {
     const clearSelection = () =>
@@ -81,12 +71,12 @@ export default function PuzzleGrid({ userId }: Props) {
       case 'ArrowRight':
       case 'ArrowUp':
         event.preventDefault();
-        execute({ type: 'KEYBOARD_NAVIGATE', payload: { key: event.key } });
+        execute({ type: 'KEYBOARD_NAVIGATE', payload: { userId, key: event.key } });
         break;
       case 'Tab':
         event.preventDefault();
-        if (event.shiftKey) execute({ type: 'PREVIOUS_CLUE' });
-        else execute({ type: 'NEXT_CLUE' });
+        if (event.shiftKey) execute({ type: 'PREVIOUS_CLUE', payload: { userId } });
+        else execute({ type: 'NEXT_CLUE', payload: { userId } });
         break;
       case ' ':
         event.preventDefault();
@@ -104,17 +94,17 @@ export default function PuzzleGrid({ userId }: Props) {
       let deletedIndex = index;
       if (backspace && cellContent === false) {
         deletedIndex = getPrevIndex({ solution, width }, selection)!;
-        execute({ type: 'RETREAT_CURSOR' });
+        execute({ type: 'RETREAT_CURSOR', payload: { userId } });
       }
       execute({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
     },
-    [execute, solution, width, isCorrect, selection],
+    [execute, solution, width, isCorrect, selection, userId],
   );
   const handleCellFocus = useCallback(
     (index: number) => {
-      execute({ type: 'SELECT', payload: { index } });
+      execute({ type: 'FOCUS', payload: { userId, index } });
     },
-    [execute],
+    [execute, userId],
   );
   const handleCellInput = useCallback(
     (index: number, value: string) => {
@@ -129,9 +119,9 @@ export default function PuzzleGrid({ userId }: Props) {
         type: 'CELL_CHANGED',
         payload: { index, value, isPencil: selection.isPencil },
       });
-      execute({ type: 'ADVANCE_CURSOR' });
+      execute({ type: 'ADVANCE_CURSOR', payload: { userId } });
     },
-    [execute, isCorrect, selection.isPencil],
+    [execute, isCorrect, selection.isPencil, userId],
   );
   const handleCellRotate = useCallback(() => {
     execute({ type: 'ROTATE_SELECTION' });

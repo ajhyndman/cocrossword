@@ -17,14 +17,15 @@ import {
 } from '~/store/remote/index';
 
 type Command =
-  | { type: 'ADVANCE_CURSOR'; payload?: undefined }
-  | { type: 'RETREAT_CURSOR'; payload?: undefined }
+  | { type: 'FOCUS'; payload: { index: number; userId: string } }
+  | { type: 'ADVANCE_CURSOR'; payload: { userId: string } }
+  | { type: 'RETREAT_CURSOR'; payload: { userId: string } }
   | {
       type: 'KEYBOARD_NAVIGATE';
-      payload: { key: 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' };
+      payload: { userId: string; key: 'ArrowDown' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' };
     }
-  | { type: 'PREVIOUS_CLUE'; payload?: undefined }
-  | { type: 'NEXT_CLUE'; payload?: undefined };
+  | { type: 'PREVIOUS_CLUE'; payload: { userId: string } }
+  | { type: 'NEXT_CLUE'; payload: { userId: string } };
 
 type AllActions = Command | LocalEvent | RemoteEvent;
 
@@ -39,44 +40,51 @@ const executor: Executor<
   switch (command.type) {
     case 'ADVANCE_CURSOR': {
       if (!remote.puzzle || local.index == null) break;
+      const id = command.payload.userId;
       const index = getNextIndex(remote.puzzle, local)!;
       dispatchLocal({ type: 'SELECT', payload: { index } });
+      dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
       break;
     }
 
     case 'RETREAT_CURSOR': {
       if (!remote.puzzle || local.index == null) break;
+      const id = command.payload.userId;
       const index = getPrevIndex(remote.puzzle, local)!;
       dispatchLocal({ type: 'SELECT', payload: { index } });
+      dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
       break;
     }
 
     case 'KEYBOARD_NAVIGATE': {
       if (!remote.puzzle || local.index == null) break;
-      let nextIndex = local.index;
+      const id = command.payload.userId;
+      let index = local.index;
       do {
         switch (command.payload.key) {
           case 'ArrowDown':
-            nextIndex += remote.puzzle.width;
+            index += remote.puzzle.width;
             break;
           case 'ArrowLeft':
-            nextIndex -= 1;
+            index -= 1;
             break;
           case 'ArrowRight':
-            nextIndex += 1;
+            index += 1;
             break;
           case 'ArrowUp':
-            nextIndex -= remote.puzzle.width;
+            index -= remote.puzzle.width;
             break;
         }
-        nextIndex = (nextIndex + remote.puzzle.solution.length) % remote.puzzle.solution.length;
-      } while (remote.puzzle.solution[nextIndex] === '.');
-      dispatchLocal({ type: 'SELECT', payload: { index: nextIndex } });
+        index = (index + remote.puzzle.solution.length) % remote.puzzle.solution.length;
+      } while (remote.puzzle.solution[index] === '.');
+      dispatchLocal({ type: 'SELECT', payload: { index } });
+      dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
       break;
     }
 
     case 'NEXT_CLUE': {
       if (!remote.puzzle || local.index == null) break;
+      const id = command.payload.userId;
       const selectedClue = getClueForSelection(remote.puzzle, local);
       const numbering = gridNumbering(remote.puzzle);
       const clues = enumerateClues(remote.puzzle);
@@ -85,13 +93,15 @@ const executor: Executor<
 
       const clueIndex = clues[clueCategory].findIndex(({ number }) => number === selectedClue);
       const nextClue = clues[clueCategory][(clueIndex + 1) % numClues].number;
-      const nextIndex = numbering.findIndex((number) => number === nextClue);
-      dispatchLocal({ type: 'SELECT', payload: { index: nextIndex } });
+      const index = numbering.findIndex((number) => number === nextClue);
+      dispatchLocal({ type: 'SELECT', payload: { index } });
+      dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
       break;
     }
 
     case 'PREVIOUS_CLUE': {
       if (!remote.puzzle || local.index == null) break;
+      const id = command.payload.userId;
       const selectedClue = getClueForSelection(remote.puzzle, local);
       const numbering = gridNumbering(remote.puzzle);
       const clues = enumerateClues(remote.puzzle);
@@ -100,8 +110,17 @@ const executor: Executor<
 
       const clueIndex = clues[clueCategory].findIndex(({ number }) => number === selectedClue);
       const nextClue = clues[clueCategory][(clueIndex + numClues - 1) % numClues].number;
-      const nextIndex = numbering.findIndex((number) => number === nextClue);
-      dispatchLocal({ type: 'SELECT', payload: { index: nextIndex } });
+      const index = numbering.findIndex((number) => number === nextClue);
+      dispatchLocal({ type: 'SELECT', payload: { index } });
+      dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
+      break;
+    }
+
+    case 'FOCUS': {
+      const index = command.payload.index;
+      const id = command.payload.userId;
+      dispatchLocal({ type: 'SELECT', payload: { index } });
+      dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
       break;
     }
 
