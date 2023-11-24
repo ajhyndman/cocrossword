@@ -4,7 +4,8 @@ import classNames from 'classnames';
 import { type RefObject, useRef, useLayoutEffect } from 'react';
 
 import NavigationTabs from '~/components/NavigationTabs';
-import { Provider, loadStore } from '~/store/remote';
+import { Provider } from '~/store/isomorphic';
+import { loadStore } from '~/store/isomorphic/index.server';
 import { login } from '~/util/login.server';
 import styles from './$id.module.css';
 

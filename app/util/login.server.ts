@@ -4,8 +4,8 @@ import { v4 } from 'uuid';
 import { json } from '@remix-run/node';
 
 import { commitSession, getSession } from '~/sessions.server';
-import { DeviceType } from '~/store/remote/users';
-import { loadStore } from '~/store/remote';
+import type { DeviceType } from '~/store/remote/users';
+import { loadStore } from '~/store/isomorphic/index.server';
 import { randomItem } from './randomItem';
 import { MIDDLE_EARTH_NAMES } from './constants';
 

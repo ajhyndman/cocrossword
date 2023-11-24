@@ -1,8 +1,7 @@
 import { gridNumbering } from '@ajhyndman/puz';
 import { useCallback, useEffect, useMemo } from 'react';
 
-import { useSelectionStore } from '~/store/local/selection';
-import { useStore } from '~/store/remote';
+import { useExecute, useSelector } from '~/store/isomorphic';
 import { getPrevIndex } from '~/util/cursor';
 import { getActiveClues } from '~/util/getActiveClues';
 import { getClueForSelection } from '~/util/getClueForSelection';
@@ -14,11 +13,12 @@ type Props = {
 };
 
 export default function PuzzleGrid({ userId }: Props) {
-  const {
-    dispatch: dispatchRemote,
-    state: { isCorrect, users, selections, puzzle },
-  } = useStore();
-  const { dispatch, selection } = useSelectionStore();
+  const isCorrect = useSelector(({ remote }) => remote.isCorrect);
+  const users = useSelector(({ remote }) => remote.users);
+  const selections = useSelector(({ remote }) => remote.selections);
+  const puzzle = useSelector(({ remote }) => remote.puzzle);
+  const selection = useSelector(({ local }) => local);
+  const execute = useExecute();
 
   const solution = puzzle!.solution;
   const width = puzzle!.width;
@@ -44,27 +44,17 @@ export default function PuzzleGrid({ userId }: Props) {
     }
   }, [isCorrect]);
 
-  useEffect(() => {
-    // whenever selection updates, notify peers of new position
-    if (selection.index != null) {
-      dispatchRemote({
-        type: 'USER_SELECTION_CHANGED',
-        payload: { id: userId, index: selection.index! },
-      });
-    }
-  }, [dispatchRemote, selection.index, userId]);
-
   // clear selection on unmount or page hide
   useEffect(() => {
     const clearSelection = () =>
-      dispatchRemote({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
+      execute({ type: 'USER_SELECTION_CLEARED', payload: { id: userId } });
 
     window.addEventListener('visibilitychange', clearSelection);
     return () => {
       clearSelection();
       window.removeEventListener('visibilitychange', clearSelection);
     };
-  }, [dispatchRemote, userId]);
+  }, [execute, userId]);
 
   // derive clue to cell mappings
   const numbering = useMemo(() => gridNumbering({ solution, width }), [solution, width]);
@@ -81,16 +71,16 @@ export default function PuzzleGrid({ userId }: Props) {
       case 'ArrowRight':
       case 'ArrowUp':
         event.preventDefault();
-        dispatch({ type: 'KEYBOARD_NAVIGATE', payload: { key: event.key } });
+        execute({ type: 'KEYBOARD_NAVIGATE', payload: { userId, key: event.key } });
         break;
       case 'Tab':
         event.preventDefault();
-        if (event.shiftKey) dispatch({ type: 'PREVIOUS_CLUE' });
-        else dispatch({ type: 'NEXT_CLUE' });
+        if (event.shiftKey) execute({ type: 'PREVIOUS_CLUE', payload: { userId } });
+        else execute({ type: 'NEXT_CLUE', payload: { userId } });
         break;
       case ' ':
         event.preventDefault();
-        dispatch({ type: 'ROTATE_SELECTION' });
+        execute({ type: 'ROTATE_SELECTION' });
         break;
       default:
       // pass
@@ -104,38 +94,38 @@ export default function PuzzleGrid({ userId }: Props) {
       let deletedIndex = index;
       if (backspace && cellContent === false) {
         deletedIndex = getPrevIndex({ solution, width }, selection)!;
-        dispatch({ type: 'RETREAT_CURSOR' });
+        execute({ type: 'RETREAT_CURSOR', payload: { userId } });
       }
-      dispatchRemote({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
+      execute({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
     },
-    [dispatch, dispatchRemote, solution, width, isCorrect, selection],
+    [execute, solution, width, isCorrect, selection, userId],
   );
   const handleCellFocus = useCallback(
     (index: number) => {
-      dispatch({ type: 'SELECT', payload: { index } });
+      execute({ type: 'FOCUS', payload: { userId, index } });
     },
-    [dispatch],
+    [execute, userId],
   );
   const handleCellInput = useCallback(
     (index: number, value: string) => {
       if (isCorrect) return;
 
       if (value === '.') {
-        dispatch({ type: 'TOGGLE_PENCIL' });
+        execute({ type: 'TOGGLE_PENCIL' });
         return;
       }
 
-      dispatchRemote({
+      execute({
         type: 'CELL_CHANGED',
         payload: { index, value, isPencil: selection.isPencil },
       });
-      dispatch({ type: 'ADVANCE_CURSOR' });
+      execute({ type: 'ADVANCE_CURSOR', payload: { userId } });
     },
-    [dispatch, dispatchRemote, isCorrect, selection.isPencil],
+    [execute, isCorrect, selection.isPencil, userId],
   );
   const handleCellRotate = useCallback(() => {
-    dispatch({ type: 'ROTATE_SELECTION' });
-  }, [dispatch]);
+    execute({ type: 'ROTATE_SELECTION' });
+  }, [execute]);
 
   return (
     <div

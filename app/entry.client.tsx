@@ -6,6 +6,7 @@ import { hydrateRoot } from 'react-dom/client';
 startTransition(() => {
   hydrateRoot(
     document,
+    // @ts-expect-error ignore type mismatch between third party deps
     <StrictMode>
       <RemixBrowser />
     </StrictMode>,
