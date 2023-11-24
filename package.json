@@ -20,6 +20,7 @@
     "dev:worker": "remix-pwa dev",
     "serve": "remix-serve dist/index.js",
     "serve:local": "dotenv remix-serve dist/index.js",
+    "typecheck": "tsc",
     "lint": "eslint ."
   },
   "dependencies": {
