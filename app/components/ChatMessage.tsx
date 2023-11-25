@@ -15,7 +15,16 @@ export default function ChatMessage({ author, color, message, timestamp }: Props
       </span>
       <span className={styles.message}>{message}</span>
       {timestamp && (
-        <span className={styles.timestamp}>{new Date(timestamp).toLocaleTimeString()}</span>
+        <span
+          className={styles.timestamp}
+          title={new Date(timestamp).toLocaleTimeString(undefined, {
+            month: 'short',
+            weekday: 'short',
+            day: 'numeric',
+          })}
+        >
+          {new Date(timestamp).toLocaleTimeString()}
+        </span>
       )}
     </div>
   );
