@@ -19,6 +19,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   // if no ID passed, redirect to home
   if (!params.id) return redirect('/');
 
+  const userAgent = request.headers.get('User-Agent')!;
+  const isMobile = /(iPad|iPhone|iPod|Android)/i.test(userAgent);
+  if (!isMobile) return redirect(`/d/${params.id}`);
+
   // if puzzle hasn't been initialized, redirect to home
   const { getState } = await loadStore(params.id);
   if (!getState().puzzle) return redirect('/');
