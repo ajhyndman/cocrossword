@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 
 import Title from '~/components/Title';
 import { useSelector } from '~/store/isomorphic';
-import { asciiToBlackLetter } from '~/util/asciiToBlackletter';
 import styles from './$id.info.module.css';
 
 function Keycap({ children }: { children: ReactNode }) {
@@ -11,14 +10,13 @@ function Keycap({ children }: { children: ReactNode }) {
 
 export default function View() {
   const puzzle = useSelector(({ remote }) => remote.puzzle);
-  const title = asciiToBlackLetter(puzzle?.title);
 
   return (
     <div className={styles.container}>
       <div className={styles.section}>
         <Title>Puzzle Info</Title>
         <div className={styles.puzzleInfo}>
-          <h2 className={styles.puzzleTitle}>{title}</h2>
+          <h2 className={styles.puzzleTitle}>{puzzle?.title}</h2>
           <p>{puzzle?.author}</p>
           <p>{puzzle?.copyright}</p>
         </div>
