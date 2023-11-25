@@ -1,4 +1,5 @@
 import { gridNumbering } from '@ajhyndman/puz';
+import { useOutletContext } from '@remix-run/react';
 import { useEffect, useMemo } from 'react';
 
 import { useExecute, useSelector } from '~/store/isomorphic';
@@ -6,12 +7,10 @@ import { getActiveClues } from '~/util/getActiveClues';
 import { getClueForSelection } from '~/util/getClueForSelection';
 import styles from './PuzzleGrid.module.css';
 import PuzzleCell from './PuzzleCell';
+import { OutletContext } from '~/routes/$id';
 
-type Props = {
-  userId: string;
-};
-
-export default function PuzzleGrid({ userId }: Props) {
+export default function PuzzleGrid() {
+  const { userId } = useOutletContext<OutletContext>();
   const isCorrect = useSelector(({ remote }) => remote.isCorrect);
   const users = useSelector(({ remote }) => remote.users);
   const selections = useSelector(({ remote }) => remote.selections);

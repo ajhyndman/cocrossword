@@ -9,7 +9,7 @@ import styles from './$id.puzzle.module.css';
 import type { OutletContext } from './$id';
 
 export default function View() {
-  const { bottomSheet, userId } = useOutletContext<OutletContext>();
+  const { bottomSheet } = useOutletContext<OutletContext>();
   const puzzle = useSelector(({ remote }) => remote.puzzle);
 
   if (!puzzle) return null;
@@ -17,7 +17,7 @@ export default function View() {
   return (
     <>
       <div className={styles.puzzle}>
-        <PuzzleGrid userId={userId} />
+        <PuzzleGrid />
       </div>
       {createPortal(
         // @ts-expect-error type mismatch React.Node vs React.Element
