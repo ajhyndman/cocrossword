@@ -3,6 +3,7 @@ import { useState } from 'react';
 import classNames from 'classnames';
 
 import IconButton from '~/components/IconButton';
+import Title from '~/components/Title';
 import { useExecute, useSelector } from '~/store/isomorphic';
 import type { DeviceType } from '~/store/remote/users';
 import styles from './$id.participants.module.css';
@@ -54,7 +55,7 @@ export default function View() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Participants</h1>
+      <Title>Participants</Title>
       <ul className={styles.list}>
         {userList.map(({ id, color, deviceType, name }) => (
           <li key={id} className={styles.listItem}>

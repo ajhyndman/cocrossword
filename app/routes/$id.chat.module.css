@@ -25,21 +25,6 @@
   box-sizing: border-box;
 }
 
-.title {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.titleInput {
-  color: inherit;
-  appearance: none;
-  background: none;
-  border: none;
-  font-size: 22px;
-  min-width: 0;
-  width: 200px;
-}
-
 .appBar {
   background: var(--white);
   box-sizing: border-box;
