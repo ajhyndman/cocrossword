@@ -17,13 +17,13 @@
 }
 
 .puzzleInfo {
-  font-family: Georgia, Times, "Times New Roman";
   line-height: 1.5;
 }
 
 .puzzleTitle {
+  font-family: Georgia, Times, "Times New Roman";
   font-weight: bold;
-  font-size: 18px;
+  font-size: 24px;
   margin-bottom: calc(var(--gutter) * 2);
 }
 
