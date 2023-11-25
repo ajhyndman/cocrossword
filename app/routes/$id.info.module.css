@@ -6,12 +6,12 @@
   width: 100%;
   line-height: 1.5;
   /* height of navigation tabs */
-  margin-bottom: 2.25rem;
+  padding-bottom: 2.25rem;
 }
 
 /* on ios, we use position sticky, so no need for extra spacer */
 :global(.ios) .container {
-  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .container h1,
