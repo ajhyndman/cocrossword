@@ -1,27 +1,33 @@
 body {
-  --bermuda-gray: #6E899F;
-  --black-pearl: #030D1A;
-  --botticelli: #D1DCE8;
-  --we-peep: #F5D6E0;
-  --casper: #B0BECF;
-  --fountain-blue: #5EB5B9;
-  --iceberg: #D8F2F3;
-  --mystic: #DFE5EC;
-  --san-juan: #2B476A;
-  --white: #FFFFFF;
+  --bermuda-gray: #6e899f;
+  --black-pearl: #030d1a;
+  --botticelli: #d1dce8;
+  --we-peep: #f5d6e0;
+  --casper: #b0becf;
+  --fountain-blue: #5eb5b9;
+  --iceberg: #d8f2f3;
+  --mystic: #dfe5ec;
+  --san-juan: #2b476a;
+  --white: #ffffff;
 
-  --red-ink: #A03138;
-  --green-ink: #1B975D;
-  --blue-ink: #2040A1;
-  --gold-ink: #BA8328;
+  --red-ink: #a03138;
+  --green-ink: #1b975d;
+  --blue-ink: #2040a1;
+  --gold-ink: #ba8328;
 
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: var(--black-pearl);
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+code {
+  font-family: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono',
+    'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro', 'Fira Mono', 'Droid Sans Mono',
+    'Courier New', monospace;
 }
 
 input {
