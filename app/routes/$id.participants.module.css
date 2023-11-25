@@ -3,10 +3,16 @@
   box-sizing: border-box;
   margin: 0 auto;
   max-width: var(--content-width);
-  min-height: 100dvh; /* subtract height of top bar */
   padding: calc(var(--gutter) * 2) calc(var(--gutter) * 2) 0;
   width: 100%;
   line-height: 1.5;
+  /* height of navigation tabs */
+  margin-bottom: 2.25rem;
+}
+
+/* on ios, we use position sticky, so no need for extra spacer */
+:global(.ios) .container {
+  margin-bottom: 0;
 }
 
 .icon {

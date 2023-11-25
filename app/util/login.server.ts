@@ -14,7 +14,7 @@ export async function login(request: Request, id: string) {
 
   // if this is a bot request, do not assign a session
   if (isbot(userAgent)) {
-    return { userId: 'BOT' };
+    return { userId: 'BOT', zoom: 100 };
   }
 
   // if there is a real puzzle, return session
@@ -22,6 +22,7 @@ export async function login(request: Request, id: string) {
   const session = await getSession(cookie);
 
   let userId = session.get('userId');
+  const zoom = session.get('zoom') ?? 100;
   let headers = {};
 
   // if session not yet populated, initialize user
@@ -45,5 +46,5 @@ export async function login(request: Request, id: string) {
     dispatch({ type: 'USER_JOINED', payload: { id: userId, name, deviceType } });
   }
 
-  return json({ userId }, { headers });
+  return json({ userId, zoom }, { headers });
 }

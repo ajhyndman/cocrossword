@@ -12,6 +12,7 @@ import styles from './$id.module.css';
 export type OutletContext = {
   bottomSheet: RefObject<HTMLDivElement>;
   userId: string;
+  zoom: number;
 };
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -30,7 +31,7 @@ export default function View() {
   const { id } = useParams();
   const container = useRef<HTMLDivElement>(null);
   const bottomSheet = useRef<HTMLDivElement>(null);
-  const { userId } = useLoaderData<typeof loader>();
+  const { userId, zoom } = useLoaderData<typeof loader>();
 
   const isPuzzle = matches.some((match) => match.id === 'routes/$id.puzzle');
 
@@ -62,11 +63,12 @@ export default function View() {
 
   return (
     <Provider KEY={id!}>
+      {zoom && <style>{`html { font-size: ${zoom}% }`}</style>}
       <div
         className={classNames(styles.container, { [styles.isPuzzle]: isPuzzle })}
         ref={container}
       >
-        <Outlet context={{ userId, bottomSheet }} />
+        <Outlet context={{ userId, bottomSheet, zoom }} />
         <div className={styles.bottomSheet}>
           <div className={styles.bottomSheetPortal} ref={bottomSheet} />
           <NavigationTabs userId={userId} id={id!} />
