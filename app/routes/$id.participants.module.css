@@ -2,27 +2,27 @@
   align-self: center;
   box-sizing: border-box;
   margin: 0 auto;
-  max-width: 600px;
+  max-width: var(--content-width);
   min-height: 100dvh; /* subtract height of top bar */
-  padding: 18px 16px 0;
+  padding: calc(var(--gutter) * 2) calc(var(--gutter) * 2) 0;
   width: 100%;
   line-height: 1.5;
 }
 
 .icon {
-  font-size: 24px;
-  margin-right: 16px;
+  font-size: 1.5rem;
+  margin-right: calc(var(--gutter) * 2);
   flex-shrink: 0;
 }
 
 .list {
-  padding: 8px 0;
+  padding: var(--gutter) 0;
 }
 
 .listItem {
   align-items: center;
   display: flex;
-  height: 48px;
+  height: 3rem;
 }
 
 .input {

@@ -6,6 +6,6 @@
   border-bottom-width: 2px;
   border-right-width: 2px;
   display: grid;
-  grid-auto-rows: 33px;
+  grid-auto-rows: calc(2rem + 1px);
   margin: 0 auto;
 }

@@ -15,7 +15,8 @@ body {
   --blue-ink: #2040a1;
   --gold-ink: #ba8328;
 
-  --gutter: 8px;
+  --gutter: 0.5rem;
+  --content-width: 37.5rem;
 
   font-family:
     system-ui,

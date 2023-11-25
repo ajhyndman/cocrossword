@@ -89,7 +89,7 @@ export default function PuzzleGrid({ userId }: Props) {
   return (
     <div
       className={styles.grid}
-      style={{ gridTemplateColumns: `repeat(${puzzle!.width}, 33px)` }}
+      style={{ gridTemplateColumns: `repeat(${puzzle!.width}, calc(2rem + 1px))` }}
       onKeyDown={handleKeyDown}
     >
       {[...puzzle!.state!].map((char, i) => {

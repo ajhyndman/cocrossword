@@ -4,22 +4,22 @@
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  max-width: 600px;
-  padding: 18px 16px 0;
+  max-width: var(--content-width);
+  padding: calc(var(--gutter) * 2) calc(var(--gutter) * 2) 0;
   width: 100%;
 }
 
 .anchor {
   overflow-anchor: auto;
   /* also serves as a spacer for the fixed chat input pane */
-  height: calc(80px + 36px);
+  height: calc(5rem + var(--gutter) * 4);
   flex-shrink: 0;
 }
 
 .fixed {
   position: fixed;
-  /* height of tabs navigation */
-  bottom: 36px;
+  /* height of navigation tabs */
+  bottom: 2.25rem;
   left: 0;
   right: 0;
   box-sizing: border-box;
@@ -30,6 +30,6 @@
   box-sizing: border-box;
   display: flex;
   margin: 0 auto;
-  max-width: 600px;
-  padding: 16px 0 16px 16px;
+  max-width: var(--content-width);
+  padding: calc(var(--gutter) * 2) 0 calc(var(--gutter) * 2) calc(var(--gutter) * 2);
 }

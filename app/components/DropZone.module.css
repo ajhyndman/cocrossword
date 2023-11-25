@@ -3,13 +3,13 @@
 }
 
 .label {
-  border: dashed 2px var(--san-juan);
-  border-radius: 16px;
+  border: dashed 0.125rem var(--san-juan);
+  border-radius: 1rem;
   color: var(--san-juan);
   cursor: pointer;
   background: none;
-  width: 120px;
-  height: 120px;
+  width: 7.5rem;
+  height: 7.5rem;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,15 +1,15 @@
 .container {
   box-sizing: border-box;
   margin: 0 auto;
-  max-width: 600px;
-  padding: 18px 16px 0;
+  max-width: var(--content-width);
+  padding: calc(var(--gutter) * 2) calc(var(--gutter) * 2) 0;
   width: 100%;
   line-height: 1.5;
 }
 
 .container h1,
 .container h2 {
-  margin-bottom: 0.5em;
+  margin-bottom: var(--gutter);
 }
 
 .section {
@@ -22,7 +22,7 @@
 
 .puzzleTitle {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 1.125rem;
   margin-bottom: calc(var(--gutter) * 2);
 }
 
@@ -39,9 +39,9 @@
 }
 
 .keycap {
-  font-size: 14px;
+  font-size: 0.875rem;
   display: inline-block;
-  padding: 4px 6px;
+  padding: 0.25rem 0.325rem;
   background: var(--mystic);
   line-height: 1;
 }

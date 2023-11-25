@@ -2,18 +2,18 @@
   box-sizing: border-box;;
   font-weight: bold;
   left: 0;
-  padding: 0 6px;
+  padding: 0 0.325rem;
   position: absolute;
   text-align: right;
   top: auto;
-  width: 36px;
+  width: 2.25rem;
 }
 
 .listItem {
-  font-size: 16px;
-  line-height: 1.25em;
+  font-size: 1rem;
+  line-height: 1.25;
   list-style-type: none;
-  padding: 6px 6px 6px 36px;
+  padding: 0.325rem 0.325rem 0.325rem 2.25rem;
   position: relative;
 }
 

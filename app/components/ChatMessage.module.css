@@ -1,22 +1,22 @@
 .container {
-  padding: 0 6px 6px 1em;
+  padding: 0 0.325rem 0.325rem calc(var(--gutter) * 2);
   text-indent: -1em;
-  line-height: 24px;
+  line-height: 1.5;
   overflow-anchor: none;
   white-space: pre-wrap;
 }
 
 .author {
   font-weight: bold;
-  margin-right: 6px;
+  margin-right: 0.325rem;
 }
 
 .timestamp {
   color: var(--casper);
   float: inline-end;
-  font-size: 12px;
-  line-height: 20px;
-  margin-left: 1em;
-  padding-top: 4px;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  margin-left: calc(var(--gutter) * 2);
+  padding-top: calc(var(--gutter) * 0.5);
   vertical-align: sub;
 }
