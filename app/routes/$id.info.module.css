@@ -1,16 +1,48 @@
 .container {
-  align-self: center;
   box-sizing: border-box;
   margin: 0 auto;
   max-width: 600px;
   padding: 18px 16px 0;
   width: 100%;
+  line-height: 1.5;
+}
+
+.container h1,
+.container h2 {
+  margin-bottom: 0.5em;
+}
+
+.section {
+  margin-bottom: calc(var(--gutter) * 3);
+}
+
+.puzzleInfo {
   font-family: Georgia, Times, "Times New Roman";
   line-height: 1.5;
 }
 
-.title {
+.puzzleTitle {
   font-weight: bold;
-  font-size: 24px;
-  margin-bottom: 16px;
+  font-size: 18px;
+  margin-bottom: calc(var(--gutter) * 2);
+}
+
+.shortcutList li {
+  padding-bottom: var(--gutter);
+  margin-bottom: var(--gutter);
+  border-bottom: 1px solid var(--mystic);
+  display: flex;
+  justify-content: space-between;
+}
+
+.keys {
+  text-align: right;
+}
+
+.keycap {
+  font-size: 14px;
+  display: inline-block;
+  padding: 4px 6px;
+  background: var(--mystic);
+  line-height: 1;
 }
