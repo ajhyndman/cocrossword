@@ -9,12 +9,13 @@ const BROADCAST_INTERVAL = 1000 / 60;
  * A simple observable list class.
  */
 export class Log<T> {
-  private cursor: number = 0;
+  private cursor: number;
   private log: T[];
   private subscribers: Set<Subscriber<T>> = new Set();
 
   constructor(messages?: T[]) {
     this.log = messages ?? [];
+    this.cursor = this.log.length;
     this.push = this.push.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.getLog = this.getLog.bind(this);
