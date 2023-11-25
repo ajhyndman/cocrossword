@@ -19,7 +19,8 @@ export type Command =
     }
   | { type: 'PREVIOUS_CLUE'; payload: { userId: string } }
   | { type: 'NEXT_CLUE'; payload: { userId: string } }
-  | LocalEvent;
+  | LocalEvent
+  | RemoteEvent;
 
 export const executor: Executor<
   LocalState,
@@ -162,8 +163,14 @@ export const executor: Executor<
       break;
     }
 
-    default:
+    case 'ROTATE_SELECTION':
+    case 'SELECT':
+    case 'TOGGLE_PENCIL':
+    case 'TOGGLE_TOOLBAR':
       dispatchLocal(command);
       break;
+
+    default:
+      dispatchRemote(command);
   }
 };
