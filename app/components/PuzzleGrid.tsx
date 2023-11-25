@@ -1,8 +1,7 @@
 import { gridNumbering } from '@ajhyndman/puz';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useExecute, useSelector } from '~/store/isomorphic';
-import { getPrevIndex } from '~/util/cursor';
 import { getActiveClues } from '~/util/getActiveClues';
 import { getClueForSelection } from '~/util/getClueForSelection';
 import styles from './PuzzleGrid.module.css';
@@ -87,46 +86,6 @@ export default function PuzzleGrid({ userId }: Props) {
     }
   };
 
-  // cell event handlers
-  const handleCellDelete = useCallback(
-    (index: number, cellContent: false | string, backspace?: boolean) => {
-      if (isCorrect) return;
-      let deletedIndex = index;
-      if (backspace && cellContent === false) {
-        deletedIndex = getPrevIndex({ solution, width }, selection)!;
-        execute({ type: 'RETREAT_CURSOR', payload: { userId } });
-      }
-      execute({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
-    },
-    [execute, solution, width, isCorrect, selection, userId],
-  );
-  const handleCellFocus = useCallback(
-    (index: number) => {
-      execute({ type: 'FOCUS', payload: { userId, index } });
-    },
-    [execute, userId],
-  );
-  const handleCellInput = useCallback(
-    (index: number, value: string) => {
-      if (isCorrect) return;
-
-      if (value === '.') {
-        execute({ type: 'TOGGLE_PENCIL' });
-        return;
-      }
-
-      execute({
-        type: 'CELL_CHANGED',
-        payload: { index, value, isPencil: selection.isPencil },
-      });
-      execute({ type: 'ADVANCE_CURSOR', payload: { userId } });
-    },
-    [execute, isCorrect, selection.isPencil, userId],
-  );
-  const handleCellRotate = useCallback(() => {
-    execute({ type: 'ROTATE_SELECTION' });
-  }, [execute]);
-
   return (
     <div
       className={styles.grid}
@@ -157,10 +116,6 @@ export default function PuzzleGrid({ userId }: Props) {
             selections={selectionIndices[i]}
             state={state}
             markup={puzzle!.markupGrid?.[i]}
-            onDelete={handleCellDelete}
-            onFocus={handleCellFocus}
-            onInput={handleCellInput}
-            onRotate={handleCellRotate}
           />
         );
       })}

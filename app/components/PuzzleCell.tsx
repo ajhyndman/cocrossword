@@ -1,8 +1,11 @@
 import { SquareMarkup } from '@ajhyndman/puz';
+import { useOutletContext } from '@remix-run/react';
 import { memo, useLayoutEffect, useRef } from 'react';
 import cx from 'classnames';
 
 import styles from './PuzzleCell.module.css';
+import { useExecute } from '~/store/isomorphic';
+import { OutletContext } from '~/routes/$id';
 
 type Props = {
   activeClues: number[];
@@ -12,10 +15,6 @@ type Props = {
   selections?: { color: string; name: string }[];
   state?: 'focus' | 'secondary' | 'solved';
   markup?: SquareMarkup;
-  onDelete: (index: number, cellContent: false | string, backspace?: boolean) => void;
-  onFocus: (index: number) => void;
-  onInput: (index: number, value: string) => void;
-  onRotate: () => void;
 };
 
 export default memo(function PuzzleCell({
@@ -25,11 +24,9 @@ export default memo(function PuzzleCell({
   state,
   selections,
   markup,
-  onDelete,
-  onFocus,
-  onInput,
-  onRotate,
 }: Props) {
+  const { userId } = useOutletContext<OutletContext>();
+  const execute = useExecute();
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
 
@@ -37,25 +34,25 @@ export default memo(function PuzzleCell({
   const cellContent = !isBlackCell && content !== '-' && content;
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Backspace') {
-      onDelete(index, cellContent, true);
-    } else if (event.key === 'Delete') {
-      onDelete(index, cellContent);
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+      execute({ type: 'DELETE', payload: { index, userId, backspace: event.key === 'Backspace' } });
     }
   };
   const handleClick = (event: React.MouseEvent) => {
     // if element is already selected, "focus" event won't be triggered
     if (state === 'focus' && event.target === labelRef.current) {
-      onRotate();
+      execute({ type: 'ROTATE_SELECTION' });
     }
   };
   const handleFocus = () => {
-    onFocus(index);
+    execute({ type: 'FOCUS', payload: { userId, index } });
   };
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     // @ts-expect-error TS doesn't guarantee that nativeEvent.data is present
     const value = event.nativeEvent.data;
-    onInput(index, value);
+    // onInput(index, value);
+
+    execute({ type: 'INPUT', payload: { userId, index, value } });
   };
 
   useLayoutEffect(() => {

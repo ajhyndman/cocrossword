@@ -1,4 +1,3 @@
-import { printBinaryFile } from '@ajhyndman/puz';
 import { useState } from 'react';
 
 import { useExecute, useSelector } from '~/store/isomorphic';
@@ -8,7 +7,6 @@ import styles from './Toolbar.module.css';
 export default function Toolbar() {
   const [isExpanded, setIsExpanded] = useState(false);
   const { index, isPencil } = useSelector(({ local }) => local);
-  const puzzle = useSelector(({ remote }) => remote.puzzle);
   const execute = useExecute();
 
   const checkSolution = () => {
@@ -17,16 +15,7 @@ export default function Toolbar() {
 
   // export the current puzzle state as a .puz binary file
   const handleDownload = () => {
-    if (puzzle) {
-      const buffer = printBinaryFile(puzzle);
-      const file = new File([buffer], 'download.puz');
-      const url = URL.createObjectURL(file);
-      const a = document.createElement('a');
-      a.download = file.name;
-      a.href = url;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+    execute({ type: 'DOWNLOAD_PUZZLE' });
   };
 
   const handleTogglePencil = () => {

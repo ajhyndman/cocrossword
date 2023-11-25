@@ -39,6 +39,7 @@ export type Executor<
   command: Command,
   dispatchLocal: Dispatch<LocalEvent>,
   dispatchRemote: Dispatch<Pick<RemoteEvent, 'type' | 'payload'>>,
+  execute: Execute<Command>,
 ) => void;
 export type Execute<Command extends BaseAction> = (command: Command) => void;
 export type Subscriber<LocalState, RemoteState> = (state: {
@@ -170,6 +171,7 @@ class Store<
       command,
       this.dispatchLocal,
       this.optimisticDispatchRemote,
+      this.execute,
     );
   };
 }
