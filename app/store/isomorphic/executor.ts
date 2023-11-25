@@ -62,6 +62,7 @@ export const executor: Executor<
     }
 
     case 'DOWNLOAD_PUZZLE': {
+      // export the current puzzle state as a .puz binary file
       if (remote.puzzle) {
         const buffer = printBinaryFile(remote.puzzle);
         const file = new File([buffer], 'download.puz');
