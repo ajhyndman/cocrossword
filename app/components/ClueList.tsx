@@ -1,16 +1,12 @@
 import { enumerateClues } from '@ajhyndman/puz';
-import { useOutletContext } from '@remix-run/react';
-
-import { OutletContext } from '~/routes/$id';
-import { useExecute, useSelector } from '~/store/isomorphic';
-import Clue from '~/components/Clue';
-import Title from '~/components/Title';
-import styles from './ClueList.module.css';
-import { getActiveClues } from '~/util/getActiveClues';
 import { memo, useCallback } from 'react';
 
+import { useExecute, useSelector } from '~/store/isomorphic';
+import Clue from '~/components/Clue';
+import styles from './ClueList.module.css';
+import { getActiveClues } from '~/util/getActiveClues';
+
 export default memo(function ClueList() {
-  const { userId } = useOutletContext<OutletContext>();
   const execute = useExecute();
   const solution = useSelector(({ remote }) => remote.puzzle!.solution)!;
   const clues = useSelector(({ remote }) => remote.puzzle!.clues)!;
