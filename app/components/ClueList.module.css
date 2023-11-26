@@ -11,9 +11,16 @@
   margin-top: 0;
 }
 
-.list {
-  /* columns: 14rem auto; */
-
+.button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: block;
+  appearance: none;
+  width: 100%;
+  text-align: left;
+  padding: 0;
 }
 
 .listItem {

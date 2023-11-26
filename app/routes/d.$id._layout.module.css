@@ -49,6 +49,8 @@
 }
 
 .outlet {
+  min-height: 0;
   overflow: auto;
   width: 27rem;
+  position: relative;
 }

@@ -34,7 +34,7 @@ export default memo(function ClueCarousel() {
         <span className="material-icons">arrow_left</span>
       </button>
       <div className={styles.center}>
-        <Clue isActive content={clue.clue} index={clue.number} />
+        <Clue state="primary" content={clue.clue} index={clue.number} />
       </div>
       <button
         className={styles.button}

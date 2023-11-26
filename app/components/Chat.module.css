@@ -1,0 +1,31 @@
+.container {
+  padding: calc(var(--gutter) * 2) calc(var(--gutter) * 2) 0;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  overflow: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translate(0, 0);
+}
+
+.anchor {
+  overflow-anchor: auto;
+  height: 5rem;
+  /* also serves as a spacer for the fixed chat input pane */
+  flex-shrink: 0;
+}
+
+.appBar {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  background: var(--athens-gray);
+  box-sizing: border-box;
+  display: flex;
+  margin: 0 auto;
+  max-width: var(--content-width);
+  padding: calc(var(--gutter) * 2) 0 calc(var(--gutter) * 2) calc(var(--gutter) * 2);
+}

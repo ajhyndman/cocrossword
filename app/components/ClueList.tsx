@@ -6,34 +6,66 @@ import { useExecute, useSelector } from '~/store/isomorphic';
 import Clue from '~/components/Clue';
 import Title from '~/components/Title';
 import styles from './ClueList.module.css';
+import { getActiveClues } from '~/util/getActiveClues';
+import { memo, useCallback } from 'react';
 
-export default function ClueList() {
+export default memo(function ClueList() {
   const { userId } = useOutletContext<OutletContext>();
   const execute = useExecute();
-  const puzzle = useSelector(({ remote }) => remote.puzzle)!;
+  const solution = useSelector(({ remote }) => remote.puzzle!.solution)!;
+  const clues = useSelector(({ remote }) => remote.puzzle!.clues)!;
+  const width = useSelector(({ remote }) => remote.puzzle!.width)!;
   const selection = useSelector(({ local }) => local);
 
-  const clues = enumerateClues(puzzle!);
+  const numberedClues = enumerateClues({ solution, width, clues });
   // const clue = clues[selection.direction === 'row' ? 'across' : 'down'].find(
   //   (clue) => clue.number === primaryClue,
   // );
+  const [primaryClue, secondaryClue] = getActiveClues({ solution, width }, selection);
+
+  const handleClick = useCallback(
+    (direction: 'ACROSS' | 'DOWN', number: number) => () => {
+      execute({ type: 'SELECT_CLUE', payload: { number, direction } });
+    },
+    [execute],
+  );
 
   return (
     <>
       {/* <ul className={styles.list}> */}
       <h3 className={styles.title}>ACROSS</h3>
-      {clues.across.map((clue) => (
-        <li key={clue.number} className={styles.listItem}>
-          <Clue index={clue.number} content={clue.clue} />
-        </li>
-      ))}
+      {numberedClues.across.map((clue) => {
+        const state =
+          selection.direction === 'row' && clue.number === primaryClue
+            ? 'primary'
+            : selection.direction === 'column' && clue.number === secondaryClue
+              ? 'secondary'
+              : undefined;
+        return (
+          <li key={clue.number} className={styles.listItem}>
+            <button className={styles.button} onClick={handleClick('ACROSS', clue.number)}>
+              <Clue index={clue.number} content={clue.clue} state={state} />
+            </button>
+          </li>
+        );
+      })}
       <h3 className={styles.title}>DOWN</h3>
-      {clues.down.map((clue) => (
-        <li key={clue.number} className={styles.listItem}>
-          <Clue index={clue.number} content={clue.clue} />
-        </li>
-      ))}
+      {numberedClues.down.map((clue) => {
+        const state =
+          selection.direction === 'column' && clue.number === primaryClue
+            ? 'primary'
+            : selection.direction === 'row' && clue.number === secondaryClue
+              ? 'secondary'
+              : undefined;
+        return (
+          <li key={clue.number} className={styles.listItem}>
+            <button className={styles.button} onClick={handleClick('DOWN', clue.number)}>
+              <Clue index={clue.number} content={clue.clue} state={state} />
+            </button>
+          </li>
+        );
+      })}
       {/* </ul> */}
     </>
   );
-}
+});

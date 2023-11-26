@@ -19,6 +19,7 @@ export type Command =
     }
   | { type: 'PREVIOUS_CLUE'; payload: { userId: string } }
   | { type: 'NEXT_CLUE'; payload: { userId: string } }
+  | { type: 'SELECT_CLUE'; payload: { direction: 'ACROSS' | 'DOWN'; number: number } }
   | LocalEvent
   | RemoteEvent;
 
@@ -152,6 +153,22 @@ export const executor: Executor<
       const index = numbering.findIndex((number) => number === nextClue);
       dispatchLocal({ type: 'SELECT', payload: { index } });
       dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
+      break;
+    }
+
+    case 'SELECT_CLUE': {
+      if (!remote.puzzle) break;
+      const { direction, number } = command.payload;
+      const numbering = gridNumbering(remote.puzzle);
+      const index = numbering.indexOf(number);
+      if (index === -1) break;
+      dispatchLocal({ type: 'SELECT', payload: { index } });
+      if (
+        (local.direction === 'column' && direction === 'ACROSS') ||
+        (local.direction === 'row' && direction === 'DOWN')
+      ) {
+        dispatchLocal({ type: 'ROTATE_SELECTION' });
+      }
       break;
     }
 

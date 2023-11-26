@@ -17,7 +17,11 @@
   position: relative;
 }
 
-.listItem.active {
+.primary {
   background: var(--san-juan);
   color: var(--white);
+}
+
+.secondary {
+  background: var(--mystic);
 }

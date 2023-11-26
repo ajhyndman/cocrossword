@@ -1,4 +1,4 @@
-import { Outlet } from '@remix-run/react';
+import { Outlet, useOutletContext } from '@remix-run/react';
 import { useMemo } from 'react';
 
 import NavigationRail from '~/components/NavigationRail';
@@ -15,6 +15,7 @@ const CELL_WIDTH = 32 + 1;
 const OUTLET_WIDTH = 27 * 16;
 
 export default function View() {
+  const context = useOutletContext();
   const puzzle = useSelector(({ remote }) => remote.puzzle);
 
   // guess how tall <main> needs to be to fit all clues within client width
@@ -70,7 +71,7 @@ export default function View() {
               <PuzzleGrid />
             </div>
             <aside className={styles.outlet}>
-              <Outlet />
+              <Outlet context={context} />
             </aside>
           </div>
           <ClueList />
