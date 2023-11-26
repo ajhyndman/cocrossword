@@ -1,0 +1,8 @@
+.container {
+  position: fixed;
+  width: 5rem;
+  top: 0;
+  bottom: 0;
+  background-color: var(--mystic);
+  z-index: 2;
+}
