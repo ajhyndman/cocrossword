@@ -7,7 +7,11 @@ type Props = {
   children: ReactNode;
 };
 
-export default function Title({ tag = 'h1', children }: Props) {
+export default function Title({ tag = 'h1', children, ...other }: Props) {
   const Element = tag;
-  return <Element className={styles.title}>{children}</Element>;
+  return (
+    <Element {...other} className={styles.title}>
+      {children}
+    </Element>
+  );
 }
