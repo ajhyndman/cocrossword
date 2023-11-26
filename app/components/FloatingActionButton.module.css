@@ -22,6 +22,15 @@
   background: var(--botticelli);
 }
 
+.button.primary {
+  background: var(--san-juan);
+  color: var(--white);
+}
+
+.button.secondary {
+  background: var(--casper);
+}
+
 .button.transparent {
   background-color: rgba(223, 226, 232, 0.75);
 }

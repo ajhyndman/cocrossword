@@ -8,6 +8,7 @@ type Props = {
   onBlur?: () => void;
   onClick?: () => void;
   size?: 'small' | 'normal' | 'large';
+  style?: 'primary' | 'secondary' | 'default';
   transparent?: boolean;
 };
 
@@ -17,6 +18,7 @@ export default function FloatingActionButton({
   onBlur,
   onClick,
   size,
+  style,
   transparent,
 }: Props) {
   return (
@@ -26,6 +28,8 @@ export default function FloatingActionButton({
         [styles.small]: size === 'small',
         [styles.large]: size === 'large',
         [styles.transparent]: transparent,
+        [styles.primary]: style === 'primary',
+        [styles.secondary]: style === 'secondary',
       })}
       onBlur={onBlur}
       onClick={onClick}
