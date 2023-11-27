@@ -98,7 +98,7 @@ export default function PuzzleGrid() {
         });
         const state =
           selection.index === i
-            ? 'focus'
+            ? 'selected'
             : activeClues?.[0] === clueForCell
               ? 'secondary'
               : isCorrect

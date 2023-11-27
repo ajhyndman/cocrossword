@@ -1,6 +1,6 @@
 import { SquareMarkup } from '@ajhyndman/puz';
 import { useOutletContext } from '@remix-run/react';
-import { memo, useLayoutEffect, useRef } from 'react';
+import { memo, useLayoutEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 
 import styles from './PuzzleCell.module.css';
@@ -13,7 +13,7 @@ type Props = {
   index: number;
   number?: number;
   selections?: { color: string; name: string }[];
-  state?: 'focus' | 'secondary' | 'solved';
+  state?: 'selected' | 'secondary' | 'solved';
   markup?: SquareMarkup;
 };
 
@@ -26,6 +26,7 @@ export default memo(function PuzzleCell({
   markup,
 }: Props) {
   const { userId } = useOutletContext<OutletContext>();
+  const [isFocused, setIsFocused] = useState(false);
   const execute = useExecute();
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
@@ -38,13 +39,17 @@ export default memo(function PuzzleCell({
       execute({ type: 'DELETE', payload: { index, userId, backspace: event.key === 'Backspace' } });
     }
   };
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
   const handleClick = (event: React.MouseEvent) => {
     // if element is already selected, "focus" event won't be triggered
-    if (state === 'focus' && event.target === labelRef.current) {
+    if (state === 'selected' && event.target === labelRef.current) {
       execute({ type: 'ROTATE_SELECTION' });
     }
   };
   const handleFocus = () => {
+    setIsFocused(true);
     execute({ type: 'FOCUS', payload: { userId, index } });
   };
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +61,7 @@ export default memo(function PuzzleCell({
   };
 
   useLayoutEffect(() => {
-    if (state === 'focus') {
+    if (state === 'selected') {
       inputRef.current?.focus();
     }
   }, [state]);
@@ -66,7 +71,8 @@ export default memo(function PuzzleCell({
       ref={labelRef}
       onClick={handleClick}
       className={cx(styles.cell, {
-        [styles.focus]: state === 'focus',
+        [styles.selected]: state === 'selected',
+        [styles.focus]: isFocused,
         [styles.active]: state === 'secondary',
         [styles.solved]: state === 'solved',
         [styles.black]: isBlackCell,
@@ -109,6 +115,7 @@ export default memo(function PuzzleCell({
           onKeyDown={handleKeyDown}
           onInput={handleInput}
           onFocus={handleFocus}
+          onBlur={handleBlur}
           value=""
           type="search"
         ></input>

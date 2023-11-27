@@ -12,7 +12,7 @@
   bottom: 0px;
   display: block;
   width: 100%;
-  font-family: "Architects Daughter";
+  font-family: 'Architects Daughter';
   font-size: 1.325rem;
   position: absolute;
   text-align: center;
@@ -82,6 +82,14 @@
   text-decoration: underline;
 }
 
+.selected {
+  background: var(--casper);
+}
+
+.pencil.selected .content {
+  color: var(--bermuda-gray);
+}
+
 .focus {
   background: var(--fountain-blue);
 }
@@ -94,11 +102,15 @@
 }
 
 .pencil.focus .content {
-  color: var(--botticelli)
+  color: var(--mystic);
 }
 
 .active {
   background: var(--mystic);
+}
+
+.active.pencil .content {
+  color: var(--bermuda-gray);
 }
 
 .solved {
