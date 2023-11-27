@@ -14,9 +14,6 @@ export default memo(function ClueList() {
   const selection = useSelector(({ local }) => local);
 
   const numberedClues = enumerateClues({ solution, width, clues });
-  // const clue = clues[selection.direction === 'row' ? 'across' : 'down'].find(
-  //   (clue) => clue.number === primaryClue,
-  // );
   const [primaryClue, secondaryClue] = getActiveClues({ solution, width }, selection);
 
   const handleClick = useCallback(
@@ -28,7 +25,6 @@ export default memo(function ClueList() {
 
   return (
     <>
-      {/* <ul className={styles.list}> */}
       <h3 className={styles.title}>ACROSS</h3>
       {numberedClues.across.map((clue) => {
         const state =
@@ -61,7 +57,6 @@ export default memo(function ClueList() {
           </li>
         );
       })}
-      {/* </ul> */}
     </>
   );
 });
