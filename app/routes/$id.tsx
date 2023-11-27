@@ -76,7 +76,7 @@ export default function View() {
         <Outlet context={{ id, userId, bottomSheet, zoom }} />
         <div className={styles.bottomSheet}>
           <div className={styles.bottomSheetPortal} ref={bottomSheet} />
-          <NavigationTabs />
+          <NavigationTabs id={id} userId={userId} />
         </div>
         <div className={styles.fixed} />
       </div>
