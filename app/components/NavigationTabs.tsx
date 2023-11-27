@@ -1,14 +1,12 @@
+import { useOutletContext } from '@remix-run/react';
 import { useMemo } from 'react';
 
-import Tabs from './Tabs';
+import { OutletContext } from '~/routes/$id';
 import { useSelector } from '~/store/isomorphic';
+import Tabs from './Tabs';
 
-type Props = {
-  id: string;
-  userId: string;
-};
-
-export default function NavigationTabs({ id, userId }: Props) {
+export default function NavigationTabs() {
+  const { id, userId } = useOutletContext<OutletContext>();
   const readReceipts = useSelector(({ remote }) => remote.readReceipts);
   const messages = useSelector(({ remote }) => remote.messages);
 
