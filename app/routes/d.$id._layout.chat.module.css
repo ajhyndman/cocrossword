@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  height: 100dvh;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
+}
+
+.info {
+  padding: calc(var(--gutter) * 2) 0;
+}
+
+.sidebar {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 20rem;
+  background: var(--athens-gray);
+  padding: var(--gutter) calc(var(--gutter) * 2);
+  overflow: auto;
+}
+
+.section {
+  margin-top: calc(var(--gutter) * 3);
+}

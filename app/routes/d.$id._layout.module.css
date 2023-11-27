@@ -1,35 +1,4 @@
 .container {
   /* make space for navigation rail */
   margin-left: 5rem;
-  padding: calc(var(--gutter) * 3) calc(var(--gutter) * 4);
-}
-
-.header {
-  margin-bottom: calc(var(--gutter) * 3)
-}
-
-.byline {
-  margin-top: var(--gutter);
-}
-
-.main {
-  writing-mode: vertical-lr;
-  text-wrap: balance;
-}
-
-.main > * {
-  writing-mode: horizontal-tb;
-}
-
-.float {
-  background-color: var(--athens-gray);
-  display: flex;
-  float: left;
-  margin-bottom: calc(var(--gutter) * 2);
-}
-
-.outlet {
-  min-height: 0;
-  width: 27rem;
-  position: relative;
 }

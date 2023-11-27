@@ -1,5 +1,5 @@
 import { useOutletContext } from '@remix-run/react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import ChatInput from '~/components/ChatInput';
 import ChatMessage from '~/components/ChatMessage';
@@ -7,13 +7,20 @@ import IconButton from '~/components/IconButton';
 import { useExecute, useSelector } from '~/store/isomorphic';
 import { OutletContext } from '~/routes/$id';
 import styles from './Chat.module.css';
+import { usePrevious } from '~/util/usePrevious';
 
 export default function Chat() {
   const { userId } = useOutletContext<OutletContext>();
+  const scrollingContainer = useRef<HTMLDivElement>(null);
+
+  const [value, setValue] = useState<string>('');
   const users = useSelector(({ remote }) => remote.users);
   const messages = useSelector(({ remote }) => remote.messages);
   const execute = useExecute();
-  const [value, setValue] = useState<string>('');
+
+  const scrollToBottom = () => {
+    scrollingContainer.current?.scroll({ top: scrollingContainer.current.scrollHeight });
+  };
 
   const submitMessage = useCallback(() => {
     if (!value) return;
@@ -45,9 +52,30 @@ export default function Chat() {
     [submitMessage],
   );
 
+  // on load, scroll chat window to bottom
+  useLayoutEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  const previousMessageLength = usePrevious(messages.length);
+
+  useLayoutEffect(() => {
+    if (
+      // if messages just loaded for the first time, or
+      (previousMessageLength === 0 && messages.length !== 0) ||
+      // if overflow-anchor not supported
+      !CSS.supports('overflow-anchor', 'none')
+    ) {
+      // programmatically scroll to bottom
+      scrollToBottom();
+    }
+  }, [previousMessageLength, messages.length]);
+
+  if (!user) return null;
+
   return (
     <>
-      <div className={styles.container}>
+      <div className={styles.container} ref={scrollingContainer}>
         {messages.map((message, i) => {
           const user = users[message.author];
           return (
