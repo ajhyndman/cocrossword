@@ -46,18 +46,6 @@
   align-items: center;
 }
 
-.keys {
-  text-align: right;
-}
-
-.keycap {
-  font-size: 0.875rem;
-  display: inline-block;
-  padding: 0.25rem 0.325rem;
-  background: var(--mystic);
-  line-height: 1;
-}
-
 .buttonGroup {
   display: flex;
 }
