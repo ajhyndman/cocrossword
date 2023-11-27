@@ -29,7 +29,7 @@ export default function View() {
 
   return (
     <Provider KEY={id!}>
-      <Outlet context={{ userId, zoom }} />
+      <Outlet context={{ id, userId, zoom }} />
     </Provider>
   );
 }

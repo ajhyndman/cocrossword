@@ -10,6 +10,7 @@ import { login } from '~/util/login.server';
 import styles from './$id.module.css';
 
 export type OutletContext = {
+  id: string;
   bottomSheet: RefObject<HTMLDivElement>;
   userId: string;
   zoom: number;
@@ -72,7 +73,7 @@ export default function View() {
         className={classNames(styles.container, { [styles.isPuzzle]: isPuzzle })}
         ref={container}
       >
-        <Outlet context={{ userId, bottomSheet, zoom }} />
+        <Outlet context={{ id, userId, bottomSheet, zoom }} />
         <div className={styles.bottomSheet}>
           <div className={styles.bottomSheetPortal} ref={bottomSheet} />
           <NavigationTabs userId={userId} id={id!} />
