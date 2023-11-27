@@ -1,5 +1,6 @@
 import { Link, useMatches, useOutletContext } from '@remix-run/react';
 import classNames from 'classnames';
+import { useMemo } from 'react';
 
 import { useExecute, useSelector } from '~/store/isomorphic';
 import FloatingActionButton from './FloatingActionButton';
@@ -10,16 +11,19 @@ function NavButton({
   active,
   icon,
   label,
+  notify,
   to,
 }: {
   active?: boolean;
   icon: string;
   label: string;
+  notify?: boolean;
   to: string;
 }) {
   return (
     <Link className={styles.button} to={to}>
       <div className={classNames(styles.highlight, { [styles.active]: active })}>
+        {notify && <div className={styles.badge} />}
         <span className={classNames('material-icons', styles.icon)}>{icon}</span>
       </div>
       <span>{label}</span>
@@ -28,12 +32,18 @@ function NavButton({
 }
 
 export default function NavigationRail() {
-  const { id } = useOutletContext<OutletContext>();
+  const { id, userId } = useOutletContext<OutletContext>();
   const matches = useMatches();
   const { index, isPencil } = useSelector(({ local }) => local);
   const execute = useExecute();
 
-  console.log(matches);
+  const readReceipts = useSelector(({ remote }) => remote.readReceipts);
+  const messages = useSelector(({ remote }) => remote.messages);
+
+  const userReadReceipts = readReceipts[userId];
+  const hasUnreadMessages = useMemo(() => {
+    return messages.length > (userReadReceipts ?? 0);
+  }, [userReadReceipts, messages.length]);
 
   const checkSolution = () => {
     execute({ type: 'CHECK_PUZZLE' });
@@ -95,11 +105,9 @@ export default function NavigationRail() {
         active={matches.some((match) => match.id === 'routes/d.$id._layout.chat')}
         icon="chat"
         label="Chat"
+        notify={hasUnreadMessages}
         to={`/d/${id}/chat`}
       />
-
-      {/* <IconButton name="window" />
-      <IconButton name="chat" /> */}
     </div>
   );
 }
