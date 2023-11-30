@@ -2,12 +2,14 @@ import { ActionFunctionArgs } from '@remix-run/node';
 import { Form, useOutletContext } from '@remix-run/react';
 
 import Title from '~/components/Title';
-import { useSelector } from '~/store/isomorphic';
-import styles from './$id.info.module.css';
+import AppInfo from '~/components/AppInfo';
 import IconButton from '~/components/IconButton';
 import { commitSession, getSession } from '~/sessions.server';
-import { OutletContext } from './$id';
-import AppInfo from '~/components/AppInfo';
+import { useSelector } from '~/store/isomorphic';
+import githubIcon from '~/mark-github-16.svg';
+import kofiIcon from '~/ko-fi.svg';
+import type { OutletContext } from './$id';
+import styles from './$id.info.module.css';
 
 export async function action({ request }: ActionFunctionArgs) {
   const data = await request.formData();
@@ -62,17 +64,30 @@ export default function View() {
         </ul>
       </div>
       <div className={styles.section}>
-        <Title>Support</Title>
-        <p>If you enjoy this website, please consider leaving a tip. </p>
+        <Title>About</Title>
         <p>
-          <a href="https://ko-fi.com/C0C2RO28J" target="_blank" rel="noreferrer">
-            <img
-              height="36"
-              style={{ border: 0, height: 36 }}
-              src="https://storage.ko-fi.com/cdn/brandasset/kofi_button_stroke.png"
-              alt="Buy Me a Coffee at ko-fi.com"
-            />
+          View this project on{' '}
+          <a
+            className={styles.link}
+            href="https://github.com/ajhyndman/crossword-app/issues/1"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub <img className={styles.icon} src={githubIcon} alt="github icon" />
           </a>
+          .
+        </p>
+        <p>
+          If you enjoy this website, please consider{' '}
+          <a
+            className={styles.link}
+            href="https://ko-fi.com/C0C2RO28J"
+            target="_blank"
+            rel="noreferrer"
+          >
+            leaving a tip <img className={styles.icon} src={kofiIcon} alt="" />
+          </a>
+          .
         </p>
       </div>
     </div>
