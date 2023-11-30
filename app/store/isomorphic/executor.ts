@@ -166,7 +166,6 @@ export const executor: Executor<
     case 'ROTATE_SELECTION':
     case 'SELECT':
     case 'TOGGLE_PENCIL':
-    case 'TOGGLE_TOOLBAR':
       dispatchLocal(command);
       break;
 

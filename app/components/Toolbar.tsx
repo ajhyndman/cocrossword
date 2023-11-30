@@ -3,7 +3,7 @@ import FloatingActionButton from './FloatingActionButton';
 import styles from './Toolbar.module.css';
 
 export default function Toolbar() {
-  const { index, isPencil, isToolbarExpanded } = useSelector(({ local }) => local);
+  const { index, isPencil } = useSelector(({ local }) => local);
   const execute = useExecute();
 
   const checkSolution = () => {
@@ -24,46 +24,32 @@ export default function Toolbar() {
     }
   };
 
-  const handleToggleToolbar = () => {
-    execute({ type: 'TOGGLE_TOOLBAR' });
-  };
-
   return (
     <div className={styles.container}>
       <FloatingActionButton
-        label="Close"
-        onClick={handleToggleToolbar}
-        name={isToolbarExpanded ? 'close' : 'more_horiz'}
-        transparent
+        label="Toggle pencil mode"
+        name={isPencil ? 'edit_off' : 'edit'}
+        onClick={handleTogglePencil}
+        style="secondary"
       />
-      {isToolbarExpanded && (
-        <>
-          <FloatingActionButton
-            label="Toggle pencil mode"
-            name={isPencil ? 'edit_off' : 'edit'}
-            size="small"
-            onClick={handleTogglePencil}
-          />
-          <FloatingActionButton
-            label="Star/Unstar square"
-            name="star"
-            size="small"
-            onClick={handleToggleRebus}
-          />
-          <FloatingActionButton
-            label="Check puzzle"
-            name="check_box"
-            size="small"
-            onClick={checkSolution}
-          />
-          <FloatingActionButton
-            label="Download puzzle"
-            name="download"
-            size="small"
-            onClick={handleDownload}
-          />
-        </>
-      )}
+      <FloatingActionButton
+        label="Star/Unstar square"
+        name="star"
+        size="small"
+        onClick={handleToggleRebus}
+      />
+      <FloatingActionButton
+        label="Check puzzle"
+        name="check_box"
+        size="small"
+        onClick={checkSolution}
+      />
+      <FloatingActionButton
+        label="Download puzzle"
+        name="download"
+        size="small"
+        onClick={handleDownload}
+      />
     </div>
   );
 }

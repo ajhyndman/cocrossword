@@ -13,8 +13,7 @@ export type Selection = {
 export type SelectionAction =
   | { type: 'SELECT'; payload: { index: number } }
   | { type: 'ROTATE_SELECTION'; payload?: undefined }
-  | { type: 'TOGGLE_PENCIL'; payload?: undefined }
-  | { type: 'TOGGLE_TOOLBAR'; payload?: undefined };
+  | { type: 'TOGGLE_PENCIL'; payload?: undefined };
 
 export const DEFAULT_SELECTION: Selection = { direction: 'row' };
 
@@ -33,10 +32,6 @@ export const reducer = (state: Selection, { type, payload }: SelectionAction) =>
 
     case 'TOGGLE_PENCIL': {
       return { ...state, isPencil: !state.isPencil };
-    }
-
-    case 'TOGGLE_TOOLBAR': {
-      return { ...state, isToolbarExpanded: !state.isToolbarExpanded };
     }
 
     default:
