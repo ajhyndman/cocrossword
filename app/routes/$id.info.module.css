@@ -23,6 +23,10 @@
   margin-bottom: calc(var(--gutter) * 3);
 }
 
+.section p {
+  margin-bottom: calc(var(--gutter));
+}
+
 .puzzleInfo {
   line-height: 1.5;
 }

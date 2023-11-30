@@ -101,6 +101,20 @@ export default function View() {
           </li>
         </ul>
       </div>
+      <div className={styles.section}>
+        <Title>Support</Title>
+        <p>If you enjoy this website, please consider leaving a tip. </p>
+        <p>
+          <a href="https://ko-fi.com/C0C2RO28J" target="_blank" rel="noreferrer">
+            <img
+              height="36"
+              style={{ border: 0, height: 36 }}
+              src="https://storage.ko-fi.com/cdn/brandasset/kofi_button_stroke.png"
+              alt="Buy Me a Coffee at ko-fi.com"
+            />
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

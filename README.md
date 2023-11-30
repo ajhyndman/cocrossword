@@ -1,5 +1,7 @@
 # Crosswords
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C2RO28J)
+
 This project implements an **online, collaborative crossword solving** application.
 
 Bring your own crossword puzzle (in .puz format) and solve with friends, family or coworkers!
