@@ -119,6 +119,7 @@
 
 .black {
   background: var(--black-pearl);
+  cursor: inherit;
 }
 
 .superscript {
