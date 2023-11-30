@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
-"@ajhyndman/puz@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@ajhyndman/puz/-/puz-0.3.0.tgz#29546504f80606288602c90f290b2aeee4a792be"
-  integrity sha512-X38TMOYskKTbZUq9rPFXY7kGsq09RSva3pxLozB1lJLp1wiPHt2xpeTvwIR9LccwkXFCyRoZi9aOSQbERZp1AA==
+"@ajhyndman/puz@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@ajhyndman/puz/-/puz-0.4.0.tgz#8c9c5bb375117796820772914242196579511737"
+  integrity sha512-aPn7srVTJcN9iSB5UPkYMOYPbnVrIqV6FPCwHTgzT+feqAh0eTjvrqBL4gVtNtIyCJ7iNpQZV966ypZiRpblyQ==
   dependencies:
     ts-invariant "0.8.2"
   optionalDependencies:

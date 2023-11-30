@@ -24,7 +24,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@ajhyndman/puz": "^0.3.0",
+    "@ajhyndman/puz": "^0.4.0",
     "@remix-pwa/cache": "^2.0.12",
     "@remix-pwa/strategy": "^2.1.9",
     "@remix-pwa/sw": "^2.1.12",

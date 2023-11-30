@@ -55,7 +55,7 @@ export const reducer = (state: State, { type, payload }: Action) => {
       markupGrid.length = state.puzzle.state.length;
       markupGrid[payload.index] = {
         ...markupGrid[payload.index],
-        unknown_08: payload.isPencil,
+        penciled: payload.isPencil,
       };
       // clear any previous checked state
       delete markupGrid[payload.index].incorrect;

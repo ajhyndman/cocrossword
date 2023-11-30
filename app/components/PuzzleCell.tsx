@@ -73,7 +73,7 @@ export default memo(function PuzzleCell({
         [styles.circled]: markup?.circled,
         [styles.incorrect]: markup?.incorrect,
         [styles.revealed]: markup?.revealed,
-        [styles.pencil]: markup?.unknown_08,
+        [styles.pencil]: markup?.penciled,
         [styles.starred]: markup?.unknown_04,
       })}
     >
