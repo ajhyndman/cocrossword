@@ -31,3 +31,13 @@
 .section p {
   margin: var(--gutter) 0;
 }
+
+.link {
+  text-decoration: underline;
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: text-top;
+  height: 1.125rem;
+}

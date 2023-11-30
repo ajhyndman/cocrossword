@@ -2,6 +2,8 @@ import AppInfo from '~/components/AppInfo';
 import Chat from '~/components/Chat';
 import Participants from '~/components/Participants';
 import Title from '~/components/Title';
+import githubIcon from '~/mark-github-16.svg';
+import kofiIcon from '~/ko-fi.svg';
 import styles from './d.$id._layout.chat.module.css';
 
 export default function View() {
@@ -22,17 +24,30 @@ export default function View() {
           </div>
         </section>
         <section className={styles.section}>
-          <Title tag="h3">SUPPORT</Title>
-          <p>If you enjoy this website, please consider leaving a tip. </p>
+          <Title tag="h3">ABOUT</Title>
           <p>
-            <a href="https://ko-fi.com/C0C2RO28J" target="_blank" rel="noreferrer">
-              <img
-                height="36"
-                style={{ border: 0, height: 36 }}
-                src="https://storage.ko-fi.com/cdn/brandasset/kofi_button_stroke.png"
-                alt="Buy Me a Coffee at ko-fi.com"
-              />
+            View this project on{' '}
+            <a
+              className={styles.link}
+              href="https://github.com/ajhyndman/crossword-app/issues/1"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub <img className={styles.icon} src={githubIcon} alt="github icon" />
             </a>
+            .
+          </p>
+          <p>
+            If you enjoy this website, please consider{' '}
+            <a
+              className={styles.link}
+              href="https://ko-fi.com/C0C2RO28J"
+              target="_blank"
+              rel="noreferrer"
+            >
+              leaving a tip <img className={styles.icon} src={kofiIcon} alt="" />
+            </a>
+            .
           </p>
         </section>
       </div>
