@@ -44,7 +44,7 @@ export default memo(function PuzzleCell({
   };
   const handleClick = (event: React.MouseEvent) => {
     // if element is already selected, "focus" event won't be triggered
-    if (state === 'selected' && event.target === labelRef.current) {
+    if (isFocused && event.target === labelRef.current) {
       execute({ type: 'ROTATE_SELECTION' });
     }
   };
@@ -59,6 +59,10 @@ export default memo(function PuzzleCell({
 
     execute({ type: 'INPUT', payload: { userId, index, value } });
   };
+  const handleMouseDown = (event: React.MouseEvent) => {
+    // prevent mousedown from immediately stealing focus
+    event.preventDefault();
+  };
 
   useLayoutEffect(() => {
     if (state === 'selected') {
@@ -70,6 +74,7 @@ export default memo(function PuzzleCell({
     <label
       ref={labelRef}
       onClick={handleClick}
+      onMouseDown={handleMouseDown}
       className={cx(styles.cell, {
         [styles.selected]: state === 'selected',
         [styles.focus]: isFocused,
@@ -112,10 +117,10 @@ export default memo(function PuzzleCell({
           role="textbox"
           ref={inputRef}
           className={styles.input}
-          onKeyDown={handleKeyDown}
-          onInput={handleInput}
-          onFocus={handleFocus}
           onBlur={handleBlur}
+          onFocus={handleFocus}
+          onInput={handleInput}
+          onKeyDown={handleKeyDown}
           value=""
           type="search"
         ></input>
