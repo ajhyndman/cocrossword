@@ -1,15 +1,32 @@
-.caption {
-  color: var(--san-juan);
-  font-size: 1.75rem;
-  line-height: 1.5;
-  text-align: center;
-  margin: calc(var(--gutter) * 4);
-}
-
 .container {
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   justify-content: center;
+  line-height: 1.5;
+  box-sizing: border-box;
+  padding: calc(var(--gutter) * 2);
+}
+
+.dropzone {
+  margin: calc(var(--gutter) * 8) 0 calc(var(--gutter) * 4);
+}
+
+.title {
+  font-size: 3.25rem;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 1.375rem;
+  font-family: 'Architects Daughter';
+}
+
+.caption {
+  /* color: var(--san-juan); */
+  /* font-family: 'Architects Daughter'; */
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0 calc(var(--gutter) * 2);
 }

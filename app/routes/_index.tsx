@@ -64,13 +64,18 @@ export default function View() {
       onDrop={handleDrop}
     >
       <div className={styles.container}>
-        <DropZone onChange={handleUpload} />
+        <h1 className={styles.title}>co-crossword</h1>
+        <p className={styles.subtitle}>don&apos;t puzzle alone!</p>
+        <div className={styles.dropzone}>
+          <DropZone onChange={handleUpload} />
+        </div>
         <input name="key" type="hidden" value={gameId} />
         <input name="type" type="hidden" value="NEW_PUZZLE" />
         <input name="payload" type="hidden" ref={valueRef} />
         <input name="client" type="hidden" value={CLIENT_ID} />
         <input name="index" type="hidden" value={0} />
-        <p className={styles.caption}>Upload a .puz file to start a new game</p>
+        {/* <p className={styles.caption}>Don&apos;t puzzle alone!</p> */}
+        <p className={styles.caption}>Upload a .puz file to get started</p>
       </div>
     </Form>
   );
