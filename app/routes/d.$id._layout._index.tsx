@@ -7,7 +7,7 @@ import PuzzleGrid from '~/components/PuzzleGrid';
 import ClueList from '~/components/ClueList';
 
 const DOCUMENT_GUTTER_SIZE = (5 + 3) * 16; // navigation rail + padding
-const CLUE_HEIGHT = 38;
+const CLUE_HEIGHT = 39;
 const CLUE_WIDTH = 16 * 16;
 const CELL_WIDTH = 32 + 1;
 const HEADER_HEIGHT = 80 + 48;
