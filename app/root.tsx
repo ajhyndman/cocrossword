@@ -33,7 +33,13 @@ export function loader({ request }: LoaderFunctionArgs) {
 }
 
 export function meta() {
-  return [{ title: 'co-crossword' }];
+  return [
+    { title: 'co-crossword' },
+    {
+      name: 'description',
+      content: "Don't puzzle alone! Solve crosswords online with friends.",
+    },
+  ];
 }
 
 export default function App() {
