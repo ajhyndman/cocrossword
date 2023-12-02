@@ -89,12 +89,10 @@ export default memo(function PuzzleCell({
       })}
     >
       {number && <span className={styles.number}>{number}</span>}
-      {cellContent && (
-        <span className={styles.content} aria-hidden>
-          {cellContent.toLocaleUpperCase()}
-          {markup?.unknown_04 && <sup className={styles.superscript}>*</sup>}
-        </span>
-      )}
+      <span className={styles.content}>
+        {cellContent && cellContent.toLocaleUpperCase()}
+        {markup?.unknown_04 && <sup className={styles.superscript}>*</sup>}
+      </span>
       {selections && (
         <div className={styles.cursors}>
           {selections.map(({ color, name }) => (
