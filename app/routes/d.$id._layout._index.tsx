@@ -10,6 +10,7 @@ const DOCUMENT_GUTTER_SIZE = (5 + 3) * 16; // navigation rail + padding
 const CLUE_HEIGHT = 38;
 const CLUE_WIDTH = 16 * 16;
 const CELL_WIDTH = 32 + 1;
+const HEADER_HEIGHT = 80 + 48;
 
 export default function View() {
   const puzzle = useSelector(({ remote }) => remote.puzzle);
@@ -49,7 +50,12 @@ export default function View() {
           </cite>
         </p>
       </header>
-      <main className={styles.main} style={{ height }}>
+      <main
+        className={styles.main}
+        style={{
+          height: height ? Math.max(height, window.innerHeight - HEADER_HEIGHT) : undefined,
+        }}
+      >
         <div className={styles.float}>
           <div>
             <PuzzleGrid />
