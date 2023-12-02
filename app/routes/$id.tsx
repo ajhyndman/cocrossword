@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, redirect } from '@remix-run/node';
+import { LoaderFunctionArgs, MetaArgs, json, redirect } from '@remix-run/node';
 import { Outlet, useLoaderData, useMatches, useParams } from '@remix-run/react';
 import classNames from 'classnames';
 import { type RefObject, useRef, useLayoutEffect } from 'react';
@@ -26,9 +26,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   // if puzzle hasn't been initialized, redirect to home
   const { getState } = await loadStore(params.id);
-  if (!getState().puzzle) return redirect('/');
+  const state = getState();
+  if (!state.puzzle) return redirect('/');
 
-  return login(request, params.id!);
+  const { userId, zoom, headers } = await login(request, params.id!);
+  return json({ userId, zoom, title: state.puzzle?.title }, { headers });
+}
+
+export function meta({ data }: MetaArgs<typeof loader>) {
+  return [{ title: `co-crossword — ${data?.title}` }];
 }
 
 export default function View() {
@@ -76,7 +82,7 @@ export default function View() {
         <Outlet context={{ id, userId, bottomSheet, zoom }} />
         <div className={styles.bottomSheet}>
           <div className={styles.bottomSheetPortal} ref={bottomSheet} />
-          <NavigationTabs id={id} userId={userId} />
+          <NavigationTabs id={id!} userId={userId} />
         </div>
         <div className={styles.fixed} />
       </div>

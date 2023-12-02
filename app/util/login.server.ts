@@ -1,7 +1,6 @@
 import isbot from 'isbot';
 import { UAParser } from 'ua-parser-js';
 import { v4 } from 'uuid';
-import { json } from '@remix-run/node';
 
 import { commitSession, getSession } from '~/sessions.server';
 import type { DeviceType } from '~/store/remote/users';
@@ -46,5 +45,5 @@ export async function login(request: Request, id: string) {
     dispatch({ type: 'USER_JOINED', payload: { id: userId, name, deviceType } });
   }
 
-  return json({ userId, zoom }, { headers });
+  return { userId, zoom, headers };
 }
