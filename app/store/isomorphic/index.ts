@@ -25,14 +25,12 @@ const flushToServer = (events: [string, RemoteEvent]) =>
     body: JSON.stringify(events),
   });
 
-const subscribeToServer: SubscribeToServer<RemoteEvent> = (key, subscriber) => {
-  // TODO
-  const eventSource = new EventSource(`/kafka/sse?key=${key}`);
+const subscribeToServer: SubscribeToServer<RemoteEvent> = (key, offset, subscriber) => {
+  const eventSource = new EventSource(`/kafka/sse?key=${key}&offset=${offset}`);
   const handleEvent = (event: MessageEvent<string>) => {
     // parse batch
     const actions = JSON.parse(event.data);
-    actions.forEach((a: string) => {
-      const action = JSON.parse(a);
+    actions.forEach((action: RemoteEvent) => {
       subscriber(action);
     });
   };

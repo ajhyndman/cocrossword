@@ -24,6 +24,7 @@ interface BaseAction {
 
 interface RemoteAction extends BaseAction {
   id: string;
+  offset: number;
 }
 
 export type Reducer<State, E extends BaseAction> = (state: State, event: E) => State;
@@ -48,6 +49,7 @@ export type Subscriber<LocalState, RemoteState> = (state: {
 }) => void;
 export type SubscribeToServer<RemoteEvent> = (
   key: string,
+  offset: number,
   subscriber: (event: RemoteEvent) => void,
 ) => () => void;
 
@@ -60,6 +62,9 @@ class Store<
 > {
   // stream key to subscribe/publish to
   private key: string;
+
+  // the server-defined "offset" of the most-recently-read actions
+  private offset: number = 0;
 
   // "command" handler
   private executor: Executor<LocalState, RemoteState, Command, LocalEvent, RemoteEvent>;
@@ -145,14 +150,20 @@ class Store<
   /**
    * Push new events recieved from server into this store
    */
-  serverDispatch: Dispatch<RemoteEvent> = (event) => {
-    // update remote state snapshot
-    this.remoteState = this.remoteReducer(this.remoteState, event);
+  onServerEvent = (event: RemoteEvent) => {
+    if (event.offset >= this.offset) {
+      // update remote state snapshot
+      this.remoteState = this.remoteReducer(this.remoteState, event);
+      // update offset position
+      this.offset = event.offset + 1;
+    }
     // remove event (if present) from optimistic updates
     this.optimisticEvents = this.optimisticEvents.filter(({ id }) => id !== event.id);
 
     this.next();
   };
+
+  getOffset = () => this.offset;
 
   getSnapshot = () => {
     // always replay yet-unvalidated events on top of latest verified remote state
@@ -216,7 +227,8 @@ export function createStore<
     }, [props.KEY]);
 
     useEffect(() => {
-      const cleanup = subscribeToServer(props.KEY, store.serverDispatch);
+      const cleanup = subscribeToServer(props.KEY, store.getOffset(), store.onServerEvent);
+
       return cleanup;
     }, [store, props.KEY]);
 

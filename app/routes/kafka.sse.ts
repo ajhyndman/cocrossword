@@ -21,15 +21,25 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const params = new URL(request.url).searchParams;
+  const key = params.get('key') as string;
+  const offset = Number.parseInt(params.get('offset') as string);
   const messageLog = await getMessageLog();
 
   return eventStream(request.signal, (send) => {
-    const unsubscribe = messageLog.subscribe((messages) => {
+    const unsubscribe = messageLog.subscribe((messages, offset) => {
       const actions = messages
-        .filter((message) => message.key?.toString() === (params.get('key') as string))
-        .map((message) => message.value?.toString() ?? '');
-      send({ event: params.get('key') as string, data: JSON.stringify(actions) });
-    });
+        .filter((message) => message.key?.toString() === key)
+        // .map((message) => message.value)
+        // .map((message, i) => ({ ...message, offset: offset - messages.length + i }))
+        // .map((message) => message.value?.toString() ?? '');
+        .map(({ value }, i) => {
+          const json = value?.toString() ?? '{}';
+          const action = JSON.parse(json);
+          return { ...action, offset: offset - messages.length + i };
+        });
+
+      send({ event: key, data: JSON.stringify(actions) });
+    }, offset);
 
     return unsubscribe;
   });
