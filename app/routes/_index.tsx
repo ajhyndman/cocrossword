@@ -82,7 +82,7 @@ export default function View() {
             target="_blank"
             rel="noreferrer"
           >
-            Where can I find a .puz file?
+            Where can I find .puz files?
           </a>
         </p>
       </div>
