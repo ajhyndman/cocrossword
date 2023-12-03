@@ -6,6 +6,7 @@ import { Outlet, useLoaderData, useParams } from '@remix-run/react';
 
 import { Provider } from '~/store/isomorphic';
 import { loadStore } from '~/store/isomorphic/index.server';
+import { SITE_DESCRIPTION } from '~/util/constants';
 import { login } from '~/util/login.server';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -26,7 +27,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export function meta({ data }: MetaArgs<typeof loader>) {
-  return [{ title: `co-crossword — ${data?.title}` }];
+  return [
+    { title: `co-crossword — ${data?.title}` },
+    { name: 'description', content: SITE_DESCRIPTION },
+  ];
 }
 
 export default function View() {

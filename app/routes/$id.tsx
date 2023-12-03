@@ -6,6 +6,7 @@ import { type RefObject, useRef, useLayoutEffect } from 'react';
 import NavigationTabs from '~/components/NavigationTabs';
 import { Provider } from '~/store/isomorphic';
 import { loadStore } from '~/store/isomorphic/index.server';
+import { SITE_DESCRIPTION } from '~/util/constants';
 import { login } from '~/util/login.server';
 import styles from './$id.module.css';
 
@@ -34,7 +35,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export function meta({ data }: MetaArgs<typeof loader>) {
-  return [{ title: `co-crossword — ${data?.title}` }];
+  return [
+    { title: `co-crossword — ${data?.title}` },
+    { name: 'description', content: SITE_DESCRIPTION },
+  ];
 }
 
 export default function View() {

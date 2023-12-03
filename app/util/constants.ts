@@ -1,5 +1,7 @@
 import { v4 } from 'uuid';
 
+export const SITE_DESCRIPTION = "Don't puzzle alone! Solve crosswords online with friends.";
+
 export const CLIENT_ID = v4();
 
 export const REGEX_INPUT = /^[A-Za-z0-9@#$%&+?]+$/;
