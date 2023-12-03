@@ -76,8 +76,9 @@ export default function View() {
         <input name="index" type="hidden" value={0} />
         {/* <p className={styles.caption}>Don&apos;t puzzle alone!</p> */}
         <p className={styles.caption}>Upload a .puz file to get started</p>
-        <p className={styles.info}>
+        <p>
           <a
+            className={styles.info}
             href="https://www.fleetingimage.com/wij/xyzzy/nyt-links.html"
             target="_blank"
             rel="noreferrer"
