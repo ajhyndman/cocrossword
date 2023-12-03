@@ -9,3 +9,25 @@
   grid-auto-rows: calc(2rem + 1px);
   margin: 0 auto;
 }
+
+.solved {
+  animation: pulse-border 6s;
+}
+
+@keyframes pulse-border {
+  0% {
+    border-color: var(--black-pearl);
+  }
+  25% {
+    border-color: var(--gold-ink);
+  }
+  50% {
+    border-color: #F8DB4F;
+  }
+  75% {
+    border-color: var(--gold-ink);
+  }
+  100% {
+    border-color: var(--black-pearl);
+  }
+}
