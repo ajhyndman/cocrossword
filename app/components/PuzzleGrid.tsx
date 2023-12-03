@@ -1,5 +1,6 @@
 import { gridNumbering } from '@ajhyndman/puz';
 import { useOutletContext } from '@remix-run/react';
+import classNames from 'classnames';
 import { useEffect, useMemo } from 'react';
 
 import { useExecute, useSelector } from '~/store/isomorphic';
@@ -35,12 +36,6 @@ export default function PuzzleGrid() {
     });
     return selectionIndices;
   }, [userId, users, selections]);
-
-  useEffect(() => {
-    if (isCorrect) {
-      window.alert('Congratulations!\n\nYou solved this puzzle.');
-    }
-  }, [isCorrect]);
 
   // clear selection on unmount or page hide
   useEffect(() => {
@@ -87,7 +82,7 @@ export default function PuzzleGrid() {
 
   return (
     <div
-      className={styles.grid}
+      className={classNames(styles.grid, { [styles.solved]: isCorrect })}
       style={{ gridTemplateColumns: `repeat(${puzzle!.width}, calc(2rem + 1px))` }}
       onKeyDown={handleKeyDown}
     >
@@ -101,9 +96,7 @@ export default function PuzzleGrid() {
             ? 'selected'
             : activeClues?.[0] === clueForCell
               ? 'secondary'
-              : isCorrect
-                ? 'solved'
-                : undefined;
+              : undefined;
 
         return (
           <PuzzleCell
@@ -114,6 +107,7 @@ export default function PuzzleGrid() {
             content={char}
             selections={selectionIndices[i]}
             state={state}
+            solved={isCorrect}
             markup={puzzle!.markupGrid?.[i]}
           />
         );

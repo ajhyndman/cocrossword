@@ -13,7 +13,8 @@ type Props = {
   index: number;
   number?: number;
   selections?: { color: string; name: string }[];
-  state?: 'selected' | 'secondary' | 'solved';
+  state?: 'selected' | 'secondary';
+  solved?: boolean;
   markup?: SquareMarkup;
 };
 
@@ -21,8 +22,9 @@ export default memo(function PuzzleCell({
   index,
   number,
   content,
-  state,
   selections,
+  state,
+  solved,
   markup,
 }: Props) {
   const { userId } = useOutletContext<OutletContext>();
@@ -79,7 +81,7 @@ export default memo(function PuzzleCell({
         [styles.selected]: state === 'selected',
         [styles.focus]: isFocused,
         [styles.active]: state === 'secondary',
-        [styles.solved]: state === 'solved',
+        [styles.solved]: solved,
         [styles.black]: isBlackCell,
         [styles.circled]: markup?.circled,
         [styles.incorrect]: markup?.incorrect,
@@ -87,6 +89,9 @@ export default memo(function PuzzleCell({
         [styles.pencil]: markup?.penciled,
         [styles.starred]: markup?.unknown_04,
       })}
+      style={{
+        animationDelay: `${0.0125 * index}s`,
+      }}
     >
       {number && <span className={styles.number}>{number}</span>}
       <span className={styles.content}>

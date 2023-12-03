@@ -114,6 +114,8 @@
 }
 
 .solved {
+  transition: color 3s;
+  animation: pulse-border 2.5s;
   color: var(--blue-ink);
 }
 
@@ -122,21 +124,14 @@
   cursor: inherit;
 }
 
+.black.solved {
+  animation: pulse-border 2.5s, pulse-background 2.5s;
+}
+
 .superscript {
   vertical-align: super;
   font-size: 0.875rem;
 }
-
-/* .rebus {
-  position: absolute;
-  color: var(--iceberg);
-  left: 50%;
-  top: 60%;
-  transform: translate(-50%, -50%);
-  font-family: "Architects Daughter";
-  font-size: 32px;
-  display: block;
-} */
 
 /* input should be visually hidden but interactable */
 .input {
@@ -151,3 +146,41 @@
   white-space: nowrap;
   width: 1px;
 }
+
+@keyframes pulse-border {
+  0% {
+    border-color: var(--black-pearl);
+  }
+  25% {
+    border-color: var(--gold-ink);
+  }
+  50% {
+    border-color: #F8DB4F;
+  }
+  75% {
+    border-color: var(--gold-ink);
+  }
+  100% {
+    border-color: var(--black-pearl);
+  }
+}
+
+
+@keyframes pulse-background {
+  0% {
+    background-color: var(--black-pearl);
+  }
+  25% {
+    background-color: var(--gold-ink);
+  }
+  50% {
+    background-color: #F8DB4F;
+  }
+  75% {
+    background-color: var(--gold-ink);
+  }
+  100% {
+    background-color: var(--black-pearl);
+  }
+}
+
