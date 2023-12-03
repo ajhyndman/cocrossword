@@ -24,9 +24,14 @@
 }
 
 .caption {
-  /* color: var(--san-juan); */
-  /* font-family: 'Architects Daughter'; */
   font-size: 1.5rem;
+  font-weight: 300;
   text-align: center;
-  margin: 0 calc(var(--gutter) * 2);
+  margin: calc(var(--gutter) * 2);
+}
+
+.info {
+  font-weight: 300;
+  font-size: 0.875rem;
+  text-decoration: underline;
 }

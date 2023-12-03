@@ -76,6 +76,15 @@ export default function View() {
         <input name="index" type="hidden" value={0} />
         {/* <p className={styles.caption}>Don&apos;t puzzle alone!</p> */}
         <p className={styles.caption}>Upload a .puz file to get started</p>
+        <p className={styles.info}>
+          <a
+            href="https://www.fleetingimage.com/wij/xyzzy/nyt-links.html"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Where can I find a .puz file?
+          </a>
+        </p>
       </div>
     </Form>
   );
