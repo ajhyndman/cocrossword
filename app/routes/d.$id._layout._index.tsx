@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Title from '~/components/Title';
 import { useSelector } from '~/store/isomorphic';
@@ -15,12 +15,17 @@ const HEADER_HEIGHT = 80 + 48;
 export default function View() {
   const puzzle = useSelector(({ remote }) => remote.puzzle);
 
+  // use a state container as a mechanism for forcing rerenders
+  const [, forceUpdate] = useState<Event>();
+
+  const viewWidth = typeof document === 'undefined' ? 0 : window.innerWidth;
+
   // guess how tall <main> needs to be to fit all clues within client width
   const height = useMemo(() => {
-    if (typeof document === 'undefined' || !puzzle) return;
+    if (!puzzle) return 0;
 
     const puzzleSize = puzzle.width * CELL_WIDTH + 3;
-    const viewportWidth = window.innerWidth - DOCUMENT_GUTTER_SIZE;
+    const viewportWidth = viewWidth - DOCUMENT_GUTTER_SIZE;
     const floatWidth = puzzleSize;
     const targetWidth = Math.max(viewportWidth, floatWidth);
 
@@ -36,7 +41,12 @@ export default function View() {
 
     // compute height
     return numCluesPerCol * CLUE_HEIGHT;
-  }, [puzzle]);
+  }, [puzzle, viewWidth]);
+
+  useEffect(() => {
+    window.addEventListener('resize', forceUpdate);
+    return () => window.removeEventListener('resize', forceUpdate);
+  }, []);
 
   if (!puzzle) return;
 
