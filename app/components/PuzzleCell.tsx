@@ -4,7 +4,7 @@ import { memo, useLayoutEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 
 import styles from './PuzzleCell.module.css';
-import { useExecute } from '~/store/isomorphic';
+import { useExecute, useSelector } from '~/store/isomorphic';
 import { OutletContext } from '~/routes/$id';
 
 type Props = {
@@ -29,6 +29,7 @@ export default memo(function PuzzleCell({
 }: Props) {
   const { userId } = useOutletContext<OutletContext>();
   const [isFocused, setIsFocused] = useState(false);
+  const width = useSelector((state) => state.remote.puzzle?.width);
   const execute = useExecute();
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLLabelElement>(null);
@@ -90,7 +91,8 @@ export default memo(function PuzzleCell({
         [styles.starred]: markup?.unknown_04,
       })}
       style={{
-        animationDelay: `${0.0125 * index}s`,
+        // animations pass in a wave from top left to bottom right
+        animationDelay: `${20 * ((4 * index) / width! + (index % width!))}ms`,
       }}
     >
       {number && <span className={styles.number}>{number}</span>}

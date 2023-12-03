@@ -115,7 +115,7 @@
 
 .solved {
   transition: color 3s;
-  animation: pulse-border 2.5s;
+  animation: pulse-border 3s;
   color: var(--blue-ink);
 }
 
@@ -125,7 +125,7 @@
 }
 
 .black.solved {
-  animation: pulse-border 2.5s, pulse-background 2.5s;
+  animation: pulse-border 3s, pulse-background 3s;
 }
 
 .superscript {
