@@ -13,6 +13,7 @@ Bring your own crossword puzzle (in .puz format) and solve with friends, family 
 This project was developed using:
 
   - [Remix](https://remix.run/)
+  - [@ajhyndman/puz](https://github.com/ajhyndman/puz)
 
 ### Getting Started
 
