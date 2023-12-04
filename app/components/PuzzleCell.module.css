@@ -91,14 +91,9 @@
   color: var(--bermuda-gray);
 }
 
-.focus {
-  background: var(--fountain-blue);
-}
-
 /* NOTE: uses extra selectors for specificity */
-.focus,
-.focus .content,
-.focus .content .superscript {
+.focus.focus {
+  background: var(--fountain-blue);
   color: var(--white);
 }
 
@@ -111,7 +106,6 @@
 }
 
 .solved {
-  transition: color 3s;
   animation: pulse-border 2.5s;
   color: var(--blue-ink);
 }
