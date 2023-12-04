@@ -58,8 +58,6 @@ export default memo(function PuzzleCell({
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     // @ts-expect-error TS doesn't guarantee that nativeEvent.data is present
     const value = event.nativeEvent.data;
-    // onInput(index, value);
-
     execute({ type: 'INPUT', payload: { userId, index, value } });
   };
   const handleMouseDown = (event: React.MouseEvent) => {
