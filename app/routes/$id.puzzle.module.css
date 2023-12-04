@@ -9,15 +9,13 @@
   padding: calc(var(--gutter) * 2.25);
   width: fit-content;
   /* intrinsic + toolbar + navbar + clue */
-  /* padding-bottom: calc(20px + 72px + 64px + 36px); */
   padding-bottom: calc(1.25rem + 4.5rem + 4rem + 2.25rem);
 
 }
 
 /* on ios, we use position sticky, so no need for extra spacer */
 :global(.ios) .puzzle {
-  /* padding-bottom: calc(20px + 72px); */
-  padding-bottom: calc(1.25rem + 4.5rem);
+  padding-bottom: calc(1.25rem + 4.5rem + 2.25rem);
   min-height: 0;
   flex-shrink: 0;
 }
