@@ -30,25 +30,28 @@ export default function Toolbar() {
         label="Toggle pencil mode"
         name={isPencil ? 'edit_off' : 'edit'}
         onClick={handleTogglePencil}
-        style="secondary"
+        transparent
       />
       <FloatingActionButton
         label="Star/Unstar square"
         name="star"
         size="small"
         onClick={handleToggleRebus}
+        transparent
       />
       <FloatingActionButton
         label="Check puzzle"
         name="check_box"
         size="small"
         onClick={checkSolution}
+        transparent
       />
       <FloatingActionButton
         label="Download puzzle"
         name="download"
         size="small"
         onClick={handleDownload}
+        transparent
       />
     </div>
   );
