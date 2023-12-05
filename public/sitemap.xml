@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="https://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://cocrossword.com/</loc>
+    <xhtml:link
+      rel="canonical"
+      hreflang="en"
+      href="https://cocrossword.com/"
+    />
+    <lastmod>2023-12-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
