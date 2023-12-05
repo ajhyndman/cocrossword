@@ -15,7 +15,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const userAgent = request.headers.get('User-Agent')!;
   const isMobile = /(iPad|iPhone|iPod|Android)/i.test(userAgent);
-  if (isMobile) return redirect(`/${params.id}/puzzle`);
+  if (isMobile) return redirect(`/${params.id}`);
 
   // if puzzle hasn't been initialized, redirect to home
   const { getState } = await loadStore(params.id);

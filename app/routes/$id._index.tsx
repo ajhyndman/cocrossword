@@ -5,7 +5,7 @@ import ClueCarousel from '~/components/ClueCarousel';
 import PuzzleGrid from '~/components/PuzzleGrid';
 import Toolbar from '~/components/Toolbar';
 import { useSelector } from '~/store/isomorphic';
-import styles from './$id.puzzle.module.css';
+import styles from './$id._index.module.css';
 import type { OutletContext } from './$id';
 
 export default function View() {

@@ -13,7 +13,7 @@ export async function action({ request }: ActionFunctionArgs) {
   await dispatch(key, { index, client, type, payload: JSON.parse(payload) });
 
   if (type === 'NEW_PUZZLE') {
-    return redirect(`/${key}/puzzle`);
+    return redirect(`/${key}`);
   }
 
   return null;

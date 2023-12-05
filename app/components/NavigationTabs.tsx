@@ -20,7 +20,7 @@ export default function NavigationTabs({ id, userId }: Props) {
   return (
     <Tabs
       tabs={[
-        { icon: 'window', href: `/${id}/puzzle` },
+        { icon: 'window', href: `/${id}` },
         { icon: 'chat', href: `/${id}/chat`, notify: hasUnreadMessages },
         { icon: 'group', href: `/${id}/participants` },
         { icon: 'info', href: `/${id}/info` },
