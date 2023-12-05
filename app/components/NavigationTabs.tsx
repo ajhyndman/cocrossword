@@ -20,10 +20,10 @@ export default function NavigationTabs({ id, userId }: Props) {
   return (
     <Tabs
       tabs={[
-        { icon: 'window', href: `/${id}` },
-        { icon: 'chat', href: `/${id}/chat`, notify: hasUnreadMessages },
-        { icon: 'group', href: `/${id}/participants` },
-        { icon: 'info', href: `/${id}/info` },
+        { icon: 'window', href: `/${id}`, id: 'routes/$id._index' },
+        { icon: 'chat', href: `/${id}/chat`, id: 'routes/$id.chat', notify: hasUnreadMessages },
+        { icon: 'group', href: `/${id}/participants`, id: 'routes/$id.participants' },
+        { icon: 'info', href: `/${id}/info`, id: 'routes/$id.info' },
       ]}
     />
   );

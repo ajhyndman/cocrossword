@@ -6,6 +6,7 @@ import styles from './Tabs.module.css';
 type Tab = {
   href: string;
   icon: string;
+  id: string;
   notify?: boolean;
 };
 
@@ -18,11 +19,11 @@ export default function Tabs({ tabs }: Props) {
 
   return (
     <div className={styles.container}>
-      {tabs.map(({ href, icon, notify }) => {
-        const isActive = matches.some(({ pathname }) => pathname === href);
+      {tabs.map(({ href, icon, id, notify }) => {
+        const isActive = matches.some((match) => match.id === id);
         return (
           <Link
-            key={icon}
+            key={id}
             to={href}
             className={classNames(styles.tab, { [styles.active]: isActive })}
           >
