@@ -1,6 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { eventStream } from 'remix-utils/sse/server';
 
+import ACTION_ZERO from '~/action-zero.json';
 import { dispatch, getMessageLog } from '~/kafkajs';
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -27,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return eventStream(request.signal, (send) => {
     const unsubscribe = messageLog.subscribe((messages, offset) => {
-      const actions = messages
+      let actions = messages
         .filter((message) => message.key?.toString() === key)
         // .map((message) => message.value)
         // .map((message, i) => ({ ...message, offset: offset - messages.length + i }))
@@ -37,6 +38,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
           const action = JSON.parse(json);
           return { ...action, offset: offset - messages.length + i };
         });
+
+      if (key === '0') {
+        actions = [ACTION_ZERO, ...actions];
+      }
 
       send({ event: key, data: JSON.stringify(actions) });
     }, offset);
