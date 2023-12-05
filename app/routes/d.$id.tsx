@@ -6,8 +6,8 @@ import { Outlet, useLoaderData, useParams } from '@remix-run/react';
 
 import { Provider } from '~/store/isomorphic';
 import { loadStore } from '~/store/isomorphic/index.server';
-import { SITE_DESCRIPTION } from '~/util/constants';
 import { login } from '~/util/login.server';
+import { siteMeta } from '~/util/siteMeta';
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   // if no ID passed, redirect to home
@@ -26,11 +26,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   return json({ userId, zoom, title: state.puzzle?.title }, { headers });
 }
 
-export function meta({ data }: MetaArgs<typeof loader>) {
-  return [
-    { title: `${data?.title} — co-crossword` },
-    { name: 'description', content: SITE_DESCRIPTION },
-  ];
+export function meta({ data, params }: MetaArgs<typeof loader>) {
+  return siteMeta(`${data?.title} — co-crossword`, params.id);
 }
 
 export default function View() {
