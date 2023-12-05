@@ -1,14 +1,16 @@
 import { json } from '@remix-run/node';
 
+import { THEME_COLOR } from '~/util/constants';
+
 export const loader = async () => {
   return json(
     {
-      short_name: 'Crosswords',
-      name: 'Crosswords',
+      short_name: 'co-crossword',
+      name: 'co-crossword',
       start_url: '/',
       display: 'standalone',
       background_color: '#FFF',
-      theme_color: '#2B476A',
+      theme_color: THEME_COLOR,
       icons: [
         {
           src: '/icons/36logo.png',
