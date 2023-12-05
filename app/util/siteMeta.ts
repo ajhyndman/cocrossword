@@ -3,6 +3,7 @@ import { SITE_DESCRIPTION } from './constants';
 
 export function siteMeta(title: string, id: string = '') {
   return [
+    { title },
     { name: 'description', content: SITE_DESCRIPTION },
     { property: 'og:title', content: title },
     { property: 'og:type', content: 'website' },
