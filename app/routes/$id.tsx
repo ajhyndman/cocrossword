@@ -36,7 +36,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 export function meta({ data }: MetaArgs<typeof loader>) {
   return [
-    { title: `co-crossword — ${data?.title}` },
+    { title: `${data?.title} — co-crossword` },
     { name: 'description', content: SITE_DESCRIPTION },
   ];
 }
