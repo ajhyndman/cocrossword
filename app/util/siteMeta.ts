@@ -5,6 +5,7 @@ export function siteMeta(title: string, id: string = '') {
   return [
     { title },
     { name: 'description', content: SITE_DESCRIPTION },
+    { name: 'theme_color', content: '' },
     { property: 'og:title', content: title },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: `https://cocrossword.com/${id}` },

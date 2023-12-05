@@ -6,6 +6,8 @@ export const CLIENT_ID = v4();
 
 export const REGEX_INPUT = /^[A-Za-z0-9@#$%&+?]+$/;
 
+export const THEME_COLOR = '#2B476A';
+
 export const CHAT_COLORS = [
   // list of colors that may be assigned to a user
   '#609EEB',
