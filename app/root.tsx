@@ -14,7 +14,6 @@ export const links = () => [
   { rel: 'icon', href: favicon },
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
-  { rel: 'stylesheet', href: resetCss },
   {
     rel: 'stylesheet',
     href: 'https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap',
@@ -23,6 +22,7 @@ export const links = () => [
     rel: 'stylesheet',
     href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
   },
+  { rel: 'stylesheet', href: resetCss },
   { rel: 'stylesheet', href: cssBundleHref! },
   { rel: 'stylesheet', href: styles },
 ];
