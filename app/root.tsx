@@ -25,6 +25,7 @@ export const links = () => [
   { rel: 'stylesheet', href: resetCss },
   { rel: 'stylesheet', href: cssBundleHref! },
   { rel: 'stylesheet', href: styles },
+  { rel: 'manifest', href: '/manifest.webmanifest' },
 ];
 
 export function loader({ request }: LoaderFunctionArgs) {
