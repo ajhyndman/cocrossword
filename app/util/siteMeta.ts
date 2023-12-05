@@ -13,7 +13,7 @@ export function siteMeta(title: string, id: string = '') {
     { property: 'og:image', content: preview },
     { property: 'og:image:type', content: 'image/png' },
     { property: 'og:image:width', content: '1200' },
-    { property: 'og:image:height', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     {
       property: 'og:image:alt',
       content: 'A screenshot of a crossword puzzle, filled with intersecting words and hints.',
