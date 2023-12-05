@@ -106,8 +106,13 @@
 }
 
 .solved {
-  animation: pulse-border 2.5s;
   color: var(--blue-ink);
+  animation: pulse-border 2.5s, pulse-color 2.5s;
+}
+
+.solved .content {
+  animation: pulse-color 2.5s;
+  animation-delay: inherit;
 }
 
 .black {
@@ -136,6 +141,24 @@
   right: 0;
   white-space: nowrap;
   width: 1px;
+}
+
+@keyframes pulse-color {
+  0% {
+    /* start at current value */
+  }
+  25% {
+    color: var(--gold-ink);
+  }
+  50% {
+    color: #F8DB4F;
+  }
+  75% {
+    color: var(--gold-ink);
+  }
+  100% {
+    /* revert to current value */
+  }
 }
 
 @keyframes pulse-border {
