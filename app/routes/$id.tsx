@@ -45,7 +45,7 @@ export default function View() {
   const bottomSheet = useRef<HTMLDivElement>(null);
   const { userId, zoom } = useLoaderData<typeof loader>();
 
-  const isPuzzle = matches.some((match) => match.id === 'routes/$id.puzzle');
+  const isPuzzle = matches.some((match) => match.id === 'routes/$id._index');
 
   function fixContainerHeight() {
     window.requestAnimationFrame(() => {
