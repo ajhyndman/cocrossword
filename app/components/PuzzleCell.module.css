@@ -41,7 +41,6 @@
 }
 
 .number {
-  color: var(--black-pearl);
   font-size: 0.75rem;
   pointer-events: none;
   position: absolute;
@@ -53,7 +52,9 @@
 .circled::after {
   content: '';
   border-radius: 100%;
-  border: solid 1px var(--black-pearl);
+  border-width: 1px;
+  border-style: solid;
+  border-color: inherit;
   position: absolute;
   left: 0;
   right: 0;
@@ -74,7 +75,6 @@
 }
 
 .pencil .content {
-  /* color: var(--casper); */
   color: var(--graphite);
 }
 
@@ -93,12 +93,9 @@
 }
 
 /* NOTE: uses extra selectors for specificity */
-.focus.focus {
+.focus.focus,
+.focus.focus .content {
   background: var(--fountain-blue);
-  color: var(--white);
-}
-
-.focus .number {
   color: var(--white);
 }
 
@@ -112,6 +109,9 @@
 
 .solved {
   animation: pulse-border 2.5s;
+}
+
+.solved .content {
   color: var(--blue-ink);
 }
 
