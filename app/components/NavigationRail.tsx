@@ -97,7 +97,7 @@ export default function NavigationRail() {
 
       <NavButton
         active={matches.some((match) => match.id === 'routes/d.$id._layout._index')}
-        icon="window"
+        icon="edit_square"
         label="Puzzle"
         to={`/d/${id}`}
       />
