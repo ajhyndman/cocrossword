@@ -41,6 +41,7 @@
 }
 
 .number {
+  color: var(--black-pearl);
   font-size: 0.75rem;
   pointer-events: none;
   position: absolute;
@@ -94,6 +95,10 @@
 /* NOTE: uses extra selectors for specificity */
 .focus.focus {
   background: var(--fountain-blue);
+  color: var(--white);
+}
+
+.focus .number {
   color: var(--white);
 }
 
