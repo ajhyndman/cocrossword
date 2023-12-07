@@ -2,6 +2,11 @@ import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/nod
 import { eventStream } from 'remix-utils/sse/server';
 
 import { dispatch, getMessageLog } from '~/kafkajs';
+import { loadStore } from '~/store/isomorphic/index.server';
+
+function wait(ms: number) {
+  return new Promise((resolve) => global.setTimeout(resolve, ms));
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   const body = await request.formData();
@@ -13,6 +18,16 @@ export async function action({ request }: ActionFunctionArgs) {
   await dispatch(key, { index, client, type, payload: JSON.parse(payload) });
 
   if (type === 'NEW_PUZZLE') {
+    // wait for puzzle to populate
+    // TODO: set a max timeout or exponential backoff?
+    let puzzle;
+    do {
+      await wait(50);
+      const { getState } = await loadStore(key);
+      const state = getState();
+      puzzle = state.puzzle;
+    } while (puzzle == null);
+
     return redirect(`/${key}`);
   }
 
