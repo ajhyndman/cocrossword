@@ -55,6 +55,11 @@ export const executor: Executor<
         break;
       }
 
+      if (value === ' ') {
+        dispatchLocal({ type: 'ROTATE_SELECTION' });
+        break;
+      }
+
       dispatchRemote({
         type: 'CELL_CHANGED',
         payload: { index, value, isPencil: local.isPencil },
