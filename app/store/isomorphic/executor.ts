@@ -28,7 +28,7 @@ export const executor: Executor<
   RemoteState,
   Command,
   LocalEvent,
-  RemoteEvent & { id: string }
+  RemoteEvent & { id: string; offset: number }
 > = ({ local, remote }, command, dispatchLocal, dispatchRemote, execute) => {
   // TODO: differentiate commands and events
   switch (command.type) {
