@@ -47,7 +47,6 @@ export const executor: Executor<
     }
 
     case 'INPUT': {
-      if (!remote.puzzle || remote.isCorrect) break;
       const { index, value, userId } = command.payload;
 
       if (value === '.') {
@@ -59,6 +58,8 @@ export const executor: Executor<
         dispatchLocal({ type: 'ROTATE_SELECTION' });
         break;
       }
+
+      if (!remote.puzzle || remote.isCorrect) break;
 
       dispatchRemote({
         type: 'CELL_CHANGED',
