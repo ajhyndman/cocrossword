@@ -5,7 +5,7 @@ import Title from '~/components/Title';
 import AppInfo from '~/components/AppInfo';
 import IconButton from '~/components/IconButton';
 import { commitSession, getSession } from '~/sessions.server';
-import { useSelector } from '~/store/isomorphic';
+import { useExecute, useSelector } from '~/store/isomorphic';
 import githubIcon from '~/mark-github-16.svg';
 import kofiIcon from '~/ko-fi.svg';
 import type { OutletContext } from './$id';
@@ -29,6 +29,11 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function View() {
   const puzzle = useSelector(({ remote }) => remote.puzzle);
   const { zoom } = useOutletContext<OutletContext>();
+  const execute = useExecute();
+
+  const handleDownload = () => {
+    execute({ type: 'DOWNLOAD_PUZZLE' });
+  };
 
   return (
     <div className={styles.container}>
@@ -59,6 +64,12 @@ export default function View() {
                 <input type="hidden" name="direction" value="IN" />
                 <IconButton name="zoom_in" />
               </Form>
+            </span>
+          </li>
+          <li>
+            Download puzzle
+            <span className={styles.buttonGroup}>
+              <IconButton name="download" onClick={handleDownload} />
             </span>
           </li>
         </ul>

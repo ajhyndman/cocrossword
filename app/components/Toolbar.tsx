@@ -10,10 +10,6 @@ export default function Toolbar() {
     execute({ type: 'CHECK_PUZZLE' });
   };
 
-  const handleDownload = () => {
-    execute({ type: 'DOWNLOAD_PUZZLE' });
-  };
-
   const handleTogglePencil = () => {
     execute({ type: 'TOGGLE_PENCIL' });
   };
@@ -44,13 +40,6 @@ export default function Toolbar() {
         name="check_box"
         size="small"
         onClick={checkSolution}
-        transparent
-      />
-      <FloatingActionButton
-        label="Download puzzle"
-        name="download"
-        size="small"
-        onClick={handleDownload}
         transparent
       />
     </div>
