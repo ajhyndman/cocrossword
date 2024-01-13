@@ -20,13 +20,16 @@
 }
 
 .input {
+  box-sizing: border-box;
   color: var(--black-pearl);
   font-family: inherit;
   font-weight: inherit;
   font-size: inherit;
+  min-width: 0;
 }
 
 .name {
+  display: flex;
   font-weight: bold;
   flex-grow: 1;
   flex-shrink: 1;

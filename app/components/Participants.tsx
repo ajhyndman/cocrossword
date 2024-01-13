@@ -1,6 +1,6 @@
 import { useOutletContext } from '@remix-run/react';
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import IconButton from '~/components/IconButton';
 import type { DeviceType } from '~/store/remote/users';
@@ -29,21 +29,23 @@ function getDeviceTypeIcon(deviceType?: DeviceType) {
 }
 
 export default function Participants() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const { userId } = useOutletContext<OutletContext>();
   const execute = useExecute();
   const users = useSelector(({ remote }) => remote.users);
-  const [editing, setEditing] = useState<'name' | 'color' | false>(false);
+  const [editing, setEditing] = useState<boolean>(false);
 
   const userList = Object.values(users);
   userList.sort((a, b) => (a.id === userId ? -1 : b.id === userId ? 1 : 0));
 
+  const toggleEditName = () => {
+    setEditing(!editing);
+    setTimeout(() => inputRef.current?.select(), 0);
+  };
+
   const changeName = (name: string) => {
     execute({ type: 'USER_RENAMED', payload: { id: userId, name } });
     setEditing(false);
-  };
-
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    changeName(event.target.value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -61,12 +63,12 @@ export default function Participants() {
           </span>
 
           <span className={styles.name} style={{ color }}>
-            {editing === 'name' && id === userId ? (
+            {editing && id === userId ? (
               <input
+                ref={inputRef}
                 autoFocus
                 className={styles.input}
                 defaultValue={name}
-                onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
                 maxLength={50}
               />
@@ -75,7 +77,9 @@ export default function Participants() {
             )}
           </span>
 
-          {id === userId && <IconButton name="edit" onClick={() => setEditing('name')} />}
+          {id === userId && (
+            <IconButton name={editing ? 'close' : 'edit'} onClick={toggleEditName} />
+          )}
         </li>
       ))}
     </ul>
