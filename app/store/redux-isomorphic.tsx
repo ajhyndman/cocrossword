@@ -1,5 +1,13 @@
 import throttle from 'lodash.throttle';
-import { type ReactNode, createContext, useContext, useEffect, useState, useMemo } from 'react';
+import {
+  type ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+} from 'react';
 import { v4 } from 'uuid';
 
 // - server reducer
@@ -243,16 +251,20 @@ export function createStore<
 
   function useSelector<T>(selector: (state: { local: LocalState; remote: RemoteState }) => T): T {
     const store = useContext(StoreContext);
+    const mutableValue = useRef<T>();
     const [value, setValue] = useState<T>(() => {
       const snapshot = store!.getSnapshot();
-      return selector(snapshot);
+      const v = selector(snapshot);
+      mutableValue.current = v;
+      return v;
     });
 
     useEffect(() => {
       const unsubscribe = store!.subscribe(({ local, remote }) => {
         // *only* update state if value has changed
         const nextValue = selector({ local, remote });
-        if (value !== nextValue) {
+        if (mutableValue !== nextValue) {
+          mutableValue.current = nextValue;
           setValue(nextValue);
         }
       });
