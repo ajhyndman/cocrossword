@@ -49,3 +49,17 @@ input {
   /* prevent ios from automatically zooming when an input is focused */
   font-size: inherit;
 }
+
+/* some inputs should be visually hidden but interactable */
+.hidden {
+  bottom: 0;
+  clip-path: inset(50%);
+  clip: rect(0 0 0 0);
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  white-space: nowrap;
+  width: 1px;
+}

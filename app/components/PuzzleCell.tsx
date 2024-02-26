@@ -119,7 +119,7 @@ export default memo(function PuzzleCell({
           aria-expanded={false}
           role="textbox"
           ref={inputRef}
-          className={styles.input}
+          className="hidden"
           onBlur={handleBlur}
           onFocus={handleFocus}
           onInput={handleInput}
