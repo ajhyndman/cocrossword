@@ -28,8 +28,17 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function View() {
   const puzzle = useSelector(({ remote }) => remote.puzzle);
+  const autocheck = useSelector(({ remote }) => {
+    return Boolean(remote.autocheck);
+  });
   const { zoom } = useOutletContext<OutletContext>();
   const execute = useExecute();
+
+  console.log({ autocheck });
+
+  const handleToggleAutocheck = () => {
+    execute({ type: 'TOGGLE_AUTOCHECK' });
+  };
 
   const handleDownload = () => {
     execute({ type: 'DOWNLOAD_PUZZLE' });
@@ -64,6 +73,22 @@ export default function View() {
                 <input type="hidden" name="direction" value="IN" />
                 <IconButton name="zoom_in" />
               </Form>
+            </span>
+          </li>
+          <li>
+            Autocheck
+            <span className={styles.buttonGroup}>
+              <label htmlFor="autocheck">
+                <input
+                  className="hidden"
+                  type="checkbox"
+                  name="autocheck"
+                  id="autocheck"
+                  checked={autocheck}
+                  onChange={handleToggleAutocheck}
+                />
+                <IconButton tag="span" name={autocheck ? 'check_box' : 'check_box_outline_blank'} />
+              </label>
             </span>
           </li>
           <li>

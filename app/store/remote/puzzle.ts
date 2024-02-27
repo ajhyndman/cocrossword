@@ -1,7 +1,10 @@
 import { type Puzzle, isCorrect } from '@ajhyndman/puz';
 
+import { checkPuzzle } from '~/util/checkPuzzle';
+
 export type State = {
   puzzle?: Puzzle;
+  autocheck?: boolean;
   isCorrect?: boolean;
 };
 
@@ -15,11 +18,15 @@ export type Action =
       payload: { index: number; value: string; isPencil?: boolean };
     }
   | {
+      type: 'CHECK_PUZZLE';
+      payload?: undefined;
+    }
+  | {
       type: 'TOGGLE_STARRED';
       payload: { index: number };
     }
   | {
-      type: 'CHECK_PUZZLE';
+      type: 'TOGGLE_AUTOCHECK';
       payload?: undefined;
     };
 
@@ -61,7 +68,11 @@ export const reducer = (state: State, { type, payload }: Action) => {
       delete markupGrid[payload.index].incorrect;
       delete markupGrid[payload.index].revealed;
 
-      const puzzle: Puzzle = { ...state.puzzle, state: nextState.join(''), markupGrid };
+      let puzzle: Puzzle = { ...state.puzzle, state: nextState.join(''), markupGrid };
+
+      if (state.autocheck) {
+        puzzle = checkPuzzle(puzzle);
+      }
 
       return { ...state, puzzle, isCorrect: isCorrect(puzzle, true) };
     }
@@ -91,6 +102,10 @@ export const reducer = (state: State, { type, payload }: Action) => {
       return { ...state, puzzle: { ...state.puzzle, markupGrid } };
     }
 
+    case 'TOGGLE_AUTOCHECK': {
+      return { ...state, autocheck: !state.autocheck };
+    }
+
     case 'CHECK_PUZZLE': {
       if (
         // if puzzle is already correct
@@ -101,18 +116,8 @@ export const reducer = (state: State, { type, payload }: Action) => {
         // ignore this action
         return state;
       }
-      // also set markup flag
-      const markupGrid = state.puzzle.markupGrid?.slice() ?? [];
-      markupGrid.length = state.puzzle.state.length;
-      state.puzzle.state.split('').forEach((char, i) => {
-        // if cell has been populated, and does not match solution
-        if (char !== '-' && state.puzzle?.solution?.[i] !== char) {
-          // mark incorrect
-          markupGrid[i] = { ...markupGrid[i], incorrect: true };
-        }
-      });
 
-      return { ...state, puzzle: { ...state.puzzle, markupGrid } };
+      return { ...state, puzzle: checkPuzzle(state.puzzle) };
     }
 
     default:
