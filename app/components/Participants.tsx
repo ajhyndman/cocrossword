@@ -43,6 +43,10 @@ export default function Participants() {
     setTimeout(() => inputRef.current?.select(), 0);
   };
 
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    changeName(event.currentTarget.value);
+  };
+
   const changeName = (name: string) => {
     execute({ type: 'USER_RENAMED', payload: { id: userId, name } });
     setEditing(false);
@@ -71,6 +75,8 @@ export default function Participants() {
                 defaultValue={name}
                 onKeyDown={handleKeyDown}
                 maxLength={50}
+                enterKeyHint="done"
+                onBlur={handleBlur}
               />
             ) : (
               name
