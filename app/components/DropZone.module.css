@@ -3,10 +3,10 @@
 }
 
 .label {
-  border: dashed 3px var(--san-juan);
+  border: dashed 3px var(--blue-ink);
   border-radius: 1rem;
   box-sizing: border-box;
-  color: var(--san-juan);
+  color: var(--blue-ink);
   cursor: pointer;
   background: none;
   width: 8.5rem;
