@@ -108,13 +108,13 @@ export default function View() {
               Mon
             </button>
             <button className={styles.button} data-difficulty="2" onClick={handleLaunchNyt}>
-              Tues
+              Tue
             </button>
             <button className={styles.button} data-difficulty="3" onClick={handleLaunchNyt}>
               Wed
             </button>
             <button className={styles.button} data-difficulty="4" onClick={handleLaunchNyt}>
-              Thurs
+              Thu
             </button>
             <button className={styles.button} data-difficulty="5" onClick={handleLaunchNyt}>
               Fri
