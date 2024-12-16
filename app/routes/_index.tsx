@@ -55,6 +55,18 @@ export default function View() {
     });
   };
 
+  const handleLaunchNyt = async (event: React.MouseEvent) => {
+    // prevent default behaviour (submitting the form immediately)
+    event.preventDefault();
+
+    const difficulty = event.target.dataset.difficulty;
+
+    const response = await fetch(`/nyt/${difficulty}`);
+    const blob = await response.blob();
+    const file = new File([blob], 'nyt.puz');
+    submitFile(file);
+  };
+
   return (
     <Form
       action="/kafka/sse"
@@ -66,7 +78,7 @@ export default function View() {
       <div className={styles.container}>
         <h1 className={styles.title}>co-crossword</h1>
         <p className={styles.subtitle}>don&apos;t puzzle alone!</p>
-        <div className={styles.dropzone}>
+        <div className={styles.section}>
           <DropZone onChange={handleUpload} />
         </div>
         <input name="key" type="hidden" value={gameId} />
@@ -86,6 +98,36 @@ export default function View() {
             Where can I find .puz files?
           </a>
         </p>
+
+        <div className={styles.sectionBreak}>
+          <p className={styles.caption}>— OR —</p>
+        </div>
+        <div className={styles.section}>
+          <p>
+            <button className={styles.button} data-difficulty="1" onClick={handleLaunchNyt}>
+              Mon
+            </button>
+            <button className={styles.button} data-difficulty="2" onClick={handleLaunchNyt}>
+              Tues
+            </button>
+            <button className={styles.button} data-difficulty="3" onClick={handleLaunchNyt}>
+              Wed
+            </button>
+            <button className={styles.button} data-difficulty="4" onClick={handleLaunchNyt}>
+              Thurs
+            </button>
+            <button className={styles.button} data-difficulty="5" onClick={handleLaunchNyt}>
+              Fri
+            </button>
+            <button className={styles.button} data-difficulty="6" onClick={handleLaunchNyt}>
+              Sat
+            </button>
+            <button className={styles.button} data-difficulty="0" onClick={handleLaunchNyt}>
+              Sun
+            </button>
+          </p>
+        </div>
+        <p className={styles.caption}>Launch a puzzle from the NYT archive</p>
       </div>
     </Form>
   );
