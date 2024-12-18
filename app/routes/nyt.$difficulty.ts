@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { ActionFunctionArgs } from '@remix-run/node';
 import { addWeeks, differenceInCalendarDays, format, nextDay, type Day } from 'date-fns';
 
 const EARLIEST_AVAILABLE_DATE = '1993-11-21';
@@ -18,7 +18,7 @@ function formatPuzzleUrl(date: Date): string {
 /**
  * Fetch a New York Times crossword puzzle file from archive.org
  */
-export function loader({ params }: LoaderFunctionArgs) {
+export function action({ params }: ActionFunctionArgs) {
   if (params.difficulty == null) throw new Error('Missing parameter: "difficulty"');
   const difficulty = Number.parseInt(params.difficulty) as Day; // day of the week (sun-sat)
 

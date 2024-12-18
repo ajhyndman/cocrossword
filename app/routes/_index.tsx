@@ -62,7 +62,7 @@ export default function View() {
     // @ts-expect-error The typedef for EventTarget doesn't include the dataset attribute
     const difficulty = event.target.dataset.difficulty;
 
-    const response = await fetch(`/nyt/${difficulty}`);
+    const response = await fetch(`/nyt/${difficulty}`, { method: 'POST' });
     const blob = await response.blob();
     const file = new File([blob], 'nyt.puz');
     submitFile(file);
