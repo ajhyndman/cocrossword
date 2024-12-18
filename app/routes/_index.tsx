@@ -55,10 +55,11 @@ export default function View() {
     });
   };
 
-  const handleLaunchNyt = async (event: React.MouseEvent) => {
+  const handleLaunchNyt = async (event: React.MouseEvent<HTMLButtonElement>) => {
     // prevent default behaviour (submitting the form immediately)
     event.preventDefault();
 
+    // @ts-expect-error The typedef for EventTarget doesn't include the dataset attribute
     const difficulty = event.target.dataset.difficulty;
 
     const response = await fetch(`/nyt/${difficulty}`);
