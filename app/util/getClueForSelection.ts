@@ -1,6 +1,11 @@
 import { gridNumbering, Puzzle } from '@ajhyndman/puz';
+import memoize from 'lodash.memoize';
 
 import type { Selection } from '~/store/local/selection';
+
+const gridNumberingMemo = memoize(function (solution, width) {
+  return gridNumbering({ solution, width });
+});
 
 export const getClueForSelection = (
   puzzle: Pick<Puzzle, 'solution' | 'width'>,
@@ -8,7 +13,7 @@ export const getClueForSelection = (
 ): number => {
   if (selection.index == null) return -1;
 
-  const numbering = gridNumbering(puzzle);
+  const numbering = gridNumberingMemo(puzzle.solution, puzzle.width);
   let clue;
   let index = selection.index;
 
