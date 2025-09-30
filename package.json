@@ -11,6 +11,7 @@
   "engines": {
     "node": ">=18"
   },
+  "packageManager": "yarn@4.10.3",
   "scripts": {
     "build": "run-s 'build:*'",
     "build:remix": "remix build",
@@ -72,6 +73,5 @@
     "prettier": "^3.1.0",
     "remix-pwa": "^3.0.19",
     "typescript": "^5.2.2"
-  },
-  "packageManager": "yarn@4.10.3"
+  }
 }
