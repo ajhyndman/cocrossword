@@ -42,7 +42,7 @@ export const executor: Executor<
         deletedIndex = getPrevIndex(remote.puzzle, local)!;
         execute({ type: 'RETREAT_CURSOR', payload: { userId: command.payload.userId } });
       }
-      dispatchRemote({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-' } });
+      dispatchRemote({ type: 'CELL_CHANGED', payload: { index: deletedIndex, value: '-', userId: command.payload.userId } });
       break;
     }
 
@@ -63,7 +63,7 @@ export const executor: Executor<
 
       dispatchRemote({
         type: 'CELL_CHANGED',
-        payload: { index, value, isPencil: local.isPencil },
+        payload: { index, value, isPencil: local.isPencil, userId },
       });
       execute({ type: 'ADVANCE_CURSOR', payload: { userId } });
       break;
