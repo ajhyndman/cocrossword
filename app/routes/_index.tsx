@@ -128,7 +128,7 @@ export default function View() {
             </button>
           </p>
         </div>
-        <p className={styles.caption}>Launch a puzzle from the NYT archive</p>
+        <p className={styles.caption}>Launch a puzzle from the New York Times archive</p>
       </div>
     </Form>
   );
