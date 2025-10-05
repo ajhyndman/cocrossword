@@ -12,16 +12,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ajhyndman/puz@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@ajhyndman/puz@npm:0.4.0"
+"@ajhyndman/puz@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@ajhyndman/puz@npm:1.0.1"
   dependencies:
     buffer: "npm:>=5"
     ts-invariant: "npm:0.8.2"
   dependenciesMeta:
     buffer:
       optional: true
-  checksum: 10c0/eb87aed55556783efae2389cc23c6159a4c3cebe957953c280a25cd31028d7c1509e0bdecbf7729e9588548d3bc5bb2163fba0bb28a28223df9744f0aa5eacbb
+  checksum: 10c0/dfe4b8f90bcd604908c5c31268c8e4c749fc1c4967d37e59075363239991812616dd2bd743c04a295aeecbfdb1ef4b4ba4173714cededeaed8b195c02d218081
   languageName: node
   linkType: hard
 
@@ -2829,7 +2829,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "crossword-app@workspace:."
   dependencies:
-    "@ajhyndman/puz": "npm:^0.4.0"
+    "@ajhyndman/puz": "npm:^1.0.1"
     "@flydotio/dockerfile": "npm:^0.4.10"
     "@remix-pwa/cache": "npm:^2.0.12"
     "@remix-pwa/dev": "npm:2.0.31"
