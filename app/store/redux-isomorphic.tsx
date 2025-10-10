@@ -186,7 +186,7 @@ class Store<
 
   execute: Execute<Command> = (command) => {
     this.executor(
-      { local: this.localState, remote: this.remoteState },
+      this.getSnapshot(),
       command,
       this.dispatchLocal,
       this.optimisticDispatchRemote,

@@ -1,17 +1,18 @@
-import { enumerateClues, gridNumbering, printBinaryFile } from '@ajhyndman/puz';
+import { gridNumbering, printBinaryFile } from '@ajhyndman/puz';
 
 import { getClueForSelection } from '~/util/getClueForSelection';
 import { getNextIndex, getPrevIndex } from '~/util/cursor';
 import { Executor } from '~/store/redux-isomorphic';
 import { SelectionAction as LocalEvent, Selection as LocalState } from '~/store/local/selection';
 import { Action as RemoteEvent, State as RemoteState } from '~/store/remote/index';
+import { emptyCellsForClue, findClueIndex, isEndOfClue } from '~/util/clues';
 
 export type Command =
   | { type: 'DELETE'; payload: { index: number; userId: string; backspace?: boolean } }
   | { type: 'INPUT'; payload: { index: number; value: string; userId: string } }
   | { type: 'DOWNLOAD_PUZZLE'; payload?: undefined }
   | { type: 'FOCUS'; payload: { index: number; userId: string } }
-  | { type: 'ADVANCE_CURSOR'; payload: { userId: string } }
+  | { type: 'ADVANCE_CURSOR'; payload: { userId: string; index?: number } }
   | { type: 'RETREAT_CURSOR'; payload: { userId: string } }
   | {
       type: 'KEYBOARD_NAVIGATE';
@@ -65,7 +66,37 @@ export const executor: Executor<
         type: 'CELL_CHANGED',
         payload: { index, value, isPencil: local.isPencil },
       });
-      execute({ type: 'ADVANCE_CURSOR', payload: { userId } });
+
+      const puzzle = remote.puzzle;
+      const currentClue = getClueForSelection(puzzle, local);
+      const clueIndex = gridNumbering(puzzle).findIndex((number) => number === currentClue);
+      const clueCategory = local.direction === 'row' ? 'across' : 'down';
+      const emptyCells = emptyCellsForClue(puzzle, clueIndex, clueCategory);
+      const typingInEmptyCell = remote.puzzle.state && remote.puzzle.state[index] === '-';
+
+      // If we are filling in the clue and there are empty empty cells (other than the one we are currently filling)
+      // go to the next one
+      if (typingInEmptyCell && emptyCells.length > 1) {
+        let nextIndex = emptyCells[0];
+        for (let i = emptyCells.length - 1; i >= 0; i--) {
+          if (emptyCells[i] > (local.index ?? 0)) {
+            nextIndex = emptyCells[i];
+          }
+        }
+
+        execute({ type: 'ADVANCE_CURSOR', payload: { userId, index: nextIndex } });
+
+        // If we fill in the last cell of the clue or we are
+        // overwriting cell values and reach the last one, go
+        // to the next clue
+      } else if ((typingInEmptyCell && emptyCells.length <= 1) || isEndOfClue(puzzle, local)) {
+        execute({ type: 'NEXT_CLUE', payload: { userId } });
+
+        // Otherwise, we are typing over something and should go to the next cell
+      } else {
+        execute({ type: 'ADVANCE_CURSOR', payload: { userId } });
+      }
+
       break;
     }
 
@@ -87,7 +118,7 @@ export const executor: Executor<
     case 'ADVANCE_CURSOR': {
       if (!remote.puzzle || local.index == null) break;
       const id = command.payload.userId;
-      const index = getNextIndex(remote.puzzle, local)!;
+      const index = command.payload.index ?? getNextIndex(remote.puzzle, local)!;
       dispatchLocal({ type: 'SELECT', payload: { index } });
       dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
       break;
@@ -131,15 +162,7 @@ export const executor: Executor<
     case 'NEXT_CLUE': {
       if (!remote.puzzle || local.index == null) break;
       const id = command.payload.userId;
-      const selectedClue = getClueForSelection(remote.puzzle, local);
-      const numbering = gridNumbering(remote.puzzle);
-      const clues = enumerateClues(remote.puzzle);
-      const clueCategory = local.direction === 'row' ? 'across' : 'down';
-      const numClues = clues[clueCategory].length;
-
-      const clueIndex = clues[clueCategory].findIndex(({ number }) => number === selectedClue);
-      const nextClue = clues[clueCategory][(clueIndex + 1) % numClues].number;
-      const index = numbering.findIndex((number) => number === nextClue);
+      const index = findClueIndex(remote.puzzle, local, 'next');
       dispatchLocal({ type: 'SELECT', payload: { index } });
       dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
       break;
@@ -148,15 +171,7 @@ export const executor: Executor<
     case 'PREVIOUS_CLUE': {
       if (!remote.puzzle || local.index == null) break;
       const id = command.payload.userId;
-      const selectedClue = getClueForSelection(remote.puzzle, local);
-      const numbering = gridNumbering(remote.puzzle);
-      const clues = enumerateClues(remote.puzzle);
-      const clueCategory = local.direction === 'row' ? 'across' : 'down';
-      const numClues = clues[clueCategory].length;
-
-      const clueIndex = clues[clueCategory].findIndex(({ number }) => number === selectedClue);
-      const nextClue = clues[clueCategory][(clueIndex + numClues - 1) % numClues].number;
-      const index = numbering.findIndex((number) => number === nextClue);
+      const index = findClueIndex(remote.puzzle, local, 'previous');
       dispatchLocal({ type: 'SELECT', payload: { index } });
       dispatchRemote({ type: 'USER_SELECTION_CHANGED', payload: { index, id } });
       break;
