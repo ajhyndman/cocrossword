@@ -2,6 +2,9 @@
 
 # Adjust NODE_VERSION as desired
 ARG NODE_VERSION=18.18.2
+# Adjust YARN_VERSION as desired
+ARG YARN_VERSION=4.10.3
+
 FROM node:${NODE_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Remix"
@@ -20,9 +23,11 @@ FROM base as build
 RUN apt-get update -qq && \
     apt-get install -y build-essential pkg-config python-is-python3
 
+RUN corepack enable && corepack prepare yarn@${YARN_VERSION} --activate
+
 # Install node modules
-COPY --link package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --production=false
+COPY --link package.json yarn.lock .yarnrc.yml ./
+RUN yarn install --immutable
 
 # Copy application code
 COPY --link . .
@@ -31,7 +36,7 @@ COPY --link . .
 RUN yarn run build
 
 # Remove development dependencies
-RUN yarn install --production=true
+RUN yarn workspaces focus --production
 
 
 # Final stage for app image
