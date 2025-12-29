@@ -5,7 +5,7 @@ ARG NODE_VERSION=18.18.2
 # Adjust YARN_VERSION as desired
 ARG YARN_VERSION=4.10.3
 
-FROM node:${NODE_VERSION}-slim as base
+FROM node:${NODE_VERSION}-slim AS base
 
 LABEL fly_launch_runtime="Remix"
 
@@ -17,7 +17,7 @@ ENV NODE_ENV="production"
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
