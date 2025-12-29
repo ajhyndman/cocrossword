@@ -2,7 +2,7 @@ import throttle from 'lodash.throttle';
 
 type Subscriber<T> = (entries: T[], offset: number) => void;
 
-// broadcast changes 60 no more than 60 times a second
+// broadcast changes no more than 60 times a second
 const BROADCAST_INTERVAL = 1000 / 60;
 
 /**
