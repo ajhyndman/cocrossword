@@ -4,6 +4,9 @@ import { checkPuzzle } from '~/util/checkPuzzle';
 
 export type State = {
   puzzle?: Puzzle;
+  // Mapping from cell index to a map from letter to who first
+  // input that letter
+  cellOwners?: Record<number, Record<string, string | undefined>>;
   autocheck?: boolean;
   isCorrect?: boolean;
 };
@@ -15,7 +18,7 @@ export type Action =
     }
   | {
       type: 'CELL_CHANGED';
-      payload: { index: number; value: string; isPencil?: boolean };
+      payload: { index: number; value: string; userId: string, isPencil?: boolean };
     }
   | {
       type: 'CHECK_PUZZLE';
@@ -55,7 +58,8 @@ export const reducer = (state: State, { type, payload }: Action) => {
       }
       // update the character at the given position
       const nextState = [...state.puzzle.state];
-      nextState[payload.index] = payload.value.slice(0, 1).toUpperCase();
+      const value = payload.value.slice(0, 1).toUpperCase();
+      nextState[payload.index] = value;
 
       // also set markup flag
       const markupGrid = state.puzzle.markupGrid?.slice() ?? [];
@@ -74,7 +78,11 @@ export const reducer = (state: State, { type, payload }: Action) => {
         puzzle = checkPuzzle(puzzle);
       }
 
-      return { ...state, puzzle, isCorrect: isCorrect(puzzle, true) };
+      const cellOwners = state.cellOwners || {};
+      cellOwners[payload.index] = cellOwners[payload.index] || {};
+      cellOwners[payload.index][value] = cellOwners[payload.index][value] || payload.userId;
+
+      return { ...state, puzzle, isCorrect: isCorrect(puzzle, true), cellOwners };
     }
 
     // NOTE: This only sets a markup flag (for now)

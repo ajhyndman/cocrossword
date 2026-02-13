@@ -36,6 +36,14 @@ export default memo(function PuzzleCell({
 
   const isBlackCell = content === '.';
   const cellContent = !isBlackCell && content !== '-' && content;
+  const cellColor = useSelector(({remote}) => {
+    if (!cellContent) {
+      return;
+    }
+
+    const cellOwner = remote.cellOwners?.[index]?.[cellContent];
+    return cellOwner && remote.users[cellOwner].color;
+  })
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Backspace' || event.key === 'Delete') {
@@ -94,7 +102,7 @@ export default memo(function PuzzleCell({
       }}
     >
       {number && <span className={styles.number}>{number}</span>}
-      <span className={styles.content}>
+      <span className={styles.content} style={{color: cellColor}}>
         {cellContent && cellContent.toLocaleUpperCase()}
         {markup?.unknown_04 && <sup className={styles.superscript}>*</sup>}
       </span>
